@@ -268,98 +268,54 @@ END:VEVENT
 
     #[test]
     fn test_parse_vcalendar() {
-        let line = "BEGIN:VCALENDAR
-PRODID:-//Nextcloud calendar v1.5.0
-VERSION:2.0
-CALSCALE:GREGORIAN
-BEGIN:VEVENT
-CREATED:20170209T192358
-DTSTAMP:20170209T192358
-LAST-MODIFIED:20170209T192358
-UID:5UILHLI7RI6K2IDRAQX7O
-SUMMARY:Vers
-CLASS:PUBLIC
-STATUS:CONFIRMED
-DTSTART;VALUE=DATE:20170209
-DTEND;VALUE=DATE:20170210
-END:VEVENT
-END:VCALENDAR
-";
+        let tests = ::std::path::Path::new("tests");
 
-        let event = ::VEvent {
-            created: ::VEvent::parse_date("20170209T192358").unwrap(),
-            dtstamp: ::VEvent::parse_date("20170209T192358").unwrap(),
-            last_modified: ::VEvent::parse_date("20170209T192358").unwrap(),
-            uid: "5UILHLI7RI6K2IDRAQX7O".into(),
-            summary: "Vers".into(),
-            class: ::Class::Public,
-            status: ::Status::Confirmed,
-            dt_start: ::VEvent::parse_date("20170209").unwrap(),
-            dt_end: ::VEvent::parse_date("20170210").unwrap(),
-            location: "".into(),
-            description: "".into(),
-            categories: "".into(),
-        };
+        for entry in tests.read_dir().expect("Unable to open tests dir") {
+            let file = match entry {
+                Ok(entry) => entry.path(),
+                Err(err) => {
+                    println!("{}", err);
+                    continue;
+                }
+            };
 
-        let calendar = ::VCalendar {
-            prodid: "-//Nextcloud calendar v1.5.0".into(),
-            version: "2.0".into(),
-            calscale: "GREGORIAN".into(),
-            event: event,
-        };
+            let extension = match file.extension() {
+                Some(extension) => extension,
+                None => continue,
+            };
 
-        assert_eq!(
-            ::parser::parse_vcalendar(line),
-            ::nom::IResult::Done("", Ok(calendar))
-        );
+            if extension == ::std::ffi::OsStr::new("ics") {
+                let input = match file_get_contents(&file) {
+                    Ok(input) => input,
+                    Err(_) => continue,
+                };
+
+                let output = match file_get_contents(&file.with_extension("out")) {
+                    Ok(output) => output,
+                    Err(_) => continue,
+                };
+
+                let vcalendar = ::parser::parse_vcalendar(input.as_str());
+                assert_eq!(format!("{:#?}\n", vcalendar), output);
+            }
+        }
     }
 
-    #[test]
-    fn test_parse_vcalendar_empty() {
-        let line = "BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:ownCloud Calendar
-CALSCALE:GREGORIAN
-BEGIN:VEVENT
-UID:7e27d9fc69
-DTSTAMP:20150717T101959Z
-CREATED:20150717T101959Z
-LAST-MODIFIED:20150717T101959Z
-SUMMARY:Garage
-DTSTART;VALUE=DATE:20150722
-DTEND;VALUE=DATE:20150723
-LOCATION:
-DESCRIPTION:
-CATEGORIES:
-END:VEVENT
-END:VCALENDAR
-";
+    fn file_get_contents(path: &::std::path::PathBuf) -> Result<String, String> {
+        use std::io::Read;
 
-        let event = ::VEvent {
-            created: ::VEvent::parse_date("20150717T101959Z").unwrap(),
-            dtstamp: ::VEvent::parse_date("20150717T101959Z").unwrap(),
-            last_modified: ::VEvent::parse_date("20150717T101959Z").unwrap(),
-            uid: "7e27d9fc69".into(),
-            summary: "Garage".into(),
-            class: ::Class::Public,
-            status: ::Status::Confirmed,
-            dt_start: ::VEvent::parse_date("20150722").unwrap(),
-            dt_end: ::VEvent::parse_date("20150723").unwrap(),
-            location: "".into(),
-            description: "".into(),
-            categories: "".into(),
+        let mut content = String::new();
+
+        let mut file = match ::std::fs::File::open(path) {
+            Ok(file) => file,
+            Err(err) => return Err(format!("Unable to open {:?}: {}", path, err)),
         };
 
-        let calendar = ::VCalendar {
-            prodid: "ownCloud Calendar".into(),
-            version: "2.0".into(),
-            calscale: "GREGORIAN".into(),
-            event: event,
+        match file.read_to_string(&mut content) {
+            Ok(_) => (),
+            Err(err) => return Err(format!("Unable to read {:?}: {}", path, err)),
         };
 
-        assert_eq!(
-            ::parser::parse_vcalendar(line),
-            ::nom::IResult::Done("", Ok(calendar))
-        );
+        Ok(content)
     }
 }
