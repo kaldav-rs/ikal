@@ -1,0 +1,21 @@
+[package]
+name = "ical-parser"
+description = "Parse icalendar object"
+license = "MIT"
+version = "0.1.0"
+authors = ["Sanpi <sanpi@homecomputing.fr>"]
+repository = "https://github.com/sanpii/ical-parser.git"
+documentation = "https://docs.rs/ical-parser/"
+keywords = ["icalendar"]
+categories = ["parser-implementations", "text-processing"]
+
+[dependencies]
+chrono = "0.3"
+
+[dependencies.nom]
+version = "3.0"
+features = ["verbose-errors"]
+
+[badges]
+travis-ci = { repository = "sanpii/ical-parser" }
+gitlab = { repository = "sanpi/ical-parser" }
