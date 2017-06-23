@@ -19,7 +19,7 @@ fn is_alphanumeric(chr: char) -> bool {
 }
 
 fn is_line_ending(chr: char) -> bool {
-    chr == '\n'
+    chr == '\n' || chr == '\r'
 }
 
 named!(key<&str, &str>, take_while_s!(is_alphanumeric));
