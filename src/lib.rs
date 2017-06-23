@@ -31,10 +31,10 @@ impl VCalendar {
     }
 }
 
-impl ::std::convert::TryFrom<::std::collections::HashMap<String, String>> for VCalendar {
+impl ::std::convert::TryFrom<::std::collections::BTreeMap<String, String>> for VCalendar {
     type Error = String;
 
-    fn try_from(properties: ::std::collections::HashMap<String, String>) -> Result<Self, Self::Error> {
+    fn try_from(properties: ::std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
         let mut vcalendar = VCalendar::new();
 
         for (key, value) in properties {
@@ -50,7 +50,6 @@ impl ::std::convert::TryFrom<::std::collections::HashMap<String, String>> for VC
     }
 }
 
-// @TODO use TryFrom
 impl ::std::convert::TryFrom<String> for VCalendar {
     type Error = String;
 
@@ -74,9 +73,7 @@ pub struct VEvent {
     status: Status,
     dt_start: DateTime,
     dt_end: DateTime,
-    location: String,
-    description: String,
-    categories: String,
+    extra: ::std::collections::BTreeMap<String, String>,
 }
 
 impl VEvent {
@@ -91,9 +88,7 @@ impl VEvent {
             status: Status::Confirmed,
             dt_start: Local::now(),
             dt_end: Local::now(),
-            location: String::new(),
-            description: String::new(),
-            categories: String::new(),
+            extra: ::std::collections::BTreeMap::new(),
         }
     }
 
@@ -114,10 +109,10 @@ impl VEvent {
     }
 }
 
-impl ::std::convert::TryFrom<::std::collections::HashMap<String, String>> for VEvent {
+impl ::std::convert::TryFrom<::std::collections::BTreeMap<String, String>> for VEvent {
     type Error = String;
 
-    fn try_from(properties: ::std::collections::HashMap<String, String>) -> Result<Self, Self::Error> {
+    fn try_from(properties: ::std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
         let mut vevent = VEvent::new();
 
         for (key, value) in properties {
@@ -137,10 +132,9 @@ impl ::std::convert::TryFrom<::std::collections::HashMap<String, String>> for VE
                 },
                 "DTSTART" => vevent.dt_start = VEvent::parse_date(value)?,
                 "DTEND" => vevent.dt_end = VEvent::parse_date(value)?,
-                "LOCATION" => vevent.location = value,
-                "DESCRIPTION" => vevent.location = value,
-                "CATEGORIES" => vevent.location = value,
-                _ => return Err(format!("Unknow key {}", key)),
+                _ => {
+                    vevent.extra.insert(key.to_owned(), value);
+                },
             };
         }
 
@@ -202,7 +196,7 @@ PRODID:-//Nextcloud calendar v1.5.0";
 
 ";
 
-        let mut expected = ::std::collections::HashMap::new();
+        let mut expected = ::std::collections::BTreeMap::new();
         expected.insert("CREATED".into(), "20141009T141617Z".into());
 
         assert_eq!(
@@ -218,7 +212,7 @@ CALSCALE:GREGORIAN
 
 ";
 
-        let mut expected = ::std::collections::HashMap::new();
+        let mut expected = ::std::collections::BTreeMap::new();
         expected.insert("VERSION".into(), "2.0".into());
         expected.insert("CALSCALE".into(), "GREGORIAN".into());
 
@@ -259,9 +253,7 @@ END:VEVENT
                 status: ::Status::Confirmed,
                 dt_start: ::VEvent::parse_date("20170209").unwrap(),
                 dt_end: ::VEvent::parse_date("20170210").unwrap(),
-                location: "".into(),
-                description: "".into(),
-                categories: "".into(),
+                extra: ::std::collections::BTreeMap::new(),
             }))
         );
     }
@@ -296,7 +288,7 @@ END:VEVENT
                 };
 
                 let vcalendar = ::parser::parse_vcalendar(input.as_str());
-                assert_eq!(format!("{:#?}\n", vcalendar), output);
+                assert_eq!(output, format!("{:#?}\n", vcalendar));
             }
         }
     }

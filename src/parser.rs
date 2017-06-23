@@ -81,12 +81,12 @@ named!(pub property<&str, (String, String)>,
     )
 );
 
-named!(pub properties<&str, ::std::collections::HashMap<String, String>>,
+named!(pub properties<&str, ::std::collections::BTreeMap<String, String>>,
     do_parse!(
         values: many0!(property) >>
 
         ({
-            let mut hash = ::std::collections::HashMap::new();
+            let mut hash = ::std::collections::BTreeMap::new();
 
             for (key, value) in values {
                 hash.insert(key, value);
