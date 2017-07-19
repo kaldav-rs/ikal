@@ -7,22 +7,24 @@ Done(
             calscale: Some(
                 "GREGORIAN"
             ),
-            event: VEvent {
-                created: 2015-07-17T10:19:59+02:00,
-                dtstamp: 2015-07-17T10:19:59+02:00,
-                last_modified: 2015-07-17T10:19:59+02:00,
-                uid: "7e27d9fc69",
-                summary: "Garage",
-                class: Public,
-                status: Confirmed,
-                dt_start: 2015-07-22T00:00:00+02:00,
-                dt_end: 2015-07-23T00:00:00+02:00,
-                extra: {
-                    "CATEGORIES": "",
-                    "DESCRIPTION": "",
-                    "LOCATION": ""
+            content: Event(
+                VEvent {
+                    created: 2015-07-17T10:19:59+02:00,
+                    dtstamp: 2015-07-17T10:19:59+02:00,
+                    last_modified: 2015-07-17T10:19:59+02:00,
+                    uid: "7e27d9fc69",
+                    summary: "Garage",
+                    class: Public,
+                    status: Confirmed,
+                    dt_start: 2015-07-22T00:00:00+02:00,
+                    dt_end: 2015-07-23T00:00:00+02:00,
+                    extra: {
+                        "CATEGORIES": "",
+                        "DESCRIPTION": "",
+                        "LOCATION": ""
+                    }
                 }
-            }
+            )
         }
     )
 )

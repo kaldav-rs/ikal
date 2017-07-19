@@ -17,7 +17,7 @@ pub struct VCalendar {
     prodid: String,
     version: String,
     calscale: Option<String>,
-    pub event: VEvent,
+    pub content: Content,
 }
 
 impl VCalendar {
@@ -26,7 +26,7 @@ impl VCalendar {
             prodid: String::new(),
             version: String::new(),
             calscale: None,
-            event: VEvent::new(),
+            content: Content::Empty,
         }
     }
 }
@@ -60,6 +60,13 @@ impl ::std::convert::TryFrom<String> for VCalendar {
             ::nom::IResult::Incomplete(_) => Err("Incomplete".into()),
         }
     }
+}
+
+#[derive(Debug, PartialEq)]
+pub enum Content {
+    Empty,
+    Event(VEvent),
+    Todo(VTodo),
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -128,6 +135,7 @@ impl ::std::convert::TryFrom<::std::collections::BTreeMap<String, String>> for V
                 },
                 "STATUS" => match value.as_str() {
                     "CONFIRMED" => vevent.status = Status::Confirmed,
+                    "COMPLETED" => vevent.status = Status::Completed,
                     _ => return Err(format!("Unknow status {}", value)),
                 },
                 "DTSTART" => vevent.dt_start = VEvent::parse_date(value)?,
@@ -143,6 +151,81 @@ impl ::std::convert::TryFrom<::std::collections::BTreeMap<String, String>> for V
 }
 
 #[derive(Clone, Debug, PartialEq)]
+pub struct VTodo {
+    created: DateTime,
+    dtstamp: DateTime,
+    last_modified: DateTime,
+    uid: String,
+    summary: String,
+    status: Status,
+    percent_complete: u8,
+    extra: ::std::collections::BTreeMap<String, String>,
+}
+
+impl VTodo {
+    pub fn new() -> Self {
+        VTodo {
+            created: Local::now(),
+            dtstamp: Local::now(),
+            last_modified: Local::now(),
+            uid: String::new(),
+            summary: String::new(),
+            status: Status::Confirmed,
+            percent_complete: 0,
+            extra: ::std::collections::BTreeMap::new(),
+        }
+    }
+
+    fn parse_date<S>(date: S) -> Result<DateTime, String> where S: Into<String> {
+        let mut date = date.into();
+
+        if date.len() == 8 {
+            date.push_str("T000000Z");
+        }
+        if date.len() == 15 {
+            date.push_str("Z");
+        }
+
+        match Local.datetime_from_str(date.as_str(), "%Y%m%dT%H%M%SZ") {
+            Ok(date) => Ok(date),
+            Err(_) => Err(format!("Invalid date: {}", date)),
+        }
+    }
+}
+
+impl ::std::convert::TryFrom<::std::collections::BTreeMap<String, String>> for VTodo {
+    type Error = String;
+
+    fn try_from(properties: ::std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
+        let mut vtodo = VTodo::new();
+
+        for (key, value) in properties {
+            match key.as_str() {
+                "CREATED" => vtodo.created = VTodo::parse_date(value)?,
+                "DTSTAMP" => vtodo.dtstamp = VTodo::parse_date(value)?,
+                "LAST-MODIFIED" => vtodo.last_modified = VTodo::parse_date(value)?,
+                "UID" => vtodo.uid = value,
+                "SUMMARY" => vtodo.summary = value,
+                "PERCENT-COMPLETE" => vtodo.percent_complete = match value.parse() {
+                    Ok(percent_complete) => percent_complete,
+                    Err(err) => return Err(format!("{}", err)),
+                },
+                "STATUS" => match value.as_str() {
+                    "CONFIRMED" => vtodo.status = Status::Confirmed,
+                    "COMPLETED" => vtodo.status = Status::Completed,
+                    _ => return Err(format!("Unknow status {}", value)),
+                },
+                _ => {
+                    vtodo.extra.insert(key.to_owned(), value);
+                },
+            };
+        }
+
+        Ok(vtodo)
+    }
+}
+
+#[derive(Clone, Debug, PartialEq)]
 enum Class {
     Public,
 }
@@ -150,6 +233,7 @@ enum Class {
 #[derive(Clone, Debug, PartialEq)]
 enum Status {
     Confirmed,
+    Completed,
 }
 
 #[cfg(test)]

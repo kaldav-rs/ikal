@@ -110,15 +110,40 @@ named!(pub parse_vevent<&str, (Result<::VEvent, String>)>,
     )
 );
 
+named!(pub parse_vtodo<&str, (Result<::VTodo, String>)>,
+    do_parse!(
+            tag_s!("BEGIN:VTODO") >>
+            line_ending >>
+        values:
+            properties >>
+            tag_s!("END:VTODO") >>
+            line_ending >>
+
+        (values.try_into())
+    )
+);
+
+named!(pub parse_content<&str, (Result<::Content, String>)>,
+    alt!(
+        parse_vevent => { |event| match event {
+            Ok(event) => Ok(::Content::Event(event)),
+            Err(err) => Err(err),
+        }} |
+        parse_vtodo => { |todo| match todo {
+            Ok(todo) => Ok(::Content::Todo(todo)),
+            Err(err) => Err(err),
+        }}
+    )
+);
+
 named!(pub parse_vcalendar<&str, (Result<::VCalendar, String>)>,
     do_parse!(
             tag_s!("BEGIN:VCALENDAR") >>
             line_ending >>
         values:
             properties >>
-            take_until_s!("BEGIN:VEVENT") >>
-        event:
-            parse_vevent >>
+        content:
+            parse_content >>
             take_until_and_consume!("END:VCALENDAR") >>
 
         ({
@@ -126,12 +151,13 @@ named!(pub parse_vcalendar<&str, (Result<::VCalendar, String>)>,
 
             match calendar {
                 Ok(mut calendar) => {
-                    match event {
-                        Ok(event) => calendar.event = event,
-                        Err(_) => (),
-                    };
-
-                    Ok(calendar)
+                    match content {
+                        Ok(content) => {
+                            calendar.content = content;
+                            Ok(calendar)
+                        },
+                        Err(err) => Err(err),
+                    }
                 },
                 Err(err) => Err(err),
             }

@@ -7,18 +7,20 @@ Done(
             calscale: Some(
                 "GREGORIAN"
             ),
-            event: VEvent {
-                created: 2017-02-09T19:23:58+01:00,
-                dtstamp: 2017-02-09T19:23:58+01:00,
-                last_modified: 2017-02-09T19:23:58+01:00,
-                uid: "5UILHLI7RI6K2IDRAQX7O",
-                summary: "Vers",
-                class: Public,
-                status: Confirmed,
-                dt_start: 2015-02-19T19:00:00+01:00,
-                dt_end: 2017-02-10T00:00:00+01:00,
-                extra: {}
-            }
+            content: Event(
+                VEvent {
+                    created: 2017-02-09T19:23:58+01:00,
+                    dtstamp: 2017-02-09T19:23:58+01:00,
+                    last_modified: 2017-02-09T19:23:58+01:00,
+                    uid: "5UILHLI7RI6K2IDRAQX7O",
+                    summary: "Vers",
+                    class: Public,
+                    status: Confirmed,
+                    dt_start: 2015-02-19T19:00:00+01:00,
+                    dt_end: 2017-02-10T00:00:00+01:00,
+                    extra: {}
+                }
+            )
         }
     )
 )
