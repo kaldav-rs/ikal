@@ -116,26 +116,25 @@ named!(pub parse_vcalendar<&str, (Result<::VCalendar, String>)>,
             line_ending >>
         values:
             properties >>
+            take_until_s!("BEGIN:VEVENT") >>
         event:
             parse_vevent >>
-            tag_s!("END:VCALENDAR") >>
+            take_until_and_consume!("END:VCALENDAR") >>
             line_ending >>
 
         ({
-            let vcalendar: Result<::VCalendar, String> = values.try_into();
+            let calendar: Result<::VCalendar, String> = values.try_into();
 
-            match vcalendar {
-                Ok(mut vcalendar) => {
+            match calendar {
+                Ok(mut calendar) => {
                     match event {
-                        Ok(event) => {
-                            vcalendar.event = event;
+                        Ok(event) => calendar.event = event,
+                        Err(_) => (),
+                    };
 
-                            Ok(vcalendar)
-                        },
-                        Err(err) => Err(err),
-                    }
-                }
-                Err(err) => Err(format!("{}", err)),
+                    Ok(calendar)
+                },
+                Err(err) => Err(err),
             }
         })
     )
