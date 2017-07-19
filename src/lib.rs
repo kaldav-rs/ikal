@@ -16,7 +16,7 @@ type DateTime = ::chrono::datetime::DateTime<Local>;
 pub struct VCalendar {
     prodid: String,
     version: String,
-    calscale: String,
+    calscale: Option<String>,
     pub event: VEvent,
 }
 
@@ -25,7 +25,7 @@ impl VCalendar {
         VCalendar {
             prodid: String::new(),
             version: String::new(),
-            calscale: String::new(),
+            calscale: None,
             event: VEvent::new(),
         }
     }
@@ -41,7 +41,7 @@ impl ::std::convert::TryFrom<::std::collections::BTreeMap<String, String>> for V
             match key.as_str() {
                 "PRODID" => vcalendar.prodid = value,
                 "VERSION" => vcalendar.version = value,
-                "CALSCALE" => vcalendar.calscale = value,
+                "CALSCALE" => vcalendar.calscale = Some(value),
                 _ => return Err(format!("Unknow key {}", key)),
             };
         }

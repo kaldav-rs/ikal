@@ -4,7 +4,9 @@ Done(
         VCalendar {
             prodid: "ownCloud Calendar",
             version: "2.0",
-            calscale: "GREGORIAN",
+            calscale: Some(
+                "GREGORIAN"
+            ),
             event: VEvent {
                 created: 2015-07-17T10:19:59+02:00,
                 dtstamp: 2015-07-17T10:19:59+02:00,
