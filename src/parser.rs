@@ -67,7 +67,7 @@ named!(pub property<&str, (String, String)>,
             not!(tag_s!("END")) >>
         key:
             key >>
-            opt!(param) >>
+            many0!(param) >>
             char!(':') >>
         value:
             opt!(value) >>

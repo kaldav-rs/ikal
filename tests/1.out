@@ -15,7 +15,7 @@ Done(
                 summary: "Vers",
                 class: Public,
                 status: Confirmed,
-                dt_start: 2017-02-09T00:00:00+01:00,
+                dt_start: 2015-02-19T19:00:00+01:00,
                 dt_end: 2017-02-10T00:00:00+01:00,
                 extra: {}
             }
