@@ -6,11 +6,11 @@ extern crate chrono;
 extern crate nom;
 
 use chrono::offset::TimeZone;
-use chrono::offset::local::Local;
+use chrono::offset::Local;
 
 mod parser;
 
-type DateTime = ::chrono::datetime::DateTime<Local>;
+type DateTime = ::chrono::DateTime<Local>;
 
 #[derive(Debug, PartialEq)]
 pub struct VCalendar {
