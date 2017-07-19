@@ -120,7 +120,6 @@ named!(pub parse_vcalendar<&str, (Result<::VCalendar, String>)>,
         event:
             parse_vevent >>
             take_until_and_consume!("END:VCALENDAR") >>
-            line_ending >>
 
         ({
             let calendar: Result<::VCalendar, String> = values.try_into();

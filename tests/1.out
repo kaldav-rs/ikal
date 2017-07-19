@@ -1,5 +1,5 @@
 Done(
-    "",
+    "\r\n",
     Ok(
         VCalendar {
             prodid: "-//Nextcloud calendar v1.5.0",
