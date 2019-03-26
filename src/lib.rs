@@ -1,6 +1,3 @@
-/* https://tools.ietf.org/html/rfc2445 */
-#![feature(try_from)]
-
 extern crate chrono;
 #[macro_use]
 extern crate nom;
