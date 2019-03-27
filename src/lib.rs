@@ -76,6 +76,12 @@ pub struct VEvent {
     extra: std::collections::BTreeMap<String, String>,
 }
 
+impl Default for VEvent {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl VEvent {
     pub fn new() -> Self {
         Self {
@@ -153,6 +159,12 @@ pub struct VTodo {
     status: Status,
     percent_complete: u8,
     extra: std::collections::BTreeMap<String, String>,
+}
+
+impl Default for VTodo {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl VTodo {
