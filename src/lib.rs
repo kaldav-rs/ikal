@@ -52,9 +52,9 @@ impl ::std::convert::TryFrom<String> for VCalendar {
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
         match ::parser::parse_vcalendar(raw.as_str()) {
-            ::nom::IResult::Done(_, o) => o,
-            ::nom::IResult::Error(err) => Err(format!("{}", err)),
-            ::nom::IResult::Incomplete(_) => Err("Incomplete".into()),
+            Ok((_, Ok(o))) => Ok(o),
+            Ok((_, Err(err))) => Err(err.to_string()),
+            Err(err) => Err(format!("{}", err)),
         }
     }
 }
@@ -243,7 +243,7 @@ PRODID:-//Nextcloud calendar v1.5.0";
         let expected = ("VERSION".to_owned(), "2.0".to_owned());
         assert_eq!(
             ::parser::property(line),
-            ::nom::IResult::Done("PRODID:-//Nextcloud calendar v1.5.0", expected)
+            Ok(("PRODID:-//Nextcloud calendar v1.5.0", expected))
         );
     }
 
@@ -261,7 +261,7 @@ PRODID:-//Nextcloud calendar v1.5.0";
 
         assert_eq!(
             ::parser::property(line),
-            ::nom::IResult::Done("PRODID:-//Nextcloud calendar v1.5.0", expected)
+            Ok(("PRODID:-//Nextcloud calendar v1.5.0", expected))
         );
     }
 
@@ -281,8 +281,8 @@ PRODID:-//Nextcloud calendar v1.5.0";
         expected.insert("CREATED".into(), "20141009T141617Z".into());
 
         assert_eq!(
-            ::parser::properties(line),
-            ::nom::IResult::Done("\n", expected)
+            crate::parser::properties(line),
+            Ok(("\n", expected))
         );
     }
 
@@ -299,7 +299,7 @@ CALSCALE:GREGORIAN
 
         assert_eq!(
             ::parser::properties(line),
-            ::nom::IResult::Done("\n", expected)
+            Ok(("\n", expected))
         );
     }
 
@@ -324,10 +324,10 @@ END:VEVENT
 
         assert_eq!(
             ::parser::parse_vevent(line),
-            ::nom::IResult::Done("", Ok(::VEvent {
-                created: ::VEvent::parse_date("20170209T192358").unwrap(),
-                dtstamp: ::VEvent::parse_date("20170209T192358").unwrap(),
-                last_modified: ::VEvent::parse_date("20170209T192358").unwrap(),
+            Ok(("", Ok(crate::VEvent {
+                created: crate::VEvent::parse_date("20170209T192358").unwrap(),
+                dtstamp: crate::VEvent::parse_date("20170209T192358").unwrap(),
+                last_modified: crate::VEvent::parse_date("20170209T192358").unwrap(),
                 uid: "5UILHLI7RI6K2IDRAQX7O".into(),
                 summary: "Vers".into(),
                 class: ::Class::Public,

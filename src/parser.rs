@@ -22,9 +22,9 @@ fn is_line_ending(chr: char) -> bool {
     chr == '\n' || chr == '\r'
 }
 
-named!(key<&str, &str>, take_while_s!(is_alphanumeric));
-named!(attr<&str, &str>, take_while_s!(is_alphanumeric));
-named!(value_line<&str, &str>, take_till_s!(is_line_ending));
+named!(key<&str, &str>, take_while!(is_alphanumeric));
+named!(attr<&str, &str>, take_while!(is_alphanumeric));
+named!(value_line<&str, &str>, take_till!(is_line_ending));
 
 named!(value_part<&str, (String)>,
     do_parse!(
@@ -63,8 +63,8 @@ named!(param<&str, (String, String)>,
 
 named!(pub property<&str, (String, String)>,
     do_parse!(
-            not!(tag_s!("BEGIN")) >>
-            not!(tag_s!("END")) >>
+            not!(tag!("BEGIN")) >>
+            not!(tag!("END")) >>
         key:
             key >>
             many0!(param) >>
@@ -99,11 +99,11 @@ named!(pub properties<&str, ::std::collections::BTreeMap<String, String>>,
 
 named!(pub parse_vevent<&str, (Result<::VEvent, String>)>,
     do_parse!(
-            tag_s!("BEGIN:VEVENT") >>
+            tag!("BEGIN:VEVENT") >>
             line_ending >>
         values:
             properties >>
-            tag_s!("END:VEVENT") >>
+            tag!("END:VEVENT") >>
             line_ending >>
 
         (values.try_into())
@@ -112,11 +112,11 @@ named!(pub parse_vevent<&str, (Result<::VEvent, String>)>,
 
 named!(pub parse_vtodo<&str, (Result<::VTodo, String>)>,
     do_parse!(
-            tag_s!("BEGIN:VTODO") >>
+            tag!("BEGIN:VTODO") >>
             line_ending >>
         values:
             properties >>
-            tag_s!("END:VTODO") >>
+            tag!("END:VTODO") >>
             line_ending >>
 
         (values.try_into())
@@ -138,7 +138,7 @@ named!(pub parse_content<&str, (Result<::Content, String>)>,
 
 named!(pub parse_vcalendar<&str, (Result<::VCalendar, String>)>,
     do_parse!(
-            tag_s!("BEGIN:VCALENDAR") >>
+            tag!("BEGIN:VCALENDAR") >>
             line_ending >>
         values:
             properties >>
