@@ -1,13 +1,9 @@
-extern crate chrono;
-#[macro_use]
-extern crate nom;
-
 use chrono::offset::TimeZone;
 use chrono::offset::Local;
 
 mod parser;
 
-type DateTime = ::chrono::DateTime<Local>;
+type DateTime = chrono::DateTime<Local>;
 
 #[derive(Debug, PartialEq)]
 pub struct VCalendar {
@@ -28,10 +24,10 @@ impl VCalendar {
     }
 }
 
-impl ::std::convert::TryFrom<::std::collections::BTreeMap<String, String>> for VCalendar {
+impl std::convert::TryFrom<std::collections::BTreeMap<String, String>> for VCalendar {
     type Error = String;
 
-    fn try_from(properties: ::std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
+    fn try_from(properties: std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
         let mut vcalendar = VCalendar::new();
 
         for (key, value) in properties {
@@ -47,11 +43,11 @@ impl ::std::convert::TryFrom<::std::collections::BTreeMap<String, String>> for V
     }
 }
 
-impl ::std::convert::TryFrom<String> for VCalendar {
+impl std::convert::TryFrom<String> for VCalendar {
     type Error = String;
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
-        match ::parser::parse_vcalendar(raw.as_str()) {
+        match parser::parse_vcalendar(raw.as_str()) {
             Ok((_, Ok(o))) => Ok(o),
             Ok((_, Err(err))) => Err(err.to_string()),
             Err(err) => Err(format!("{}", err)),
@@ -62,8 +58,8 @@ impl ::std::convert::TryFrom<String> for VCalendar {
 #[derive(Debug, PartialEq)]
 pub enum Content {
     Empty,
-    Event(VEvent),
-    Todo(VTodo),
+    Event(crate::VEvent),
+    Todo(crate::VTodo),
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -77,12 +73,12 @@ pub struct VEvent {
     status: Status,
     dt_start: DateTime,
     dt_end: DateTime,
-    extra: ::std::collections::BTreeMap<String, String>,
+    extra: std::collections::BTreeMap<String, String>,
 }
 
 impl VEvent {
     pub fn new() -> Self {
-        VEvent {
+        Self {
             created: Local::now(),
             dtstamp: Local::now(),
             last_modified: Local::now(),
@@ -92,7 +88,7 @@ impl VEvent {
             status: Status::Confirmed,
             dt_start: Local::now(),
             dt_end: Local::now(),
-            extra: ::std::collections::BTreeMap::new(),
+            extra: std::collections::BTreeMap::new(),
         }
     }
 
@@ -113,10 +109,10 @@ impl VEvent {
     }
 }
 
-impl ::std::convert::TryFrom<::std::collections::BTreeMap<String, String>> for VEvent {
+impl std::convert::TryFrom<std::collections::BTreeMap<String, String>> for VEvent {
     type Error = String;
 
-    fn try_from(properties: ::std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
+    fn try_from(properties: std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
         let mut vevent = VEvent::new();
 
         for (key, value) in properties {
@@ -156,7 +152,7 @@ pub struct VTodo {
     summary: String,
     status: Status,
     percent_complete: u8,
-    extra: ::std::collections::BTreeMap<String, String>,
+    extra: std::collections::BTreeMap<String, String>,
 }
 
 impl VTodo {
@@ -169,7 +165,7 @@ impl VTodo {
             summary: String::new(),
             status: Status::Confirmed,
             percent_complete: 0,
-            extra: ::std::collections::BTreeMap::new(),
+            extra: std::collections::BTreeMap::new(),
         }
     }
 
@@ -190,10 +186,10 @@ impl VTodo {
     }
 }
 
-impl ::std::convert::TryFrom<::std::collections::BTreeMap<String, String>> for VTodo {
+impl std::convert::TryFrom<std::collections::BTreeMap<String, String>> for VTodo {
     type Error = String;
 
-    fn try_from(properties: ::std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
+    fn try_from(properties: std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
         let mut vtodo = VTodo::new();
 
         for (key, value) in properties {
@@ -242,7 +238,7 @@ PRODID:-//Nextcloud calendar v1.5.0";
 
         let expected = ("VERSION".to_owned(), "2.0".to_owned());
         assert_eq!(
-            ::parser::property(line),
+            crate::parser::property(line),
             Ok(("PRODID:-//Nextcloud calendar v1.5.0", expected))
         );
     }
@@ -260,7 +256,7 @@ PRODID:-//Nextcloud calendar v1.5.0";
         );
 
         assert_eq!(
-            ::parser::property(line),
+            crate::parser::property(line),
             Ok(("PRODID:-//Nextcloud calendar v1.5.0", expected))
         );
     }
@@ -277,7 +273,7 @@ PRODID:-//Nextcloud calendar v1.5.0";
 
 ";
 
-        let mut expected = ::std::collections::BTreeMap::new();
+        let mut expected = std::collections::BTreeMap::new();
         expected.insert("CREATED".into(), "20141009T141617Z".into());
 
         assert_eq!(
@@ -293,12 +289,12 @@ CALSCALE:GREGORIAN
 
 ";
 
-        let mut expected = ::std::collections::BTreeMap::new();
+        let mut expected = std::collections::BTreeMap::new();
         expected.insert("VERSION".into(), "2.0".into());
         expected.insert("CALSCALE".into(), "GREGORIAN".into());
 
         assert_eq!(
-            ::parser::properties(line),
+            crate::parser::properties(line),
             Ok(("\n", expected))
         );
     }
@@ -323,25 +319,25 @@ END:VEVENT
 ";
 
         assert_eq!(
-            ::parser::parse_vevent(line),
+            crate::parser::parse_vevent(line),
             Ok(("", Ok(crate::VEvent {
                 created: crate::VEvent::parse_date("20170209T192358").unwrap(),
                 dtstamp: crate::VEvent::parse_date("20170209T192358").unwrap(),
                 last_modified: crate::VEvent::parse_date("20170209T192358").unwrap(),
                 uid: "5UILHLI7RI6K2IDRAQX7O".into(),
                 summary: "Vers".into(),
-                class: ::Class::Public,
-                status: ::Status::Confirmed,
-                dt_start: ::VEvent::parse_date("20170209").unwrap(),
-                dt_end: ::VEvent::parse_date("20170210").unwrap(),
-                extra: ::std::collections::BTreeMap::new(),
-            }))
+                class: crate::Class::Public,
+                status: crate::Status::Confirmed,
+                dt_start: crate::VEvent::parse_date("20170209").unwrap(),
+                dt_end: crate::VEvent::parse_date("20170210").unwrap(),
+                extra: std::collections::BTreeMap::new(),
+            })))
         );
     }
 
     #[test]
     fn test_parse_vcalendar() {
-        let tests = ::std::path::Path::new("tests");
+        let tests = std::path::Path::new("tests");
 
         for entry in tests.read_dir().expect("Unable to open tests dir") {
             let file = match entry {
@@ -357,7 +353,7 @@ END:VEVENT
                 None => continue,
             };
 
-            if extension == ::std::ffi::OsStr::new("ics") {
+            if extension == std::ffi::OsStr::new("ics") {
                 let input = match file_get_contents(&file) {
                     Ok(input) => input,
                     Err(_) => continue,
@@ -368,18 +364,18 @@ END:VEVENT
                     Err(_) => continue,
                 };
 
-                let vcalendar = ::parser::parse_vcalendar(input.as_str());
+                let vcalendar = crate::parser::parse_vcalendar(input.as_str());
                 assert_eq!(output, format!("{:#?}\n", vcalendar));
             }
         }
     }
 
-    fn file_get_contents(path: &::std::path::PathBuf) -> Result<String, String> {
+    fn file_get_contents(path: &std::path::PathBuf) -> Result<String, String> {
         use std::io::Read;
 
         let mut content = String::new();
 
-        let mut file = match ::std::fs::File::open(path) {
+        let mut file = match std::fs::File::open(path) {
             Ok(file) => file,
             Err(err) => return Err(format!("Unable to open {:?}: {}", path, err)),
         };

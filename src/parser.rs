@@ -1,5 +1,5 @@
-use ::nom::line_ending;
-use ::std::convert::TryInto;
+use nom::{line_ending, named, take_while, take_till, tag, do_parse, not, opt, many0, alt, char, take_until_and_consume};
+use std::convert::TryInto;
 
 fn is_alphabetic(chr: char) -> bool {
     (chr as u8 >= 0x41 && chr as u8 <= 0x5A)
@@ -81,12 +81,12 @@ named!(pub property<&str, (String, String)>,
     )
 );
 
-named!(pub properties<&str, ::std::collections::BTreeMap<String, String>>,
+named!(pub properties<&str, std::collections::BTreeMap<String, String>>,
     do_parse!(
         values: many0!(property) >>
 
         ({
-            let mut hash = ::std::collections::BTreeMap::new();
+            let mut hash = std::collections::BTreeMap::new();
 
             for (key, value) in values {
                 hash.insert(key, value);
@@ -97,7 +97,7 @@ named!(pub properties<&str, ::std::collections::BTreeMap<String, String>>,
     )
 );
 
-named!(pub parse_vevent<&str, (Result<::VEvent, String>)>,
+named!(pub parse_vevent<&str, (Result<crate::VEvent, String>)>,
     do_parse!(
             tag!("BEGIN:VEVENT") >>
             line_ending >>
@@ -110,7 +110,7 @@ named!(pub parse_vevent<&str, (Result<::VEvent, String>)>,
     )
 );
 
-named!(pub parse_vtodo<&str, (Result<::VTodo, String>)>,
+named!(pub parse_vtodo<&str, (Result<crate::VTodo, String>)>,
     do_parse!(
             tag!("BEGIN:VTODO") >>
             line_ending >>
@@ -123,20 +123,20 @@ named!(pub parse_vtodo<&str, (Result<::VTodo, String>)>,
     )
 );
 
-named!(pub parse_content<&str, (Result<::Content, String>)>,
+named!(pub parse_content<&str, (Result<crate::Content, String>)>,
     alt!(
         parse_vevent => { |event| match event {
-            Ok(event) => Ok(::Content::Event(event)),
+            Ok(event) => Ok(crate::Content::Event(event)),
             Err(err) => Err(err),
         }} |
         parse_vtodo => { |todo| match todo {
-            Ok(todo) => Ok(::Content::Todo(todo)),
+            Ok(todo) => Ok(crate::Content::Todo(todo)),
             Err(err) => Err(err),
         }}
     )
 );
 
-named!(pub parse_vcalendar<&str, (Result<::VCalendar, String>)>,
+named!(pub parse_vcalendar<&str, (Result<crate::VCalendar, String>)>,
     do_parse!(
             tag!("BEGIN:VCALENDAR") >>
             line_ending >>
@@ -147,7 +147,7 @@ named!(pub parse_vcalendar<&str, (Result<::VCalendar, String>)>,
             take_until_and_consume!("END:VCALENDAR") >>
 
         ({
-            let calendar: Result<::VCalendar, String> = values.try_into();
+            let calendar: Result<crate::VCalendar, String> = values.try_into();
 
             match calendar {
                 Ok(mut calendar) => {
