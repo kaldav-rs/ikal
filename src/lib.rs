@@ -50,7 +50,7 @@ impl std::convert::TryFrom<String> for VCalendar {
         match parser::parse_vcalendar(raw.as_str()) {
             Ok((_, Ok(o))) => Ok(o),
             Ok((_, Err(err))) => Err(err.to_string()),
-            Err(err) => Err(format!("{}", err)),
+            Err(err) => Err(format!("{:?}", err)),
         }
     }
 }

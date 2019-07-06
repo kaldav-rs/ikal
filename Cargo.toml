@@ -12,7 +12,7 @@ edition = "2018"
 
 [dependencies]
 chrono = "0.4"
-nom = "4.0"
+nom = "5.0"
 
 [badges]
 travis-ci = { repository = "sanpii/ical-parser" }
