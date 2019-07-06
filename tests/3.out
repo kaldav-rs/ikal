@@ -17,11 +17,11 @@ Ok(
                         percent_complete: 100,
                         extra: {
                             "COMPLETED": "20160515T192354",
-                            "LOCATION": ""
-                        }
-                    }
-                )
-            }
-        )
-    )
+                            "LOCATION": "",
+                        },
+                    },
+                ),
+            },
+        ),
+    ),
 )

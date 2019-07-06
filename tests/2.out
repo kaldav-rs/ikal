@@ -6,7 +6,7 @@ Ok(
                 prodid: "ownCloud Calendar",
                 version: "2.0",
                 calscale: Some(
-                    "GREGORIAN"
+                    "GREGORIAN",
                 ),
                 content: Event(
                     VEvent {
@@ -22,11 +22,11 @@ Ok(
                         extra: {
                             "CATEGORIES": "",
                             "DESCRIPTION": "",
-                            "LOCATION": ""
-                        }
-                    }
-                )
-            }
-        )
-    )
+                            "LOCATION": "",
+                        },
+                    },
+                ),
+            },
+        ),
+    ),
 )
