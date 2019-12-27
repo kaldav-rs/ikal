@@ -37,7 +37,7 @@ fn value_line(input: &str) -> nom::IResult<&str, &str>
     take_till!(input, is_line_ending)
 }
 
-fn value_part(input: &str) -> nom::IResult<&str, (String)>
+fn value_part(input: &str) -> nom::IResult<&str, String>
 {
     do_parse!(input,
         value_part:
@@ -49,7 +49,7 @@ fn value_part(input: &str) -> nom::IResult<&str, (String)>
     )
 }
 
-fn value(input: &str) -> nom::IResult<&str, (String)>
+fn value(input: &str) -> nom::IResult<&str, String>
 {
     do_parse!(input,
         value:
@@ -113,7 +113,7 @@ pub fn properties(input: &str) -> nom::IResult<&str, std::collections::BTreeMap<
     )
 }
 
-pub fn parse_vevent(input: &str) -> nom::IResult<&str, (Result<crate::VEvent, String>)>
+pub fn parse_vevent(input: &str) -> nom::IResult<&str, Result<crate::VEvent, String>>
 {
     do_parse!(input,
             tag!("BEGIN:VEVENT") >>
@@ -127,7 +127,7 @@ pub fn parse_vevent(input: &str) -> nom::IResult<&str, (Result<crate::VEvent, St
     )
 }
 
-pub fn parse_vtodo(input: &str) -> nom::IResult<&str, (Result<crate::VTodo, String>)>
+pub fn parse_vtodo(input: &str) -> nom::IResult<&str, Result<crate::VTodo, String>>
 {
     do_parse!(input,
             tag!("BEGIN:VTODO") >>
@@ -141,7 +141,7 @@ pub fn parse_vtodo(input: &str) -> nom::IResult<&str, (Result<crate::VTodo, Stri
     )
 }
 
-pub fn parse_content(input: &str) -> nom::IResult<&str, (Result<crate::Content, String>)>
+pub fn parse_content(input: &str) -> nom::IResult<&str, Result<crate::Content, String>>
 {
     alt!(input,
         parse_vevent => { |event| match event {
@@ -155,7 +155,7 @@ pub fn parse_content(input: &str) -> nom::IResult<&str, (Result<crate::Content, 
     )
 }
 
-pub fn parse_vcalendar(input: &str) -> nom::IResult<&str, (Result<crate::VCalendar, String>)>
+pub fn parse_vcalendar(input: &str) -> nom::IResult<&str, Result<crate::VCalendar, String>>
 {
     do_parse!(input,
             tag!("BEGIN:VCALENDAR") >>
