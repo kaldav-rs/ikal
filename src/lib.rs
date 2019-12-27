@@ -49,7 +49,7 @@ impl std::convert::TryFrom<String> for VCalendar {
     fn try_from(raw: String) -> Result<Self, Self::Error> {
         match parser::parse_vcalendar(raw.as_str()) {
             Ok((_, Ok(o))) => Ok(o),
-            Ok((_, Err(err))) => Err(err.to_string()),
+            Ok((_, Err(err))) => Err(err),
             Err(err) => Err(format!("{:?}", err)),
         }
     }
