@@ -128,15 +128,8 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VEvent {
                 "LAST-MODIFIED" => vevent.last_modified = VEvent::parse_date(value)?,
                 "UID" => vevent.uid = value,
                 "SUMMARY" => vevent.summary = value,
-                "CLASS" => match value.as_str() {
-                    "PUBLIC" => vevent.class = Class::Public,
-                    _ => return Err(format!("Unknow class {}", value)),
-                },
-                "STATUS" => match value.as_str() {
-                    "CONFIRMED" => vevent.status = Status::Confirmed,
-                    "COMPLETED" => vevent.status = Status::Completed,
-                    _ => return Err(format!("Unknow status {}", value)),
-                },
+                "CLASS" => vevent.class = TryFrom::try_from(value.as_str())?,
+                "STATUS" => vevent.status = TryFrom::try_from(value.as_str())?,
                 "DTSTART" => vevent.dt_start = VEvent::parse_date(value)?,
                 "DTEND" => vevent.dt_end = VEvent::parse_date(value)?,
                 _ => {
@@ -215,11 +208,7 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VTodo {
                     Ok(percent_complete) => percent_complete,
                     Err(err) => return Err(format!("{}", err)),
                 },
-                "STATUS" => match value.as_str() {
-                    "CONFIRMED" => vtodo.status = Status::Confirmed,
-                    "COMPLETED" => vtodo.status = Status::Completed,
-                    _ => return Err(format!("Unknow status {}", value)),
-                },
+                "STATUS" => vtodo.status = TryFrom::try_from(value.as_str())?,
                 _ => {
                     vtodo.extra.insert(key.to_owned(), value);
                 },
@@ -231,14 +220,43 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VTodo {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-enum Class {
+pub enum Class {
     Public,
 }
 
+impl TryFrom<&str> for Class {
+    type Error = String;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        let class = match value {
+            "PUBLIC" => Self::Public,
+            _ => return Err(format!("Unknow class {}", value)),
+        };
+
+        Ok(class)
+    }
+}
+
 #[derive(Clone, Debug, PartialEq)]
-enum Status {
+pub enum Status {
+    Cancelled,
     Confirmed,
     Completed,
+    Tentative,
+}
+
+impl TryFrom<&str> for Status {
+    type Error = String;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        let status = match value {
+            "CONFIRMED" => Self::Confirmed,
+            "COMPLETED" => Self::Completed,
+            _ => return Err(format!("Unknow status {}", value)),
+        };
+
+        Ok(status)
+    }
 }
 
 #[cfg(test)]
