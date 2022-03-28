@@ -64,16 +64,16 @@ pub enum Content {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct VEvent {
-    created: DateTime,
-    dtstamp: DateTime,
-    last_modified: DateTime,
-    uid: String,
-    summary: String,
-    class: Class,
-    status: Status,
-    dt_start: DateTime,
-    dt_end: DateTime,
-    extra: std::collections::BTreeMap<String, String>,
+    pub created: DateTime,
+    pub dtstamp: DateTime,
+    pub last_modified: DateTime,
+    pub uid: String,
+    pub summary: String,
+    pub class: Class,
+    pub status: Status,
+    pub dt_start: DateTime,
+    pub dt_end: DateTime,
+    pub extra: std::collections::BTreeMap<String, String>,
 }
 
 impl Default for VEvent {
@@ -151,14 +151,14 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VEvent {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct VTodo {
-    created: DateTime,
-    dtstamp: DateTime,
-    last_modified: DateTime,
-    uid: String,
-    summary: String,
-    status: Status,
-    percent_complete: u8,
-    extra: std::collections::BTreeMap<String, String>,
+    pub created: DateTime,
+    pub dtstamp: DateTime,
+    pub last_modified: DateTime,
+    pub uid: String,
+    pub summary: String,
+    pub status: Status,
+    pub percent_complete: u8,
+    pub extra: std::collections::BTreeMap<String, String>,
 }
 
 impl Default for VTodo {
