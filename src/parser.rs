@@ -1,13 +1,12 @@
+use nom::branch::alt;
+use nom::bytes::complete::{tag, take_till, take_until, take_while};
 use nom::character::complete::{char, line_ending};
-use nom::bytes::complete::{tag, take_while, take_till, take_until};
 use nom::combinator::{map, not, opt};
 use nom::multi::many0;
-use nom::branch::alt;
 use nom::sequence::tuple;
 
 fn is_alphabetic(chr: char) -> bool {
-    (chr as u8 >= 0x41 && chr as u8 <= 0x5A)
-        || (chr as u8 >= 0x61 && chr as u8 <= 0x7A)
+    (chr as u8 >= 0x41 && chr as u8 <= 0x5A) || (chr as u8 >= 0x61 && chr as u8 <= 0x7A)
 }
 
 fn is_digit(chr: char) -> bool {
@@ -26,56 +25,37 @@ fn is_line_ending(chr: char) -> bool {
     chr == '\n' || chr == '\r'
 }
 
-fn key(input: &str) -> nom::IResult<&str, &str>
-{
+fn key(input: &str) -> nom::IResult<&str, &str> {
     take_while(is_alphanumeric)(input)
 }
 
-fn attr(input: &str) -> nom::IResult<&str, &str>
-{
+fn attr(input: &str) -> nom::IResult<&str, &str> {
     take_while(is_alphanumeric)(input)
 }
 
-fn value_line(input: &str) -> nom::IResult<&str, &str>
-{
+fn value_line(input: &str) -> nom::IResult<&str, &str> {
     take_till(is_line_ending)(input)
 }
 
-fn value_part(input: &str) -> nom::IResult<&str, String>
-{
-    let (input, (value, _, _)) = tuple((
-        value_line,
-        line_ending,
-        tag(" "),
-    ))(input)?;
+fn value_part(input: &str) -> nom::IResult<&str, String> {
+    let (input, (value, _, _)) = tuple((value_line, line_ending, tag(" ")))(input)?;
 
     Ok((input, value.to_string()))
 }
 
-fn value(input: &str) -> nom::IResult<&str, String>
-{
-    let (input, (value, value_end)) = tuple((
-        many0(value_part),
-        value_line,
-    ))(input)?;
+fn value(input: &str) -> nom::IResult<&str, String> {
+    let (input, (value, value_end)) = tuple((many0(value_part), value_line))(input)?;
 
     Ok((input, value.join("") + value_end))
 }
 
-fn param(input: &str) -> nom::IResult<&str, (String, String)>
-{
-    let (input, (_, key, _, attr)) = tuple((
-        char(';'),
-        key,
-        char('='),
-        attr,
-    ))(input)?;
+fn param(input: &str) -> nom::IResult<&str, (String, String)> {
+    let (input, (_, key, _, attr)) = tuple((char(';'), key, char('='), attr))(input)?;
 
     Ok((input, (key.into(), attr.into())))
 }
 
-pub fn property(input: &str) -> nom::IResult<&str, (String, String)>
-{
+pub fn property(input: &str) -> nom::IResult<&str, (String, String)> {
     let (input, (_, _, key, _, _, value, _)) = tuple((
         not(tag("BEGIN")),
         not(tag("END")),
@@ -86,17 +66,19 @@ pub fn property(input: &str) -> nom::IResult<&str, (String, String)>
         line_ending,
     ))(input)?;
 
-    let result = (key.into(), if let Some(value) = value {
-        value
-    } else {
-        String::new()
-    });
+    let result = (
+        key.into(),
+        if let Some(value) = value {
+            value
+        } else {
+            String::new()
+        },
+    );
 
     Ok((input, result))
 }
 
-pub fn properties(input: &str) -> nom::IResult<&str, std::collections::BTreeMap<String, String>>
-{
+pub fn properties(input: &str) -> nom::IResult<&str, std::collections::BTreeMap<String, String>> {
     let (input, values) = many0(property)(input)?;
 
     let mut hash = std::collections::BTreeMap::new();
@@ -108,8 +90,7 @@ pub fn properties(input: &str) -> nom::IResult<&str, std::collections::BTreeMap<
     Ok((input, hash))
 }
 
-pub fn parse_vevent(input: &str) -> nom::IResult<&str, Result<crate::VEvent, String>>
-{
+pub fn parse_vevent(input: &str) -> nom::IResult<&str, Result<crate::VEvent, String>> {
     let (input, (_, _, value, _, _)) = tuple((
         tag("BEGIN:VEVENT"),
         line_ending,
@@ -121,8 +102,7 @@ pub fn parse_vevent(input: &str) -> nom::IResult<&str, Result<crate::VEvent, Str
     Ok((input, value.try_into()))
 }
 
-pub fn parse_vtodo(input: &str) -> nom::IResult<&str, Result<crate::VTodo, String>>
-{
+pub fn parse_vtodo(input: &str) -> nom::IResult<&str, Result<crate::VTodo, String>> {
     let (input, (_, _, values, _, _)) = tuple((
         tag("BEGIN:VTODO"),
         line_ending,
@@ -134,16 +114,14 @@ pub fn parse_vtodo(input: &str) -> nom::IResult<&str, Result<crate::VTodo, Strin
     Ok((input, values.try_into()))
 }
 
-pub fn parse_content(input: &str) -> nom::IResult<&str, Result<crate::Content, String>>
-{
+pub fn parse_content(input: &str) -> nom::IResult<&str, Result<crate::Content, String>> {
     alt((
         map(parse_vevent, |x| x.map(crate::Content::Event)),
         map(parse_vtodo, |x| x.map(crate::Content::Todo)),
     ))(input)
 }
 
-pub fn parse_vcalendar(input: &str) -> nom::IResult<&str, Result<crate::VCalendar, String>>
-{
+pub fn parse_vcalendar(input: &str) -> nom::IResult<&str, Result<crate::VCalendar, String>> {
     let (input, (_, _, values, content, _, _)) = tuple((
         tag("BEGIN:VCALENDAR"),
         line_ending,
@@ -156,14 +134,12 @@ pub fn parse_vcalendar(input: &str) -> nom::IResult<&str, Result<crate::VCalenda
     let calendar: Result<crate::VCalendar, String> = values.try_into();
 
     let result = match calendar {
-        Ok(mut calendar) => {
-            match content {
-                Ok(content) => {
-                    calendar.content = content;
-                    Ok(calendar)
-                },
-                Err(err) => Err(err),
+        Ok(mut calendar) => match content {
+            Ok(content) => {
+                calendar.content = content;
+                Ok(calendar)
             }
+            Err(err) => Err(err),
         },
         Err(err) => Err(err),
     };

@@ -1,5 +1,5 @@
-use chrono::offset::TimeZone;
 use chrono::offset::Local;
+use chrono::offset::TimeZone;
 
 mod parser;
 
@@ -27,7 +27,9 @@ impl VCalendar {
 impl TryFrom<std::collections::BTreeMap<String, String>> for VCalendar {
     type Error = String;
 
-    fn try_from(properties: std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
+    fn try_from(
+        properties: std::collections::BTreeMap<String, String>,
+    ) -> Result<Self, Self::Error> {
         let mut vcalendar = VCalendar::new();
 
         for (key, value) in properties {
@@ -98,7 +100,10 @@ impl VEvent {
         }
     }
 
-    fn parse_date<S>(date: S) -> Result<DateTime, String> where S: Into<String> {
+    fn parse_date<S>(date: S) -> Result<DateTime, String>
+    where
+        S: Into<String>,
+    {
         let mut date = date.into();
 
         if date.len() == 8 {
@@ -118,7 +123,9 @@ impl VEvent {
 impl TryFrom<std::collections::BTreeMap<String, String>> for VEvent {
     type Error = String;
 
-    fn try_from(properties: std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
+    fn try_from(
+        properties: std::collections::BTreeMap<String, String>,
+    ) -> Result<Self, Self::Error> {
         let mut vevent = VEvent::new();
 
         for (key, value) in properties {
@@ -134,7 +141,7 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VEvent {
                 "DTEND" => vevent.dt_end = VEvent::parse_date(value)?,
                 _ => {
                     vevent.extra.insert(key.to_owned(), value);
-                },
+                }
             };
         }
 
@@ -174,7 +181,10 @@ impl VTodo {
         }
     }
 
-    fn parse_date<S>(date: S) -> Result<DateTime, String> where S: Into<String> {
+    fn parse_date<S>(date: S) -> Result<DateTime, String>
+    where
+        S: Into<String>,
+    {
         let mut date = date.into();
 
         if date.len() == 8 {
@@ -194,7 +204,9 @@ impl VTodo {
 impl TryFrom<std::collections::BTreeMap<String, String>> for VTodo {
     type Error = String;
 
-    fn try_from(properties: std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
+    fn try_from(
+        properties: std::collections::BTreeMap<String, String>,
+    ) -> Result<Self, Self::Error> {
         let mut vtodo = VTodo::new();
 
         for (key, value) in properties {
@@ -204,14 +216,16 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VTodo {
                 "LAST-MODIFIED" => vtodo.last_modified = VTodo::parse_date(value)?,
                 "UID" => vtodo.uid = value,
                 "SUMMARY" => vtodo.summary = value,
-                "PERCENT-COMPLETE" => vtodo.percent_complete = match value.parse() {
-                    Ok(percent_complete) => percent_complete,
-                    Err(err) => return Err(format!("{}", err)),
-                },
+                "PERCENT-COMPLETE" => {
+                    vtodo.percent_complete = match value.parse() {
+                        Ok(percent_complete) => percent_complete,
+                        Err(err) => return Err(format!("{}", err)),
+                    }
+                }
                 "STATUS" => vtodo.status = TryFrom::try_from(value.as_str())?,
                 _ => {
                     vtodo.extra.insert(key.to_owned(), value);
-                },
+                }
             };
         }
 
@@ -282,7 +296,7 @@ PRODID:-//Nextcloud calendar v1.5.0";
 
         let expected = (
             String::from("DESCRIPTION"),
-            String::from("This is a long description that exists on a long line.")
+            String::from("This is a long description that exists on a long line."),
         );
 
         assert_eq!(
@@ -306,10 +320,7 @@ PRODID:-//Nextcloud calendar v1.5.0";
         let mut expected = std::collections::BTreeMap::new();
         expected.insert("CREATED".into(), "20141009T141617Z".into());
 
-        assert_eq!(
-            crate::parser::properties(line),
-            Ok(("\n", expected))
-        );
+        assert_eq!(crate::parser::properties(line), Ok(("\n", expected)));
     }
 
     #[test]
@@ -323,15 +334,11 @@ CALSCALE:GREGORIAN
         expected.insert("VERSION".into(), "2.0".into());
         expected.insert("CALSCALE".into(), "GREGORIAN".into());
 
-        assert_eq!(
-            crate::parser::properties(line),
-            Ok(("\n", expected))
-        );
+        assert_eq!(crate::parser::properties(line), Ok(("\n", expected)));
     }
 
     #[test]
-    fn test_component() {
-    }
+    fn test_component() {}
 
     #[test]
     fn test_parse_vevent() {
@@ -350,18 +357,21 @@ END:VEVENT
 
         assert_eq!(
             crate::parser::parse_vevent(line),
-            Ok(("", Ok(crate::VEvent {
-                created: crate::VEvent::parse_date("20170209T192358").unwrap(),
-                dtstamp: crate::VEvent::parse_date("20170209T192358").unwrap(),
-                last_modified: crate::VEvent::parse_date("20170209T192358").unwrap(),
-                uid: "5UILHLI7RI6K2IDRAQX7O".into(),
-                summary: "Vers".into(),
-                class: crate::Class::Public,
-                status: crate::Status::Confirmed,
-                dt_start: crate::VEvent::parse_date("20170209").unwrap(),
-                dt_end: crate::VEvent::parse_date("20170210").unwrap(),
-                extra: std::collections::BTreeMap::new(),
-            })))
+            Ok((
+                "",
+                Ok(crate::VEvent {
+                    created: crate::VEvent::parse_date("20170209T192358").unwrap(),
+                    dtstamp: crate::VEvent::parse_date("20170209T192358").unwrap(),
+                    last_modified: crate::VEvent::parse_date("20170209T192358").unwrap(),
+                    uid: "5UILHLI7RI6K2IDRAQX7O".into(),
+                    summary: "Vers".into(),
+                    class: crate::Class::Public,
+                    status: crate::Status::Confirmed,
+                    dt_start: crate::VEvent::parse_date("20170209").unwrap(),
+                    dt_end: crate::VEvent::parse_date("20170210").unwrap(),
+                    extra: std::collections::BTreeMap::new(),
+                })
+            ))
         );
     }
 
