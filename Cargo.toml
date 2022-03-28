@@ -8,7 +8,7 @@ repository = "https://github.com/sanpii/ical-parser.git"
 documentation = "https://docs.rs/ical-parser/"
 keywords = ["icalendar"]
 categories = ["parser-implementations", "text-processing"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 chrono = "0.4"

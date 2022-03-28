@@ -4,7 +4,6 @@ use nom::combinator::{map, not, opt};
 use nom::multi::many0;
 use nom::branch::alt;
 use nom::sequence::tuple;
-use std::convert::TryInto;
 
 fn is_alphabetic(chr: char) -> bool {
     (chr as u8 >= 0x41 && chr as u8 <= 0x5A)

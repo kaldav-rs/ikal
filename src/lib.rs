@@ -24,7 +24,7 @@ impl VCalendar {
     }
 }
 
-impl std::convert::TryFrom<std::collections::BTreeMap<String, String>> for VCalendar {
+impl TryFrom<std::collections::BTreeMap<String, String>> for VCalendar {
     type Error = String;
 
     fn try_from(properties: std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
@@ -43,7 +43,7 @@ impl std::convert::TryFrom<std::collections::BTreeMap<String, String>> for VCale
     }
 }
 
-impl std::convert::TryFrom<String> for VCalendar {
+impl TryFrom<String> for VCalendar {
     type Error = String;
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
@@ -115,7 +115,7 @@ impl VEvent {
     }
 }
 
-impl std::convert::TryFrom<std::collections::BTreeMap<String, String>> for VEvent {
+impl TryFrom<std::collections::BTreeMap<String, String>> for VEvent {
     type Error = String;
 
     fn try_from(properties: std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
@@ -198,7 +198,7 @@ impl VTodo {
     }
 }
 
-impl std::convert::TryFrom<std::collections::BTreeMap<String, String>> for VTodo {
+impl TryFrom<std::collections::BTreeMap<String, String>> for VTodo {
     type Error = String;
 
     fn try_from(properties: std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
