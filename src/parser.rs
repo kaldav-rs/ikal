@@ -1,4 +1,9 @@
-use nom::{character::complete::line_ending, take_while, take_till, tag, do_parse, not, opt, many0, alt, char, take_until};
+use nom::character::complete::{char, line_ending};
+use nom::bytes::complete::{tag, take_while, take_till, take_until};
+use nom::combinator::{map, not, opt};
+use nom::multi::many0;
+use nom::branch::alt;
+use nom::sequence::tuple;
 use std::convert::TryInto;
 
 fn is_alphabetic(chr: char) -> bool {
@@ -24,164 +29,145 @@ fn is_line_ending(chr: char) -> bool {
 
 fn key(input: &str) -> nom::IResult<&str, &str>
 {
-    take_while!(input, is_alphanumeric)
+    take_while(is_alphanumeric)(input)
 }
 
 fn attr(input: &str) -> nom::IResult<&str, &str>
 {
-    take_while!(input, is_alphanumeric)
+    take_while(is_alphanumeric)(input)
 }
 
 fn value_line(input: &str) -> nom::IResult<&str, &str>
 {
-    take_till!(input, is_line_ending)
+    take_till(is_line_ending)(input)
 }
 
 fn value_part(input: &str) -> nom::IResult<&str, String>
 {
-    do_parse!(input,
-        value_part:
-            value_line >>
-            line_ending >>
-            tag!(" ") >>
+    let (input, (value, _, _)) = tuple((
+        value_line,
+        line_ending,
+        tag(" "),
+    ))(input)?;
 
-        (value_part.into())
-    )
+    Ok((input, value.to_string()))
 }
 
 fn value(input: &str) -> nom::IResult<&str, String>
 {
-    do_parse!(input,
-        value:
-            many0!(value_part) >>
-        value_end:
-            value_line >>
+    let (input, (value, value_end)) = tuple((
+        many0(value_part),
+        value_line,
+    ))(input)?;
 
-        (value.join("") + value_end)
-    )
+    Ok((input, value.join("") + value_end))
 }
 
 fn param(input: &str) -> nom::IResult<&str, (String, String)>
 {
-    do_parse!(input,
-        char!(';') >>
-        key:
-            key >>
-            char!('=') >>
-        attr:
-            attr >>
+    let (input, (_, key, _, attr)) = tuple((
+        char(';'),
+        key,
+        char('='),
+        attr,
+    ))(input)?;
 
-        (key.into(), attr.into())
-    )
+    Ok((input, (key.into(), attr.into())))
 }
 
 pub fn property(input: &str) -> nom::IResult<&str, (String, String)>
 {
-    do_parse!(input,
-            not!(tag!("BEGIN")) >>
-            not!(tag!("END")) >>
-        key:
-            key >>
-            many0!(param) >>
-            char!(':') >>
-        value:
-            opt!(value) >>
-            line_ending >>
+    let (input, (_, _, key, _, _, value, _)) = tuple((
+        not(tag("BEGIN")),
+        not(tag("END")),
+        key,
+        many0(param),
+        char(':'),
+        opt(value),
+        line_ending,
+    ))(input)?;
 
-        (key.into(), if let Some(value) = value {
-            value
-        } else {
-            String::new()
-        })
-    )
+    let result = (key.into(), if let Some(value) = value {
+        value
+    } else {
+        String::new()
+    });
+
+    Ok((input, result))
 }
 
 pub fn properties(input: &str) -> nom::IResult<&str, std::collections::BTreeMap<String, String>>
 {
-    do_parse!(input,
-        values: many0!(property) >>
+    let (input, values) = many0(property)(input)?;
 
-        ({
-            let mut hash = std::collections::BTreeMap::new();
+    let mut hash = std::collections::BTreeMap::new();
 
-            for (key, value) in values {
-                hash.insert(key, value);
-            }
+    for (key, value) in values {
+        hash.insert(key, value);
+    }
 
-            hash
-        })
-    )
+    Ok((input, hash))
 }
 
 pub fn parse_vevent(input: &str) -> nom::IResult<&str, Result<crate::VEvent, String>>
 {
-    do_parse!(input,
-            tag!("BEGIN:VEVENT") >>
-            line_ending >>
-        values:
-            properties >>
-            tag!("END:VEVENT") >>
-            line_ending >>
+    let (input, (_, _, value, _, _)) = tuple((
+        tag("BEGIN:VEVENT"),
+        line_ending,
+        properties,
+        tag("END:VEVENT"),
+        line_ending,
+    ))(input)?;
 
-        (values.try_into())
-    )
+    Ok((input, value.try_into()))
 }
 
 pub fn parse_vtodo(input: &str) -> nom::IResult<&str, Result<crate::VTodo, String>>
 {
-    do_parse!(input,
-            tag!("BEGIN:VTODO") >>
-            line_ending >>
-        values:
-            properties >>
-            tag!("END:VTODO") >>
-            line_ending >>
+    let (input, (_, _, values, _, _)) = tuple((
+        tag("BEGIN:VTODO"),
+        line_ending,
+        properties,
+        tag("END:VTODO"),
+        line_ending,
+    ))(input)?;
 
-        (values.try_into())
-    )
+    Ok((input, values.try_into()))
 }
 
 pub fn parse_content(input: &str) -> nom::IResult<&str, Result<crate::Content, String>>
 {
-    alt!(input,
-        parse_vevent => { |event| match event {
-            Ok(event) => Ok(crate::Content::Event(event)),
-            Err(err) => Err(err),
-        }} |
-        parse_vtodo => { |todo| match todo {
-            Ok(todo) => Ok(crate::Content::Todo(todo)),
-            Err(err) => Err(err),
-        }}
-    )
+    alt((
+        map(parse_vevent, |x| x.map(crate::Content::Event)),
+        map(parse_vtodo, |x| x.map(crate::Content::Todo)),
+    ))(input)
 }
 
 pub fn parse_vcalendar(input: &str) -> nom::IResult<&str, Result<crate::VCalendar, String>>
 {
-    do_parse!(input,
-            tag!("BEGIN:VCALENDAR") >>
-            line_ending >>
-        values:
-            properties >>
-        content:
-            parse_content >>
-            take_until!("END:VCALENDAR") >>
-            tag!("END:VCALENDAR") >>
+    let (input, (_, _, values, content, _, _)) = tuple((
+        tag("BEGIN:VCALENDAR"),
+        line_ending,
+        properties,
+        parse_content,
+        take_until("END:VCALENDAR"),
+        tag("END:VCALENDAR"),
+    ))(input)?;
 
-        ({
-            let calendar: Result<crate::VCalendar, String> = values.try_into();
+    let calendar: Result<crate::VCalendar, String> = values.try_into();
 
-            match calendar {
-                Ok(mut calendar) => {
-                    match content {
-                        Ok(content) => {
-                            calendar.content = content;
-                            Ok(calendar)
-                        },
-                        Err(err) => Err(err),
-                    }
+    let result = match calendar {
+        Ok(mut calendar) => {
+            match content {
+                Ok(content) => {
+                    calendar.content = content;
+                    Ok(calendar)
                 },
                 Err(err) => Err(err),
             }
-        })
-    )
+        },
+        Err(err) => Err(err),
+    };
+
+    Ok((input, result))
 }
