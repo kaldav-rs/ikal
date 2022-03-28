@@ -105,7 +105,7 @@ impl VEvent {
             date.push_str("T000000Z");
         }
         if date.len() == 15 {
-            date.push_str("Z");
+            date.push('Z');
         }
 
         match Local.datetime_from_str(date.as_str(), "%Y%m%dT%H%M%SZ") {
@@ -188,7 +188,7 @@ impl VTodo {
             date.push_str("T000000Z");
         }
         if date.len() == 15 {
-            date.push_str("Z");
+            date.push('Z');
         }
 
         match Local.datetime_from_str(date.as_str(), "%Y%m%dT%H%M%SZ") {
