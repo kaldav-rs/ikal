@@ -1,32 +1,56 @@
 Ok(
-    (
-        "",
-        Ok(
-            VCalendar {
-                prodid: "ownCloud Calendar",
-                version: "2.0",
-                calscale: Some(
-                    "GREGORIAN",
+    VCalendar {
+        prodid: "ownCloud Calendar",
+        version: "2.0",
+        calscale: Some(
+            "GREGORIAN",
+        ),
+        content: Event(
+            VEvent {
+                dtstamp: 2015-07-17T12:19:59+02:00,
+                uid: "7e27d9fc69",
+                dt_start: 2015-07-22T00:00:00+02:00,
+                dt_end: 2015-07-23T00:00:00+02:00,
+                class: None,
+                created: Some(
+                    2015-07-17T12:19:59+02:00,
                 ),
-                content: Event(
-                    VEvent {
-                        created: 2015-07-17T10:19:59+02:00,
-                        dtstamp: 2015-07-17T10:19:59+02:00,
-                        last_modified: 2015-07-17T10:19:59+02:00,
-                        uid: "7e27d9fc69",
-                        summary: "Garage",
-                        class: Public,
-                        status: Confirmed,
-                        dt_start: 2015-07-22T00:00:00+02:00,
-                        dt_end: 2015-07-23T00:00:00+02:00,
-                        extra: {
-                            "CATEGORIES": "",
-                            "DESCRIPTION": "",
-                            "LOCATION": "",
-                        },
-                    },
+                description: Some(
+                    "",
                 ),
+                geo: None,
+                last_modified: Some(
+                    2015-07-17T12:19:59+02:00,
+                ),
+                location: Some(
+                    "",
+                ),
+                organizer: None,
+                priority: None,
+                seq: None,
+                status: None,
+                summary: Some(
+                    "Garage",
+                ),
+                transp: None,
+                url: None,
+                recurid: None,
+                rrule: None,
+                attach: [],
+                attendee: [],
+                categories: [
+                    "",
+                ],
+                comment: [],
+                contact: [],
+                exdate: [],
+                rstatus: [],
+                related: [],
+                resources: [],
+                rdate: [],
+                x_prop: {},
+                iana_prop: {},
             },
         ),
-    ),
+    },
 )

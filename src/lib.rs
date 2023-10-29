@@ -51,11 +51,7 @@ impl TryFrom<String> for VCalendar {
     type Error = Error;
 
     fn try_from(raw: String) -> Result<Self> {
-        match parser::parse_vcalendar(raw.as_str()) {
-            Ok((_, Ok(o))) => Ok(o),
-            Ok((_, Err(err))) => Err(err),
-            Err(err) => Err(Error::Parser(format!("{err:?}"))),
-        }
+        parser::parse_vcalendar(raw.as_str())
     }
 }
 
@@ -66,18 +62,42 @@ pub enum Content {
     Todo(crate::VTodo),
 }
 
+/**
+ * See [3.6.1. Event Component](https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.1)
+ */
 #[derive(Clone, Debug, PartialEq)]
 pub struct VEvent {
-    pub created: DateTime,
     pub dtstamp: DateTime,
-    pub last_modified: DateTime,
     pub uid: String,
-    pub summary: String,
-    pub class: Class,
-    pub status: Status,
     pub dt_start: DateTime,
     pub dt_end: DateTime,
-    pub extra: std::collections::BTreeMap<String, String>,
+    pub class: Option<Class>,
+    pub created: Option<DateTime>,
+    pub description: Option<String>,
+    pub geo: Option<Geo>,
+    pub last_modified: Option<DateTime>,
+    pub location: Option<String>,
+    pub organizer: Option<String>,
+    pub priority: Option<u8>,
+    pub seq: Option<u32>,
+    pub status: Option<Status>,
+    pub summary: Option<String>,
+    pub transp: Option<TimeTransparency>,
+    pub url: Option<String>,
+    pub recurid: Option<String>,
+    pub rrule: Option<Recur>,
+    pub attach: Vec<String>,
+    pub attendee: Vec<String>,
+    pub categories: Vec<String>,
+    pub comment: Vec<String>,
+    pub contact: Vec<String>,
+    pub exdate: Vec<DateTime>,
+    pub rstatus: Vec<String>,
+    pub related: Vec<String>,
+    pub resources: Vec<String>,
+    pub rdate: Vec<String>,
+    pub x_prop: std::collections::BTreeMap<String, String>,
+    pub iana_prop: std::collections::BTreeMap<String, String>,
 }
 
 impl Default for VEvent {
@@ -89,36 +109,37 @@ impl Default for VEvent {
 impl VEvent {
     pub fn new() -> Self {
         Self {
-            created: Local::now(),
             dtstamp: Local::now(),
-            last_modified: Local::now(),
             uid: String::new(),
-            summary: String::new(),
-            class: Class::Public,
-            status: Status::Confirmed,
             dt_start: Local::now(),
             dt_end: Local::now(),
-            extra: std::collections::BTreeMap::new(),
-        }
-    }
-
-    // <https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.5>
-    fn parse_date<S>(date: S) -> Result<DateTime>
-    where
-        S: Into<String>,
-    {
-        let mut date = date.into();
-
-        if date.len() == 8 {
-            date.push_str("T000000");
-        }
-
-        let dt = chrono::NaiveDateTime::parse_from_str(date.as_str(), "%Y%m%dT%H%M%S")?;
-
-        if date.ends_with('Z') {
-            Ok(dt.and_utc().with_timezone(&chrono::Local))
-        } else {
-            Ok(dt.and_local_timezone(chrono::Local).unwrap())
+            class: None,
+            created: None,
+            description: None,
+            geo: None,
+            last_modified: None,
+            location: None,
+            organizer: None,
+            priority: None,
+            seq: None,
+            status: None,
+            summary: None,
+            transp: None,
+            url: None,
+            recurid: None,
+            rrule: None,
+            attach: Vec::new(),
+            attendee: Vec::new(),
+            categories: Vec::new(),
+            comment: Vec::new(),
+            contact: Vec::new(),
+            exdate: Vec::new(),
+            rstatus: Vec::new(),
+            related: Vec::new(),
+            resources: Vec::new(),
+            rdate: Vec::new(),
+            x_prop: std::collections::BTreeMap::new(),
+            iana_prop: std::collections::BTreeMap::new(),
         }
     }
 }
@@ -133,17 +154,40 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VEvent {
 
         for (key, value) in properties {
             match key.as_str() {
-                "CREATED" => vevent.created = VEvent::parse_date(value)?,
-                "DTSTAMP" => vevent.dtstamp = VEvent::parse_date(value)?,
-                "LAST-MODIFIED" => vevent.last_modified = VEvent::parse_date(value)?,
+                "DTSTAMP" => vevent.dtstamp = parser::parse_date(value)?,
                 "UID" => vevent.uid = value,
-                "SUMMARY" => vevent.summary = value,
-                "CLASS" => vevent.class = value.into(),
-                "STATUS" => vevent.status = value.try_into()?,
-                "DTSTART" => vevent.dt_start = VEvent::parse_date(value)?,
-                "DTEND" => vevent.dt_end = VEvent::parse_date(value)?,
-                _ => {
-                    vevent.extra.insert(key, value);
+                "DTSTART" => vevent.dt_start = parser::parse_date(value)?,
+                "DTEND" => vevent.dt_end = parser::parse_date(value)?,
+                "DURATION" => vevent.dt_end = vevent.dt_start + parser::parse_duration(value)?,
+                "CLASS" => vevent.class = Some(value.into()),
+                "CREATED" => vevent.created = Some(parser::parse_date(value)?),
+                "DESCRIPTION" => vevent.description = Some(value),
+                "GEO" => vevent.geo = Some(parser::parse_geo(value)?),
+                "LAST-MODIFIED" => vevent.last_modified = Some(parser::parse_date(value)?),
+                "LOCATION" => vevent.location = Some(value),
+                "ORGANIZER" => vevent.organizer = Some(parser::parse_organizer(value)?),
+                "PRIORITY" => vevent.priority = Some(parser::parse_priority(value)?),
+                "SEQ" => vevent.seq = Some(parser::parse_sequence(value)?),
+                "STATUS" => vevent.status = Some(value.try_into()?),
+                "SUMMARY" => vevent.summary = Some(value),
+                "STRANSP" => vevent.transp = Some(value.try_into()?),
+                "URL" => vevent.url = Some(value),
+                "RECURID" => vevent.recurid = Some(parser::parse_recurid(value)?),
+                "RRULE" => vevent.rrule = Some(parser::parse_rrule(value)?),
+                "ATTACH" => vevent.attach.push(parser::parse_attach(value)),
+                "ATTENDEE" => vevent.attendee.push(parser::parse_attendee(value)),
+                "CATEGORIES" => vevent.categories.append(&mut parser::parse_categories(value)),
+                "COMMENT" => vevent.comment.push(parser::parse_comment(value)),
+                "CONTACT" => vevent.contact.push(parser::parse_contact(value)),
+                "EXDATE" => vevent.exdate.append(&mut parser::parse_exdate(value)?),
+                "RSTATUS" => vevent.rstatus.push(parser::parse_rstatus(value)?),
+                "RELATED-TO" => vevent.related.push(parser::parse_related(value)),
+                "RESOURCES" => vevent.resources.append(&mut parser::parse_resources(value)),
+                "RDATE" => vevent.rdate.append(&mut parser::parse_rdate(value)?),
+                _ => if key.starts_with("X-") {
+                    vevent.x_prop.insert(key, value);
+                } else {
+                    vevent.iana_prop.insert(key, value);
                 }
             };
         }
@@ -183,13 +227,6 @@ impl VTodo {
             extra: std::collections::BTreeMap::new(),
         }
     }
-
-    fn parse_date<S>(date: S) -> Result<DateTime>
-    where
-        S: Into<String>,
-    {
-        VEvent::parse_date(date)
-    }
 }
 
 impl TryFrom<std::collections::BTreeMap<String, String>> for VTodo {
@@ -202,9 +239,9 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VTodo {
 
         for (key, value) in properties {
             match key.as_str() {
-                "CREATED" => vtodo.created = VTodo::parse_date(value)?,
-                "DTSTAMP" => vtodo.dtstamp = VTodo::parse_date(value)?,
-                "LAST-MODIFIED" => vtodo.last_modified = VTodo::parse_date(value)?,
+                "CREATED" => vtodo.created = parser::parse_date(value)?,
+                "DTSTAMP" => vtodo.dtstamp = parser::parse_date(value)?,
+                "LAST-MODIFIED" => vtodo.last_modified = parser::parse_date(value)?,
                 "UID" => vtodo.uid = value,
                 "SUMMARY" => vtodo.summary = value,
                 "PERCENT-COMPLETE" => vtodo.percent_complete = value.parse()?,
@@ -286,6 +323,131 @@ impl TryFrom<String> for Status {
         };
 
         Ok(status)
+    }
+}
+
+/**
+ * This property defines whether or not an event is transparent to busy time searches.
+ *
+ * See [3.8.2.7. Time Transparency](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.7)
+ */
+#[derive(Clone, Debug, PartialEq)]
+pub enum TimeTransparency {
+    /** Blocks or opaque on busy time searches */
+    Opaque,
+    /** Transparent on busy time searches */
+    Transparent,
+}
+
+impl TryFrom<String> for TimeTransparency {
+    type Error = Error;
+
+    fn try_from(value: String) -> Result<Self> {
+        let status = match value.as_str() {
+            "OPAQUE" => Self::Opaque,
+            "TRANSPARENT" => Self::Transparent,
+
+            _ => return Err(Error::TimeTransparency(value.to_string())),
+        };
+
+        Ok(status)
+    }
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct Geo {
+    pub lat: f32,
+    pub lon: f32,
+}
+
+/**
+ * This value type is used to identify properties that contain a recurrence rule specification.
+ *
+ * See [3.3.10. Recurrence Rule](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3)
+ */
+#[derive(Clone, Debug, PartialEq)]
+pub struct Recur {
+    freq: Freq,
+    until: Option<DateTime>,
+    count: Option<u8>,
+    interval: Option<u8>,
+    by_second: Vec<i8>,
+    by_minute: Vec<i8>,
+    by_hour: Vec<i8>,
+    by_day: Vec<WeekdayNum>,
+    by_monthday: Vec<i8>,
+    by_yearday: Vec<i8>,
+    by_weekno: Vec<i8>,
+    by_month: Vec<i8>,
+    by_setpos: Vec<i8>,
+    wkst: Option<Weekday>,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub enum Freq {
+    Secondly,
+    Minutely,
+    Hourly,
+    Daily,
+    Weekly,
+    Monthly,
+    Yearly,
+}
+
+impl std::str::FromStr for Freq {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self> {
+        let freq = match s {
+            "SECONDLY" => Self::Secondly,
+            "MINUTELY" => Self::Minutely,
+            "HOURLY" => Self::Hourly,
+            "DAILY" => Self::Daily,
+            "WEEKLY" => Self::Weekly,
+            "MONTHLY" => Self::Monthly,
+            "YEARLY" => Self::Yearly,
+
+            _ => return Err(Error::Freq(s.to_string())),
+        };
+
+        Ok(freq)
+    }
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct WeekdayNum {
+    weekday: Weekday,
+    ord: i8,
+}
+
+impl std::str::FromStr for WeekdayNum {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self> {
+        parser::parse_weekdaynum(s)
+            .map_err(Error::from)
+            .map(|(_, x)| x)
+    }
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub enum Weekday {
+    Sunday,
+    Monday,
+    Tuesday,
+    Wenesday,
+    Thurday,
+    Friday,
+    Saturday,
+}
+
+impl std::str::FromStr for Weekday {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self> {
+        parser::parse_weekday(s)
+            .map_err(Error::from)
+            .map(|(_, x)| x)
     }
 }
 
@@ -376,16 +538,17 @@ END:VEVENT
             Ok((
                 "",
                 Ok(crate::VEvent {
-                    created: crate::VEvent::parse_date("20170209T192358").unwrap(),
-                    dtstamp: crate::VEvent::parse_date("20170209T192358").unwrap(),
-                    last_modified: crate::VEvent::parse_date("20170209T192358").unwrap(),
+                    created: Some(crate::parser::parse_date("20170209T192358").unwrap()),
+                    dtstamp: crate::parser::parse_date("20170209T192358").unwrap(),
+                    last_modified: Some(crate::parser::parse_date("20170209T192358").unwrap()),
                     uid: "5UILHLI7RI6K2IDRAQX7O".into(),
-                    summary: "Vers".into(),
-                    class: crate::Class::Public,
-                    status: crate::Status::Confirmed,
-                    dt_start: crate::VEvent::parse_date("20170209").unwrap(),
-                    dt_end: crate::VEvent::parse_date("20170210").unwrap(),
-                    extra: std::collections::BTreeMap::new(),
+                    summary: Some("Vers".into()),
+                    class: Some(crate::Class::Public),
+                    status: Some(crate::Status::Confirmed),
+                    dt_start: crate::parser::parse_date("20170209").unwrap(),
+                    dt_end: crate::parser::parse_date("20170210").unwrap(),
+
+                    ..Default::default()
                 })
             ))
         );
@@ -399,7 +562,7 @@ END:VEVENT
             let file = match entry {
                 Ok(entry) => entry.path(),
                 Err(err) => {
-                    println!("{}", err);
+                    println!("{err}");
                     continue;
                 }
             };
@@ -415,13 +578,20 @@ END:VEVENT
                     Err(_) => continue,
                 };
 
-                let output = match file_get_contents(&file.with_extension("out")) {
-                    Ok(output) => output,
+                let actual = match file_get_contents(&file.with_extension("out")) {
+                    Ok(actual) => actual,
                     Err(_) => continue,
                 };
 
                 let vcalendar = crate::parser::parse_vcalendar(input.as_str());
-                assert_eq!(output, format!("{:#?}\n", vcalendar));
+                let expected = format!("{:#?}\n", vcalendar);
+
+                if actual != expected {
+                    let path = file.with_extension("fail");
+                    std::fs::write(path, &expected).unwrap();
+                }
+
+                assert_eq!(actual, expected, "{file:?}");
             }
         }
     }
