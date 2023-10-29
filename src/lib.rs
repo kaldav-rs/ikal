@@ -139,7 +139,7 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VEvent {
                 "UID" => vevent.uid = value,
                 "SUMMARY" => vevent.summary = value,
                 "CLASS" => vevent.class = TryFrom::try_from(value.as_str())?,
-                "STATUS" => vevent.status = TryFrom::try_from(value.as_str())?,
+                "STATUS" => vevent.status = value.try_into()?,
                 "DTSTART" => vevent.dt_start = VEvent::parse_date(value)?,
                 "DTEND" => vevent.dt_end = VEvent::parse_date(value)?,
                 _ => {
@@ -208,7 +208,7 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VTodo {
                 "UID" => vtodo.uid = value,
                 "SUMMARY" => vtodo.summary = value,
                 "PERCENT-COMPLETE" => vtodo.percent_complete = value.parse()?,
-                "STATUS" => vtodo.status = TryFrom::try_from(value.as_str())?,
+                "STATUS" => vtodo.status = value.try_into()?,
                 _ => {
                     vtodo.extra.insert(key.to_owned(), value);
                 }
@@ -237,21 +237,45 @@ impl TryFrom<&str> for Class {
     }
 }
 
+/**
+ * This property defines the overall status or confirmation for the calendar component.
+ *
+ * See [3.8.1.11. Status](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.11)
+ */
 #[derive(Clone, Debug, PartialEq)]
 pub enum Status {
-    Cancelled,
-    Confirmed,
-    Completed,
+    /** Indicates event is tentative */
     Tentative,
+    /** Indicates event is definite */
+    Confirmed,
+    /** Indicates event/to-do/journal was cancelled/removed */
+    Cancelled,
+    /** Indicates to-do needs action */
+    NeedsAction,
+    /** Indicates to-do completed */
+    Completed,
+    /** Indicates to-do in process of */
+    InProcess,
+    /** Indicates journal is draft */
+    Draft,
+    /** Indicates journal is final */
+    Final,
 }
 
-impl TryFrom<&str> for Status {
+impl TryFrom<String> for Status {
     type Error = Error;
 
-    fn try_from(value: &str) -> Result<Self> {
-        let status = match value {
+    fn try_from(value: String) -> Result<Self> {
+        let status = match value.as_str() {
+            "TENTATIVE" => Self::Tentative,
             "CONFIRMED" => Self::Confirmed,
+            "CANCELLED" => Self::Cancelled,
+            "NEEDS-ACTION" => Self::NeedsAction,
             "COMPLETED" => Self::Completed,
+            "IN-PROCESS" => Self::InProcess,
+            "DRAFT" => Self::Draft,
+            "FINAL" => Self::Final,
+
             _ => return Err(Error::Status(value.to_string())),
         };
 
