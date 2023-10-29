@@ -33,9 +33,7 @@ impl VCalendar {
 impl TryFrom<BTreeMap<String, String>> for VCalendar {
     type Error = Error;
 
-    fn try_from(
-        properties: BTreeMap<String, String>,
-    ) -> Result<Self> {
+    fn try_from(properties: BTreeMap<String, String>) -> Result<Self> {
         let mut vcalendar = VCalendar::new();
 
         for (key, value) in properties {

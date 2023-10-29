@@ -87,9 +87,7 @@ impl VTodo {
 impl TryFrom<BTreeMap<String, String>> for VTodo {
     type Error = crate::Error;
 
-    fn try_from(
-        properties: BTreeMap<String, String>,
-    ) -> crate::Result<Self> {
+    fn try_from(properties: BTreeMap<String, String>) -> crate::Result<Self> {
         let mut vtodo = Self::new();
 
         for (key, value) in properties {
@@ -116,18 +114,26 @@ impl TryFrom<BTreeMap<String, String>> for VTodo {
                 "DURATION" => vtodo.duration = Some(crate::parser::parse_duration(value)?),
                 "ATTACH" => vtodo.attach.push(crate::parser::parse_attach(value)),
                 "ATTENDEE" => vtodo.attendee.push(crate::parser::parse_attendee(value)),
-                "CATEGORIES" => vtodo.categories.append(&mut crate::parser::parse_categories(value)),
+                "CATEGORIES" => vtodo
+                    .categories
+                    .append(&mut crate::parser::parse_categories(value)),
                 "COMMENT" => vtodo.comment.push(crate::parser::parse_comment(value)),
                 "CONTACT" => vtodo.contact.push(crate::parser::parse_contact(value)),
-                "EXDATE" => vtodo.exdate.append(&mut crate::parser::parse_exdate(value)?),
+                "EXDATE" => vtodo
+                    .exdate
+                    .append(&mut crate::parser::parse_exdate(value)?),
                 "RSTATUS" => vtodo.rstatus.push(crate::parser::parse_rstatus(value)?),
                 "RELATED-TO" => vtodo.related.push(crate::parser::parse_related(value)),
-                "RESOURCES" => vtodo.resources.append(&mut crate::parser::parse_resources(value)),
+                "RESOURCES" => vtodo
+                    .resources
+                    .append(&mut crate::parser::parse_resources(value)),
                 "RDATE" => vtodo.rdate.append(&mut crate::parser::parse_rdate(value)?),
-                _ => if key.starts_with("X-") {
-                    vtodo.x_prop.insert(key, value);
-                } else {
-                    vtodo.iana_prop.insert(key, value);
+                _ => {
+                    if key.starts_with("X-") {
+                        vtodo.x_prop.insert(key, value);
+                    } else {
+                        vtodo.iana_prop.insert(key, value);
+                    }
                 }
             };
         }
