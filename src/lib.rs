@@ -13,9 +13,9 @@ type DateTime = chrono::DateTime<chrono::Local>;
 
 #[derive(Debug, PartialEq)]
 pub struct VCalendar {
-    prodid: String,
-    version: String,
-    calscale: Option<String>,
+    pub prodid: String,
+    pub version: String,
+    pub calscale: Option<String>,
     pub content: Content,
 }
 
