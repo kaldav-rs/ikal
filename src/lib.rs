@@ -138,7 +138,7 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VEvent {
                 "LAST-MODIFIED" => vevent.last_modified = VEvent::parse_date(value)?,
                 "UID" => vevent.uid = value,
                 "SUMMARY" => vevent.summary = value,
-                "CLASS" => vevent.class = TryFrom::try_from(value.as_str())?,
+                "CLASS" => vevent.class = value.into(),
                 "STATUS" => vevent.status = value.try_into()?,
                 "DTSTART" => vevent.dt_start = VEvent::parse_date(value)?,
                 "DTEND" => vevent.dt_end = VEvent::parse_date(value)?,
@@ -219,21 +219,27 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VTodo {
     }
 }
 
+/**
+ * This property defines the access classification for a calendar component.
+ *
+ * See [3.8.1.3. Classification](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.3)
+ */
 #[derive(Clone, Debug, PartialEq)]
 pub enum Class {
     Public,
+    Private,
+    Confidential,
+    Custom(String),
 }
 
-impl TryFrom<&str> for Class {
-    type Error = Error;
-
-    fn try_from(value: &str) -> Result<Self> {
-        let class = match value {
+impl From<String> for Class {
+    fn from(value: String) -> Self {
+        match value.as_str() {
             "PUBLIC" => Self::Public,
-            _ => return Err(Error::Class(value.to_string())),
-        };
-
-        Ok(class)
+            "PRIVATE" => Self::Private,
+            "CONFIDENTIAL" => Self::Confidential,
+            c => Self::Custom(c.to_string()),
+        }
     }
 }
 
