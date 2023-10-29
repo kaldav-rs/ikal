@@ -102,6 +102,7 @@ impl VEvent {
         }
     }
 
+    // <https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.5>
     fn parse_date<S>(date: S) -> Result<DateTime>
     where
         S: Into<String>,
@@ -109,15 +110,16 @@ impl VEvent {
         let mut date = date.into();
 
         if date.len() == 8 {
-            date.push_str("T000000Z");
-        }
-        if date.len() == 15 {
-            date.push('Z');
+            date.push_str("T000000");
         }
 
-        let dt = chrono::DateTime::parse_from_str(date.as_str(), "%Y%m%dT%H%M%SZ")?;
+        let dt = chrono::NaiveDateTime::parse_from_str(date.as_str(), "%Y%m%dT%H%M%S")?;
 
-        Ok(dt.into())
+        if date.ends_with('Z') {
+            Ok(dt.and_utc().with_timezone(&chrono::Local))
+        } else {
+            Ok(dt.and_local_timezone(chrono::Local).unwrap())
+        }
     }
 }
 
