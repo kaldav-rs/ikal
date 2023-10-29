@@ -12,6 +12,7 @@ edition = "2021"
 
 [dependencies]
 nom = "7.0"
+thiserror = "1.0.50"
 
 [dependencies.chrono]
 version = "0.4"

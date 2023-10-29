@@ -90,7 +90,7 @@ pub fn properties(input: &str) -> nom::IResult<&str, std::collections::BTreeMap<
     Ok((input, hash))
 }
 
-pub fn parse_vevent(input: &str) -> nom::IResult<&str, Result<crate::VEvent, String>> {
+pub fn parse_vevent(input: &str) -> nom::IResult<&str, crate::Result<crate::VEvent>> {
     let (input, (_, _, value, _, _)) = tuple((
         tag("BEGIN:VEVENT"),
         line_ending,
@@ -102,7 +102,7 @@ pub fn parse_vevent(input: &str) -> nom::IResult<&str, Result<crate::VEvent, Str
     Ok((input, value.try_into()))
 }
 
-pub fn parse_vtodo(input: &str) -> nom::IResult<&str, Result<crate::VTodo, String>> {
+pub fn parse_vtodo(input: &str) -> nom::IResult<&str, crate::Result<crate::VTodo>> {
     let (input, (_, _, values, _, _)) = tuple((
         tag("BEGIN:VTODO"),
         line_ending,
@@ -114,14 +114,14 @@ pub fn parse_vtodo(input: &str) -> nom::IResult<&str, Result<crate::VTodo, Strin
     Ok((input, values.try_into()))
 }
 
-pub fn parse_content(input: &str) -> nom::IResult<&str, Result<crate::Content, String>> {
+pub fn parse_content(input: &str) -> nom::IResult<&str, crate::Result<crate::Content>> {
     alt((
         map(parse_vevent, |x| x.map(crate::Content::Event)),
         map(parse_vtodo, |x| x.map(crate::Content::Todo)),
     ))(input)
 }
 
-pub fn parse_vcalendar(input: &str) -> nom::IResult<&str, Result<crate::VCalendar, String>> {
+pub fn parse_vcalendar(input: &str) -> nom::IResult<&str, crate::Result<crate::VCalendar>> {
     let (input, (_, _, values, content, _, _)) = tuple((
         tag("BEGIN:VCALENDAR"),
         line_ending,
@@ -131,7 +131,7 @@ pub fn parse_vcalendar(input: &str) -> nom::IResult<&str, Result<crate::VCalenda
         tag("END:VCALENDAR"),
     ))(input)?;
 
-    let calendar: Result<crate::VCalendar, String> = values.try_into();
+    let calendar: crate::Result<crate::VCalendar> = values.try_into();
 
     let result = match calendar {
         Ok(mut calendar) => match content {

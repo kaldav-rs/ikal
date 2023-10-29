@@ -1,6 +1,9 @@
 use chrono::offset::Local;
 
 mod parser;
+mod errors;
+
+pub use errors::*;
 
 type DateTime = chrono::DateTime<Local>;
 
@@ -24,11 +27,11 @@ impl VCalendar {
 }
 
 impl TryFrom<std::collections::BTreeMap<String, String>> for VCalendar {
-    type Error = String;
+    type Error = Error;
 
     fn try_from(
         properties: std::collections::BTreeMap<String, String>,
-    ) -> Result<Self, Self::Error> {
+    ) -> Result<Self> {
         let mut vcalendar = VCalendar::new();
 
         for (key, value) in properties {
@@ -36,7 +39,7 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VCalendar {
                 "PRODID" => vcalendar.prodid = value,
                 "VERSION" => vcalendar.version = value,
                 "CALSCALE" => vcalendar.calscale = Some(value),
-                _ => return Err(format!("Unknow key {}", key)),
+                _ => return Err(Error::Key(key.to_string())),
             };
         }
 
@@ -45,13 +48,13 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VCalendar {
 }
 
 impl TryFrom<String> for VCalendar {
-    type Error = String;
+    type Error = Error;
 
-    fn try_from(raw: String) -> Result<Self, Self::Error> {
+    fn try_from(raw: String) -> Result<Self> {
         match parser::parse_vcalendar(raw.as_str()) {
             Ok((_, Ok(o))) => Ok(o),
             Ok((_, Err(err))) => Err(err),
-            Err(err) => Err(format!("{:?}", err)),
+            Err(err) => Err(Error::Parser(format!("{err:?}"))),
         }
     }
 }
@@ -99,7 +102,7 @@ impl VEvent {
         }
     }
 
-    fn parse_date<S>(date: S) -> Result<DateTime, String>
+    fn parse_date<S>(date: S) -> Result<DateTime>
     where
         S: Into<String>,
     {
@@ -112,19 +115,18 @@ impl VEvent {
             date.push('Z');
         }
 
-        match chrono::DateTime::parse_from_str(date.as_str(), "%Y%m%dT%H%M%SZ") {
-            Ok(date) => Ok(date.into()),
-            Err(_) => Err(format!("Invalid date: {}", date)),
-        }
+        let dt = chrono::DateTime::parse_from_str(date.as_str(), "%Y%m%dT%H%M%SZ")?;
+
+        Ok(dt.into())
     }
 }
 
 impl TryFrom<std::collections::BTreeMap<String, String>> for VEvent {
-    type Error = String;
+    type Error = Error;
 
     fn try_from(
         properties: std::collections::BTreeMap<String, String>,
-    ) -> Result<Self, Self::Error> {
+    ) -> Result<Self> {
         let mut vevent = VEvent::new();
 
         for (key, value) in properties {
@@ -180,32 +182,20 @@ impl VTodo {
         }
     }
 
-    fn parse_date<S>(date: S) -> Result<DateTime, String>
+    fn parse_date<S>(date: S) -> Result<DateTime>
     where
         S: Into<String>,
     {
-        let mut date = date.into();
-
-        if date.len() == 8 {
-            date.push_str("T000000Z");
-        }
-        if date.len() == 15 {
-            date.push('Z');
-        }
-
-        match chrono::DateTime::parse_from_str(date.as_str(), "%Y%m%dT%H%M%SZ") {
-            Ok(date) => Ok(date.into()),
-            Err(_) => Err(format!("Invalid date: {}", date)),
-        }
+        VEvent::parse_date(date)
     }
 }
 
 impl TryFrom<std::collections::BTreeMap<String, String>> for VTodo {
-    type Error = String;
+    type Error = Error;
 
     fn try_from(
         properties: std::collections::BTreeMap<String, String>,
-    ) -> Result<Self, Self::Error> {
+    ) -> Result<Self> {
         let mut vtodo = VTodo::new();
 
         for (key, value) in properties {
@@ -215,12 +205,7 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VTodo {
                 "LAST-MODIFIED" => vtodo.last_modified = VTodo::parse_date(value)?,
                 "UID" => vtodo.uid = value,
                 "SUMMARY" => vtodo.summary = value,
-                "PERCENT-COMPLETE" => {
-                    vtodo.percent_complete = match value.parse() {
-                        Ok(percent_complete) => percent_complete,
-                        Err(err) => return Err(format!("{}", err)),
-                    }
-                }
+                "PERCENT-COMPLETE" => vtodo.percent_complete = value.parse()?,
                 "STATUS" => vtodo.status = TryFrom::try_from(value.as_str())?,
                 _ => {
                     vtodo.extra.insert(key.to_owned(), value);
@@ -238,12 +223,12 @@ pub enum Class {
 }
 
 impl TryFrom<&str> for Class {
-    type Error = String;
+    type Error = Error;
 
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
+    fn try_from(value: &str) -> Result<Self> {
         let class = match value {
             "PUBLIC" => Self::Public,
-            _ => return Err(format!("Unknow class {}", value)),
+            _ => return Err(Error::Class(value.to_string())),
         };
 
         Ok(class)
@@ -259,13 +244,13 @@ pub enum Status {
 }
 
 impl TryFrom<&str> for Status {
-    type Error = String;
+    type Error = Error;
 
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
+    fn try_from(value: &str) -> Result<Self> {
         let status = match value {
             "CONFIRMED" => Self::Confirmed,
             "COMPLETED" => Self::Completed,
-            _ => return Err(format!("Unknow status {}", value)),
+            _ => return Err(Error::Status(value.to_string())),
         };
 
         Ok(status)
@@ -409,20 +394,14 @@ END:VEVENT
         }
     }
 
-    fn file_get_contents(path: &std::path::PathBuf) -> Result<String, String> {
+    fn file_get_contents(path: &std::path::PathBuf) -> Result<String, std::io::Error> {
         use std::io::Read;
 
         let mut content = String::new();
 
-        let mut file = match std::fs::File::open(path) {
-            Ok(file) => file,
-            Err(err) => return Err(format!("Unable to open {:?}: {}", path, err)),
-        };
+        let mut file = std::fs::File::open(path)?;
 
-        match file.read_to_string(&mut content) {
-            Ok(_) => (),
-            Err(err) => return Err(format!("Unable to read {:?}: {}", path, err)),
-        };
+        file.read_to_string(&mut content)?;
 
         Ok(content)
     }
