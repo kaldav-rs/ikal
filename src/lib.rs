@@ -143,7 +143,7 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VEvent {
                 "DTSTART" => vevent.dt_start = VEvent::parse_date(value)?,
                 "DTEND" => vevent.dt_end = VEvent::parse_date(value)?,
                 _ => {
-                    vevent.extra.insert(key.to_owned(), value);
+                    vevent.extra.insert(key, value);
                 }
             };
         }
