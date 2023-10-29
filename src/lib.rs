@@ -1,4 +1,5 @@
 use chrono::offset::Local;
+use std::collections::BTreeMap;
 
 mod parser;
 mod errors;
@@ -26,11 +27,11 @@ impl VCalendar {
     }
 }
 
-impl TryFrom<std::collections::BTreeMap<String, String>> for VCalendar {
+impl TryFrom<BTreeMap<String, String>> for VCalendar {
     type Error = Error;
 
     fn try_from(
-        properties: std::collections::BTreeMap<String, String>,
+        properties: BTreeMap<String, String>,
     ) -> Result<Self> {
         let mut vcalendar = VCalendar::new();
 
@@ -96,8 +97,8 @@ pub struct VEvent {
     pub related: Vec<String>,
     pub resources: Vec<String>,
     pub rdate: Vec<String>,
-    pub x_prop: std::collections::BTreeMap<String, String>,
-    pub iana_prop: std::collections::BTreeMap<String, String>,
+    pub x_prop: BTreeMap<String, String>,
+    pub iana_prop: BTreeMap<String, String>,
 }
 
 impl Default for VEvent {
@@ -138,17 +139,17 @@ impl VEvent {
             related: Vec::new(),
             resources: Vec::new(),
             rdate: Vec::new(),
-            x_prop: std::collections::BTreeMap::new(),
-            iana_prop: std::collections::BTreeMap::new(),
+            x_prop: BTreeMap::new(),
+            iana_prop: BTreeMap::new(),
         }
     }
 }
 
-impl TryFrom<std::collections::BTreeMap<String, String>> for VEvent {
+impl TryFrom<BTreeMap<String, String>> for VEvent {
     type Error = Error;
 
     fn try_from(
-        properties: std::collections::BTreeMap<String, String>,
+        properties: BTreeMap<String, String>,
     ) -> Result<Self> {
         let mut vevent = VEvent::new();
 
@@ -198,14 +199,38 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VEvent {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct VTodo {
-    pub created: DateTime,
     pub dtstamp: DateTime,
-    pub last_modified: DateTime,
     pub uid: String,
-    pub summary: String,
-    pub status: Status,
-    pub percent_complete: u8,
-    pub extra: std::collections::BTreeMap<String, String>,
+    pub class: Option<Class>,
+    pub completed: Option<DateTime>,
+    pub created: Option<DateTime>,
+    pub dt_start: Option<DateTime>,
+    pub geo: Option<Geo>,
+    pub last_modified: Option<DateTime>,
+    pub location: Option<String>,
+    pub organizer: Option<String>,
+    pub percent_complete: Option<u8>,
+    pub priority: Option<u8>,
+    pub recurid: Option<String>,
+    pub seq: Option<u32>,
+    pub status: Option<Status>,
+    pub summary: Option<String>,
+    pub url: Option<String>,
+    pub rrule: Option<Recur>,
+    pub due: Option<DateTime>,
+    pub duration: Option<chrono::Duration>,
+    pub attach: Vec<String>,
+    pub attendee: Vec<String>,
+    pub categories: Vec<String>,
+    pub comment: Vec<String>,
+    pub contact: Vec<String>,
+    pub exdate: Vec<DateTime>,
+    pub rstatus: Vec<String>,
+    pub related: Vec<String>,
+    pub resources: Vec<String>,
+    pub rdate: Vec<String>,
+    pub x_prop: BTreeMap<String, String>,
+    pub iana_prop: BTreeMap<String, String>,
 }
 
 impl Default for VTodo {
@@ -216,38 +241,87 @@ impl Default for VTodo {
 
 impl VTodo {
     pub fn new() -> Self {
-        VTodo {
-            created: Local::now(),
+        Self {
             dtstamp: Local::now(),
-            last_modified: Local::now(),
             uid: String::new(),
-            summary: String::new(),
-            status: Status::Confirmed,
-            percent_complete: 0,
-            extra: std::collections::BTreeMap::new(),
+            class: None,
+            completed: None,
+            created: None,
+            dt_start: None,
+            geo: None,
+            last_modified: None,
+            location: None,
+            organizer: None,
+            percent_complete: None,
+            priority: None,
+            recurid: None,
+            seq: None,
+            status: None,
+            summary: None,
+            url: None,
+            rrule: None,
+            due: None,
+            duration: None,
+            attach: Vec::new(),
+            attendee: Vec::new(),
+            categories: Vec::new(),
+            comment: Vec::new(),
+            contact: Vec::new(),
+            exdate: Vec::new(),
+            rstatus: Vec::new(),
+            related: Vec::new(),
+            resources: Vec::new(),
+            rdate: Vec::new(),
+            x_prop: BTreeMap::new(),
+            iana_prop: BTreeMap::new(),
         }
     }
 }
 
-impl TryFrom<std::collections::BTreeMap<String, String>> for VTodo {
+impl TryFrom<BTreeMap<String, String>> for VTodo {
     type Error = Error;
 
     fn try_from(
-        properties: std::collections::BTreeMap<String, String>,
+        properties: BTreeMap<String, String>,
     ) -> Result<Self> {
-        let mut vtodo = VTodo::new();
+        let mut vtodo = Self::new();
 
         for (key, value) in properties {
             match key.as_str() {
-                "CREATED" => vtodo.created = parser::parse_date(value)?,
                 "DTSTAMP" => vtodo.dtstamp = parser::parse_date(value)?,
-                "LAST-MODIFIED" => vtodo.last_modified = parser::parse_date(value)?,
                 "UID" => vtodo.uid = value,
-                "SUMMARY" => vtodo.summary = value,
-                "PERCENT-COMPLETE" => vtodo.percent_complete = value.parse()?,
-                "STATUS" => vtodo.status = value.try_into()?,
-                _ => {
-                    vtodo.extra.insert(key.to_owned(), value);
+                "CLASS" => vtodo.class = Some(value.into()),
+                "COMPLETED" => vtodo.completed = Some(parser::parse_date(value)?),
+                "CREATED" => vtodo.created = Some(parser::parse_date(value)?),
+                "DTSTART" => vtodo.dt_start = Some(parser::parse_date(value)?),
+                "GEO" => vtodo.geo = Some(parser::parse_geo(value)?),
+                "LAST-MODIFIED" => vtodo.last_modified = Some(parser::parse_date(value)?),
+                "LOCATION" => vtodo.location = Some(value),
+                "ORGANIZER" => vtodo.organizer = Some(parser::parse_organizer(value)?),
+                "PERCENT-COMPLETE" => vtodo.percent_complete = Some(value.parse()?),
+                "PRIORITY" => vtodo.priority = Some(parser::parse_priority(value)?),
+                "RECURID" => vtodo.recurid = Some(parser::parse_recurid(value)?),
+                "SEQ" => vtodo.seq = Some(parser::parse_sequence(value)?),
+                "STATUS" => vtodo.status = Some(value.try_into()?),
+                "SUMMARY" => vtodo.summary = Some(value),
+                "URL" => vtodo.url = Some(value),
+                "RRULE" => vtodo.rrule = Some(parser::parse_rrule(value)?),
+                "DUE" => vtodo.due = Some(parser::parse_date(value)?),
+                "DURATION" => vtodo.duration = Some(parser::parse_duration(value)?),
+                "ATTACH" => vtodo.attach.push(parser::parse_attach(value)),
+                "ATTENDEE" => vtodo.attendee.push(parser::parse_attendee(value)),
+                "CATEGORIES" => vtodo.categories.append(&mut parser::parse_categories(value)),
+                "COMMENT" => vtodo.comment.push(parser::parse_comment(value)),
+                "CONTACT" => vtodo.contact.push(parser::parse_contact(value)),
+                "EXDATE" => vtodo.exdate.append(&mut parser::parse_exdate(value)?),
+                "RSTATUS" => vtodo.rstatus.push(parser::parse_rstatus(value)?),
+                "RELATED-TO" => vtodo.related.push(parser::parse_related(value)),
+                "RESOURCES" => vtodo.resources.append(&mut parser::parse_resources(value)),
+                "RDATE" => vtodo.rdate.append(&mut parser::parse_rdate(value)?),
+                _ => if key.starts_with("X-") {
+                    vtodo.x_prop.insert(key, value);
+                } else {
+                    vtodo.iana_prop.insert(key, value);
                 }
             };
         }
