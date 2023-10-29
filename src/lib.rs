@@ -1,5 +1,4 @@
 use chrono::offset::Local;
-use chrono::offset::TimeZone;
 
 mod parser;
 
@@ -113,8 +112,8 @@ impl VEvent {
             date.push('Z');
         }
 
-        match Local.datetime_from_str(date.as_str(), "%Y%m%dT%H%M%SZ") {
-            Ok(date) => Ok(date),
+        match chrono::DateTime::parse_from_str(date.as_str(), "%Y%m%dT%H%M%SZ") {
+            Ok(date) => Ok(date.into()),
             Err(_) => Err(format!("Invalid date: {}", date)),
         }
     }
@@ -194,8 +193,8 @@ impl VTodo {
             date.push('Z');
         }
 
-        match Local.datetime_from_str(date.as_str(), "%Y%m%dT%H%M%SZ") {
-            Ok(date) => Ok(date),
+        match chrono::DateTime::parse_from_str(date.as_str(), "%Y%m%dT%H%M%SZ") {
+            Ok(date) => Ok(date.into()),
             Err(_) => Err(format!("Invalid date: {}", date)),
         }
     }
