@@ -388,7 +388,7 @@ pub fn parse_rrule(input: String) -> crate::Result<crate::Recur> {
 
     let recur = crate::Recur {
         freq: map["FREQ"].parse()?,
-        until: map.get("UNTIL").map(|x| parse_date(x)).transpose()?,
+        until: map.get("UNTIL").map(parse_date).transpose()?,
         count: map.get("COUNT").map(|x| x.parse()).transpose()?,
         interval: map.get("INTERVAL").map(|x| x.parse()).transpose()?,
         by_second: map.get("BYSECOND").map(by).transpose()?.unwrap_or_default(),
