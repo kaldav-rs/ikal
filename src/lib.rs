@@ -1,4 +1,3 @@
-use chrono::offset::Local;
 use std::collections::BTreeMap;
 
 mod components;
@@ -10,7 +9,7 @@ pub use components::*;
 pub use errors::*;
 pub use properties::*;
 
-type DateTime = chrono::DateTime<Local>;
+type DateTime = chrono::DateTime<chrono::Local>;
 
 #[derive(Debug, PartialEq)]
 pub struct VCalendar {
