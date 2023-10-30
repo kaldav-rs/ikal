@@ -54,6 +54,8 @@ impl TryFrom<String> for VCalendar {
 
     fn try_from(raw: String) -> Result<Self> {
         parser::parse_vcalendar(raw.as_str())
+            .map_err(crate::Error::from)
+            .map(|(_, x)| x)
     }
 }
 
@@ -143,7 +145,7 @@ END:VEVENT
             crate::parser::parse_vevent(line),
             Ok((
                 "",
-                Ok(crate::VEvent {
+                crate::VEvent {
                     created: Some(crate::parser::parse_date("20170209T192358").unwrap()),
                     dtstamp: crate::parser::parse_date("20170209T192358").unwrap(),
                     last_modified: Some(crate::parser::parse_date("20170209T192358").unwrap()),
@@ -155,7 +157,7 @@ END:VEVENT
                     dt_end: crate::parser::parse_date("20170210").unwrap(),
 
                     ..Default::default()
-                })
+                }
             ))
         );
     }

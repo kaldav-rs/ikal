@@ -21,6 +21,16 @@ pub struct Recur {
     pub wkst: Option<Weekday>,
 }
 
+impl TryFrom<String> for Recur {
+    type Error = crate::Error;
+
+    fn try_from(raw: String) -> Result<Self, Self::Error> {
+        crate::parser::parse_rrule(raw.as_str())
+            .map_err(crate::Error::from)
+            .map(|(_, x)| x)
+    }
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub enum Freq {
     Secondly,

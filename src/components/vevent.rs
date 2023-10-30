@@ -86,7 +86,7 @@ impl TryFrom<BTreeMap<String, String>> for VEvent {
     type Error = crate::Error;
 
     fn try_from(properties: BTreeMap<String, String>) -> crate::Result<Self> {
-        let mut vevent = VEvent::new();
+        let mut vevent = Self::new();
 
         for (key, value) in properties {
             match key.as_str() {
@@ -95,39 +95,39 @@ impl TryFrom<BTreeMap<String, String>> for VEvent {
                 "DTSTART" => vevent.dt_start = crate::parser::parse_date(value)?,
                 "DTEND" => vevent.dt_end = crate::parser::parse_date(value)?,
                 "DURATION" => {
-                    vevent.dt_end = vevent.dt_start + crate::parser::parse_duration(value)?
+                    vevent.dt_end = vevent.dt_start + crate::parser::parse_duration(&value)?
                 }
                 "CLASS" => vevent.class = Some(value.into()),
                 "CREATED" => vevent.created = Some(crate::parser::parse_date(value)?),
                 "DESCRIPTION" => vevent.description = Some(value),
-                "GEO" => vevent.geo = Some(crate::parser::parse_geo(value)?),
+                "GEO" => vevent.geo = Some(value.try_into()?),
                 "LAST-MODIFIED" => vevent.last_modified = Some(crate::parser::parse_date(value)?),
                 "LOCATION" => vevent.location = Some(value),
-                "ORGANIZER" => vevent.organizer = Some(crate::parser::parse_organizer(value)?),
-                "PRIORITY" => vevent.priority = Some(crate::parser::parse_priority(value)?),
-                "SEQ" => vevent.seq = Some(crate::parser::parse_sequence(value)?),
+                "ORGANIZER" => vevent.organizer = Some(crate::parser::parse_organizer(&value)?),
+                "PRIORITY" => vevent.priority = Some(crate::parser::parse_priority(&value)?),
+                "SEQ" => vevent.seq = Some(crate::parser::parse_sequence(&value)?),
                 "STATUS" => vevent.status = Some(value.try_into()?),
                 "SUMMARY" => vevent.summary = Some(value),
                 "STRANSP" => vevent.transp = Some(value.try_into()?),
                 "URL" => vevent.url = Some(value),
-                "RECURID" => vevent.recurid = Some(crate::parser::parse_recurid(value)?),
-                "RRULE" => vevent.rrule = Some(crate::parser::parse_rrule(value)?),
-                "ATTACH" => vevent.attach.push(crate::parser::parse_attach(value)),
-                "ATTENDEE" => vevent.attendee.push(crate::parser::parse_attendee(value)),
+                "RECURID" => vevent.recurid = Some(crate::parser::parse_recurid(&value)?),
+                "RRULE" => vevent.rrule = Some(value.try_into()?),
+                "ATTACH" => vevent.attach.push(crate::parser::parse_attach(&value)),
+                "ATTENDEE" => vevent.attendee.push(crate::parser::parse_attendee(&value)),
                 "CATEGORIES" => vevent
                     .categories
-                    .append(&mut crate::parser::parse_categories(value)),
-                "COMMENT" => vevent.comment.push(crate::parser::parse_comment(value)),
-                "CONTACT" => vevent.contact.push(crate::parser::parse_contact(value)),
+                    .append(&mut crate::parser::parse_categories(&value)),
+                "COMMENT" => vevent.comment.push(crate::parser::parse_comment(&value)),
+                "CONTACT" => vevent.contact.push(crate::parser::parse_contact(&value)),
                 "EXDATE" => vevent
                     .exdate
-                    .append(&mut crate::parser::parse_exdate(value)?),
-                "RSTATUS" => vevent.rstatus.push(crate::parser::parse_rstatus(value)?),
-                "RELATED-TO" => vevent.related.push(crate::parser::parse_related(value)),
+                    .append(&mut crate::parser::parse_exdate(&value)?),
+                "RSTATUS" => vevent.rstatus.push(crate::parser::parse_rstatus(&value)?),
+                "RELATED-TO" => vevent.related.push(crate::parser::parse_related(&value)),
                 "RESOURCES" => vevent
                     .resources
-                    .append(&mut crate::parser::parse_resources(value)),
-                "RDATE" => vevent.rdate.append(&mut crate::parser::parse_rdate(value)?),
+                    .append(&mut crate::parser::parse_resources(&value)),
+                "RDATE" => vevent.rdate.append(&mut crate::parser::parse_rdate(&value)?),
                 _ => {
                     if key.starts_with("X-") {
                         vevent.x_prop.insert(key, value);
@@ -139,5 +139,15 @@ impl TryFrom<BTreeMap<String, String>> for VEvent {
         }
 
         Ok(vevent)
+    }
+}
+
+impl TryFrom<String> for VEvent {
+    type Error = crate::Error;
+
+    fn try_from(raw: String) -> Result<Self, Self::Error> {
+        crate::parser::parse_vevent(raw.as_str())
+            .map_err(crate::Error::from)
+            .map(|(_, x)| x)
     }
 }

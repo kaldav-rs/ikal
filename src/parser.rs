@@ -3,7 +3,7 @@ use nom::bytes::complete::{tag, take_till, take_until, take_while};
 use nom::character::complete::{anychar, char, line_ending};
 use nom::combinator::{map, map_res, not, opt};
 use nom::multi::{count, many0, many1};
-use nom::number::complete::be_f32;
+use nom::number::complete::float;
 use nom::sequence::{preceded, separated_pair, terminated, tuple};
 
 fn is_alphabetic(chr: char) -> bool {
@@ -95,59 +95,61 @@ pub fn properties(input: &str) -> nom::IResult<&str, std::collections::BTreeMap<
     Ok((input, hash))
 }
 
-pub fn parse_vevent(input: &str) -> nom::IResult<&str, crate::Result<crate::VEvent>> {
-    let (input, (_, _, value, _, _)) = tuple((
-        tag("BEGIN:VEVENT"),
-        line_ending,
-        properties,
-        tag("END:VEVENT"),
-        line_ending,
-    ))(input)?;
-
-    Ok((input, value.try_into()))
+pub fn parse_vevent(input: &str) -> nom::IResult<&str, crate::VEvent> {
+    map_res(
+        tuple((
+            tag("BEGIN:VEVENT"),
+            line_ending,
+            properties,
+            tag("END:VEVENT"),
+            line_ending,
+        )),
+        |(_, _, values, _, _)| values.try_into(),
+    )(input)
 }
 
-pub fn parse_vtodo(input: &str) -> nom::IResult<&str, crate::Result<crate::VTodo>> {
-    let (input, (_, _, values, _, _)) = tuple((
-        tag("BEGIN:VTODO"),
-        line_ending,
-        properties,
-        tag("END:VTODO"),
-        line_ending,
-    ))(input)?;
-
-    Ok((input, values.try_into()))
+pub fn parse_vtodo(input: &str) -> nom::IResult<&str, crate::VTodo> {
+    map_res(
+        tuple((
+            tag("BEGIN:VTODO"),
+            line_ending,
+            properties,
+            tag("END:VTODO"),
+            line_ending,
+        )),
+        |(_, _, values, _, _)| values.try_into(),
+    )(input)
 }
 
-pub fn parse_content(input: &str) -> nom::IResult<&str, crate::Result<crate::Content>> {
+pub fn parse_content(input: &str) -> nom::IResult<&str, crate::Content> {
     alt((
-        map(parse_vevent, |x| x.map(crate::Content::Event)),
-        map(parse_vtodo, |x| x.map(crate::Content::Todo)),
+        map(parse_vevent, crate::Content::Event),
+        map(parse_vtodo, crate::Content::Todo),
     ))(input)
 }
 
-pub fn parse_vcalendar(input: &str) -> crate::Result<crate::VCalendar> {
-    let (_, (_, _, values, content, _, _)) = tuple((
-        tag("BEGIN:VCALENDAR"),
-        line_ending,
-        properties,
-        parse_content,
-        take_until("END:VCALENDAR"),
-        tag("END:VCALENDAR"),
-    ))(input)?;
+pub fn parse_vcalendar(input: &str) -> nom::IResult<&str, crate::VCalendar> {
+    map_res(
+        tuple((
+            tag("BEGIN:VCALENDAR"),
+            line_ending,
+            properties,
+            parse_content,
+            take_until("END:VCALENDAR"),
+            tag("END:VCALENDAR"),
+        )),
+        |(_, _, values, content, _, _)| {
+            let calendar: crate::Result<crate::VCalendar> = values.try_into();
 
-    let calendar: crate::Result<crate::VCalendar> = values.try_into();
-
-    match calendar {
-        Ok(mut calendar) => match content {
-            Ok(content) => {
-                calendar.content = content;
-                Ok(calendar)
+            match calendar {
+                Ok(mut calendar) => {
+                    calendar.content = content;
+                    Ok(calendar)
+                }
+                Err(err) => Err(err),
             }
-            Err(err) => Err(err),
-        },
-        Err(err) => Err(err),
-    }
+        }
+    )(input)
 }
 
 pub fn parse_weekday(input: &str) -> nom::IResult<&str, crate::Weekday> {
@@ -205,7 +207,7 @@ where
 /**
  * See [3.3.6. Duration](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.6)
  */
-pub fn parse_duration(input: String) -> crate::Result<chrono::Duration> {
+pub fn parse_duration(input: &str) -> crate::Result<chrono::Duration> {
     fn week(input: &str) -> nom::IResult<&str, i64> {
         map_res(terminated(digits, tag("W")), str::parse)(input)
     }
@@ -240,7 +242,7 @@ pub fn parse_duration(input: String) -> crate::Result<chrono::Duration> {
         map_res(terminated(digits, tag("S")), str::parse)(input)
     }
 
-    let (_, (w, d, t)) = preceded(tag("P"), tuple((opt(week), opt(day), opt(time))))(&input)?;
+    let (_, (w, d, t)) = preceded(tag("P"), tuple((opt(week), opt(day), opt(time))))(input)?;
 
     let mut duration = chrono::Duration::weeks(w.unwrap_or_default())
         + chrono::Duration::days(d.unwrap_or_default());
@@ -258,39 +260,37 @@ pub fn parse_duration(input: String) -> crate::Result<chrono::Duration> {
 /**
  * See [3.8.1.1. Attachment](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.1)
  */
-pub fn parse_attach(input: String) -> String {
-    input
+pub fn parse_attach(input: &str) -> String {
+    input.to_string()
 }
 
 /**
  * See [3.8.1.2. Categories](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.2)
  */
-pub fn parse_categories(input: String) -> Vec<String> {
+pub fn parse_categories(input: &str) -> Vec<String> {
     input.split(',').map(String::from).collect()
 }
 
 /**
  * See [3.8.1.4. Comment](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.4)
  */
-pub fn parse_comment(input: String) -> String {
-    input
+pub fn parse_comment(input: &str) -> String {
+    input.to_string()
 }
 
 /**
  * See [3.8.1.6. Geographic Position](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.6)
  */
-pub fn parse_geo(input: String) -> crate::Result<crate::Geo> {
-    let (_, geo) = map(separated_pair(be_f32, char(';'), be_f32), |(lat, lon)| {
+pub fn parse_geo(input: &str) -> nom::IResult<&str, crate::Geo> {
+    map(separated_pair(float, char(';'), float), |(lat, lon)| {
         crate::Geo { lat, lon }
-    })(input.as_bytes())?;
-
-    Ok(geo)
+    })(input)
 }
 
 /**
  * See [3.8.1.9. Priority](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.9)
  */
-pub fn parse_priority(input: String) -> crate::Result<u8> {
+pub fn parse_priority(input: &str) -> crate::Result<u8> {
     let priority = input.parse()?;
 
     if priority > 9 {
@@ -303,57 +303,58 @@ pub fn parse_priority(input: String) -> crate::Result<u8> {
 /**
  * See [3.8.1.10. Resources](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.10)
  */
-pub fn parse_resources(input: String) -> Vec<String> {
+pub fn parse_resources(input: &str) -> Vec<String> {
     input.split(',').map(String::from).collect()
 }
 
 /**
  * See [3.8.4.1. Attendee](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.1)
  */
-pub fn parse_attendee(input: String) -> String {
-    input
+pub fn parse_attendee(input: &str) -> String {
+    input.to_string()
 }
 
 /**
  * See [3.8.4.2. Contact](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.2)
  */
-pub fn parse_contact(input: String) -> String {
-    input
+pub fn parse_contact(input: &str) -> String {
+    input.to_string()
 }
 
 /**
  * See [3.8.4.3. Organizer](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.3)
  */
-pub fn parse_organizer(input: String) -> crate::Result<String> {
-    Ok(input)
+pub fn parse_organizer(input: &str) -> crate::Result<String> {
+    // @TODO
+    Ok(input.to_string())
 }
 
 /**
  * See [3.8.4.4. Recurrence ID](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.4)
  */
-pub fn parse_recurid(input: String) -> crate::Result<String> {
+pub fn parse_recurid(input: &str) -> crate::Result<String> {
     // @TODO
-    Ok(input)
+    Ok(input.to_string())
 }
 
 /**
  * See [3.8.4.5. Related To](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.5)
  */
-pub fn parse_related(input: String) -> String {
-    input
+pub fn parse_related(input: &str) -> String {
+    input.to_string()
 }
 
 /**
  * See [3.8.5.1. Exception Date-Times](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.1)
  */
-pub fn parse_exdate(input: String) -> crate::Result<Vec<crate::DateTime>> {
+pub fn parse_exdate(input: &str) -> crate::Result<Vec<crate::DateTime>> {
     input.split(',').map(parse_date).collect()
 }
 
 /**
  * See [3.8.5.2. Recurrence Date-Times](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.2)
  */
-pub fn parse_rdate(input: String) -> crate::Result<Vec<String>> {
+pub fn parse_rdate(input: &str) -> crate::Result<Vec<String>> {
     // @TODO
     Ok(input.split(',').map(String::from).collect())
 }
@@ -361,12 +362,12 @@ pub fn parse_rdate(input: String) -> crate::Result<Vec<String>> {
 /**
  * See [3.8.5.3. Recurrence Rule](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3)
  */
-pub fn parse_rrule(input: String) -> crate::Result<crate::Recur> {
+pub fn parse_rrule(input: &str) -> nom::IResult<&str, crate::Recur> {
     fn item(input: &str) -> nom::IResult<&str, (&str, String)> {
         terminated(separated_pair(key, char('='), value), opt(char(';')))(input)
     }
 
-    fn by(input: &String) -> crate::Result<Vec<i8>> {
+    fn by(input: &str) -> crate::Result<Vec<i8>> {
         input
             .split(',')
             .map(str::parse)
@@ -374,7 +375,7 @@ pub fn parse_rrule(input: String) -> crate::Result<crate::Recur> {
             .map_err(crate::Error::from)
     }
 
-    fn bywdaylist(input: &String) -> crate::Result<Vec<crate::WeekdayNum>> {
+    fn bywdaylist(input: &str) -> crate::Result<Vec<crate::WeekdayNum>> {
         input
             .split(',')
             .map(str::parse)
@@ -382,53 +383,53 @@ pub fn parse_rrule(input: String) -> crate::Result<crate::Recur> {
             .map_err(crate::Error::from)
     }
 
-    let (_, map) = map(many1(item), |items| {
-        std::collections::BTreeMap::from_iter(items)
-    })(input.as_str())?;
+    map_res(many1(item), |items| {
+        let map = std::collections::BTreeMap::from_iter(items);
 
-    let recur = crate::Recur {
-        freq: map["FREQ"].parse()?,
-        until: map.get("UNTIL").map(parse_date).transpose()?,
-        count: map.get("COUNT").map(|x| x.parse()).transpose()?,
-        interval: map.get("INTERVAL").map(|x| x.parse()).transpose()?,
-        by_second: map.get("BYSECOND").map(by).transpose()?.unwrap_or_default(),
-        by_minute: map.get("BYMINUTE").map(by).transpose()?.unwrap_or_default(),
-        by_hour: map.get("BYHOUR").map(by).transpose()?.unwrap_or_default(),
-        by_day: map
-            .get("BYHOUR")
-            .map(bywdaylist)
-            .transpose()?
-            .unwrap_or_default(),
-        by_monthday: map
-            .get("BYMONTHDAY")
-            .map(by)
-            .transpose()?
-            .unwrap_or_default(),
-        by_yearday: map
-            .get("BYYEARDAY")
-            .map(by)
-            .transpose()?
-            .unwrap_or_default(),
-        by_weekno: map.get("BYWEEKNO").map(by).transpose()?.unwrap_or_default(),
-        by_month: map.get("BYMONTH").map(by).transpose()?.unwrap_or_default(),
-        by_setpos: map.get("BYSETPOS").map(by).transpose()?.unwrap_or_default(),
-        wkst: map.get("WKST").map(|x| x.parse()).transpose()?,
-    };
+        let recur = crate::Recur {
+            freq: map["FREQ"].parse()?,
+            until: map.get("UNTIL").map(parse_date).transpose()?,
+            count: map.get("COUNT").map(|x| x.parse()).transpose()?,
+            interval: map.get("INTERVAL").map(|x| x.parse()).transpose()?,
+            by_second: map.get("BYSECOND").map(|x| by(x)).transpose()?.unwrap_or_default(),
+            by_minute: map.get("BYMINUTE").map(|x| by(x)).transpose()?.unwrap_or_default(),
+            by_hour: map.get("BYHOUR").map(|x| by(x)).transpose()?.unwrap_or_default(),
+            by_day: map
+                .get("BYHOUR")
+                .map(|x| bywdaylist(x))
+                .transpose()?
+                .unwrap_or_default(),
+                by_monthday: map
+                    .get("BYMONTHDAY")
+                    .map(|x| by(x))
+                    .transpose()?
+                    .unwrap_or_default(),
+                    by_yearday: map
+                        .get("BYYEARDAY")
+                        .map(|x| by(x))
+                        .transpose()?
+                        .unwrap_or_default(),
+                        by_weekno: map.get("BYWEEKNO").map(|x| by(x)).transpose()?.unwrap_or_default(),
+                        by_month: map.get("BYMONTH").map(|x| by(x)).transpose()?.unwrap_or_default(),
+                        by_setpos: map.get("BYSETPOS").map(|x| by(x)).transpose()?.unwrap_or_default(),
+                        wkst: map.get("WKST").map(|x| x.parse()).transpose()?,
+        };
 
-    Ok(recur)
+        Ok::<_, crate::Error>(recur)
+    })(input)
 }
 
 /**
  * See [3.8.7.4. Sequence Number](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.7.4)
  */
-pub fn parse_sequence(input: String) -> crate::Result<u32> {
+pub fn parse_sequence(input: &str) -> crate::Result<u32> {
     input.parse().map_err(crate::Error::from)
 }
 
 /**
  * See [3.8.8.3. Request Status](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.8.3)
  */
-pub fn parse_rstatus(input: String) -> crate::Result<String> {
+pub fn parse_rstatus(input: &str) -> crate::Result<String> {
     // @TODO
-    Ok(input)
+    Ok(input.to_string())
 }
