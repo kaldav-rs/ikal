@@ -1,9 +1,12 @@
 /**
  * See [3.6. Calendar Components](https://datatracker.ietf.org/doc/html/rfc5545#section-3.6)
  */
+
+mod vcalendar;
 mod vevent;
 mod vtodo;
 
+pub use vcalendar::*;
 pub use vevent::*;
 pub use vtodo::*;
 

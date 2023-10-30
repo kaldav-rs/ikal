@@ -1,5 +1,3 @@
-use std::collections::BTreeMap;
-
 mod components;
 mod errors;
 mod parser;
@@ -10,66 +8,6 @@ pub use errors::*;
 pub use properties::*;
 
 type DateTime = chrono::DateTime<chrono::Local>;
-
-/**
- * See [3.6. Calendar Components](https://datatracker.ietf.org/doc/html/rfc5545#section-3.4)
- */
-#[derive(Debug, PartialEq)]
-pub struct VCalendar {
-    pub prodid: String,
-    pub version: String,
-    pub calscale: Option<String>,
-    pub method: Option<String>,
-    pub content: Content,
-}
-
-impl Default for VCalendar {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl VCalendar {
-    fn new() -> Self {
-        VCalendar {
-            prodid: String::new(),
-            version: String::new(),
-            calscale: None,
-            method: None,
-            content: Content::default(),
-        }
-    }
-}
-
-impl TryFrom<BTreeMap<String, String>> for VCalendar {
-    type Error = Error;
-
-    fn try_from(properties: BTreeMap<String, String>) -> Result<Self> {
-        let mut vcalendar = VCalendar::new();
-
-        for (key, value) in properties {
-            match key.as_str() {
-                "PRODID" => vcalendar.prodid = value,
-                "VERSION" => vcalendar.version = value,
-                "CALSCALE" => vcalendar.calscale = Some(value),
-                "METHOD" => vcalendar.method = Some(value),
-                _ => return Err(Error::Key(key.to_string())),
-            };
-        }
-
-        Ok(vcalendar)
-    }
-}
-
-impl TryFrom<String> for VCalendar {
-    type Error = Error;
-
-    fn try_from(raw: String) -> Result<Self> {
-        parser::parse_vcalendar(raw.as_str())
-            .map_err(crate::Error::from)
-            .map(|(_, x)| x)
-    }
-}
 
 #[cfg(test)]
 mod test {
@@ -137,11 +75,6 @@ CALSCALE:GREGORIAN
 
     #[test]
     fn test_component() {}
-
-    #[test]
-    fn test_parse_vcalendar() {
-        test_files::<crate::VCalendar>("calendars")
-    }
 
     pub(crate) fn test_files<T: std::fmt::Debug + TryFrom<String, Error = crate::Error>>(path: &str) {
         let tests = std::path::Path::new("tests")
