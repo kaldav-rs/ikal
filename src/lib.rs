@@ -25,7 +25,7 @@ impl VCalendar {
             prodid: String::new(),
             version: String::new(),
             calscale: None,
-            content: Content::Empty,
+            content: Content::default(),
         }
     }
 }
