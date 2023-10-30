@@ -73,9 +73,6 @@ CALSCALE:GREGORIAN
         assert_eq!(crate::parser::properties(line), Ok(("\n", expected)));
     }
 
-    #[test]
-    fn test_component() {}
-
     pub(crate) fn test_files<T: std::fmt::Debug + TryFrom<String, Error = crate::Error>>(path: &str) {
         let tests = std::path::Path::new("tests")
             .join(path);
