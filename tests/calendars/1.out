@@ -6,7 +6,7 @@ Ok(
             "GREGORIAN",
         ),
         method: None,
-        content: Event(
+        component: Event(
             VEvent {
                 dtstamp: 2017-02-09T19:23:58+01:00,
                 uid: "5UILHLI7RI6K2IDRAQX7O",

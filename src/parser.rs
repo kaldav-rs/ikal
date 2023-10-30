@@ -121,10 +121,10 @@ pub fn parse_vtodo(input: &str) -> nom::IResult<&str, crate::VTodo> {
     )(input)
 }
 
-pub fn parse_content(input: &str) -> nom::IResult<&str, crate::Content> {
+pub fn parse_component(input: &str) -> nom::IResult<&str, crate::Component> {
     alt((
-        map(parse_vevent, crate::Content::Event),
-        map(parse_vtodo, crate::Content::Todo),
+        map(parse_vevent, crate::Component::Event),
+        map(parse_vtodo, crate::Component::Todo),
     ))(input)
 }
 
@@ -134,16 +134,16 @@ pub fn parse_vcalendar(input: &str) -> nom::IResult<&str, crate::VCalendar> {
             tag("BEGIN:VCALENDAR"),
             line_ending,
             properties,
-            parse_content,
+            parse_component,
             take_until("END:VCALENDAR"),
             tag("END:VCALENDAR"),
         )),
-        |(_, _, values, content, _, _)| {
+        |(_, _, values, component, _, _)| {
             let calendar: crate::Result<crate::VCalendar> = values.try_into();
 
             match calendar {
                 Ok(mut calendar) => {
-                    calendar.content = content;
+                    calendar.component = component;
                     Ok(calendar)
                 }
                 Err(err) => Err(err),

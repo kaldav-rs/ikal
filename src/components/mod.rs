@@ -11,12 +11,12 @@ pub use vevent::*;
 pub use vtodo::*;
 
 #[derive(Debug, PartialEq)]
-pub enum Content {
+pub enum Component {
     Event(crate::VEvent),
     Todo(crate::VTodo),
 }
 
-impl Default for Content {
+impl Default for Component {
     fn default() -> Self {
         Self::Event(crate::VEvent::default())
     }
@@ -34,7 +34,7 @@ macro_rules! get {
     }
 }
 
-impl Content {
+impl Component {
     get!(dtstamp => crate::DateTime);
     get!(uid => String);
     get!(summary => Option<String>);
