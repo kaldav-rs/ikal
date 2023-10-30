@@ -7,7 +7,7 @@ pub struct VCalendar {
     pub version: String,
     pub calscale: Option<String>,
     pub method: Option<String>,
-    pub component: crate::Component,
+    pub components: Vec<crate::Component>,
 }
 
 impl Default for VCalendar {
@@ -18,12 +18,12 @@ impl Default for VCalendar {
 
 impl VCalendar {
     fn new() -> Self {
-        VCalendar {
+        Self {
             prodid: String::new(),
             version: String::new(),
             calscale: None,
             method: None,
-            component: crate::Component::default(),
+            components: Vec::new(),
         }
     }
 }

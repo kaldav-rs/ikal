@@ -16,12 +16,6 @@ pub enum Component {
     Todo(crate::VTodo),
 }
 
-impl Default for Component {
-    fn default() -> Self {
-        Self::Event(crate::VEvent::default())
-    }
-}
-
 macro_rules! get {
     ($name:ident => $ty:ty) => {
         pub fn $name(&self) -> &$ty {

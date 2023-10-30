@@ -4,7 +4,7 @@ use nom::character::complete::{anychar, char, line_ending};
 use nom::combinator::{map, map_res, not, opt};
 use nom::multi::{count, many0, many1};
 use nom::number::complete::float;
-use nom::sequence::{preceded, separated_pair, terminated, tuple};
+use nom::sequence::{delimited, preceded, separated_pair, terminated, tuple};
 
 fn is_alphabetic(chr: char) -> bool {
     nom::character::is_alphabetic(chr as u8)
@@ -128,27 +128,28 @@ pub fn parse_component(input: &str) -> nom::IResult<&str, crate::Component> {
     ))(input)
 }
 
+pub fn parse_components(input: &str) -> nom::IResult<&str, Vec<crate::Component>> {
+    many0(parse_component)(input)
+}
+
 pub fn parse_vcalendar(input: &str) -> nom::IResult<&str, crate::VCalendar> {
     map_res(
-        tuple((
+        delimited(
             tag("BEGIN:VCALENDAR"),
-            line_ending,
-            properties,
-            parse_component,
-            take_until("END:VCALENDAR"),
+            tuple((
+                line_ending,
+                properties,
+                parse_components,
+                take_until("END:VCALENDAR"),
+            )),
             tag("END:VCALENDAR"),
-        )),
-        |(_, _, values, component, _, _)| {
-            let calendar: crate::Result<crate::VCalendar> = values.try_into();
-
-            match calendar {
-                Ok(mut calendar) => {
-                    calendar.component = component;
-                    Ok(calendar)
-                }
-                Err(err) => Err(err),
-            }
-        }
+        ),
+        |(_, properties, components, _)| {
+            properties.try_into().map(|mut x: crate::VCalendar| {
+                x.components = components;
+                x
+            })
+        },
     )(input)
 }
 
@@ -391,28 +392,52 @@ pub fn parse_rrule(input: &str) -> nom::IResult<&str, crate::Recur> {
             until: map.get("UNTIL").map(parse_date).transpose()?,
             count: map.get("COUNT").map(|x| x.parse()).transpose()?,
             interval: map.get("INTERVAL").map(|x| x.parse()).transpose()?,
-            by_second: map.get("BYSECOND").map(|x| by(x)).transpose()?.unwrap_or_default(),
-            by_minute: map.get("BYMINUTE").map(|x| by(x)).transpose()?.unwrap_or_default(),
-            by_hour: map.get("BYHOUR").map(|x| by(x)).transpose()?.unwrap_or_default(),
+            by_second: map
+                .get("BYSECOND")
+                .map(|x| by(x))
+                .transpose()?
+                .unwrap_or_default(),
+            by_minute: map
+                .get("BYMINUTE")
+                .map(|x| by(x))
+                .transpose()?
+                .unwrap_or_default(),
+            by_hour: map
+                .get("BYHOUR")
+                .map(|x| by(x))
+                .transpose()?
+                .unwrap_or_default(),
             by_day: map
                 .get("BYHOUR")
                 .map(|x| bywdaylist(x))
                 .transpose()?
                 .unwrap_or_default(),
-                by_monthday: map
-                    .get("BYMONTHDAY")
-                    .map(|x| by(x))
-                    .transpose()?
-                    .unwrap_or_default(),
-                    by_yearday: map
-                        .get("BYYEARDAY")
-                        .map(|x| by(x))
-                        .transpose()?
-                        .unwrap_or_default(),
-                        by_weekno: map.get("BYWEEKNO").map(|x| by(x)).transpose()?.unwrap_or_default(),
-                        by_month: map.get("BYMONTH").map(|x| by(x)).transpose()?.unwrap_or_default(),
-                        by_setpos: map.get("BYSETPOS").map(|x| by(x)).transpose()?.unwrap_or_default(),
-                        wkst: map.get("WKST").map(|x| x.parse()).transpose()?,
+            by_monthday: map
+                .get("BYMONTHDAY")
+                .map(|x| by(x))
+                .transpose()?
+                .unwrap_or_default(),
+            by_yearday: map
+                .get("BYYEARDAY")
+                .map(|x| by(x))
+                .transpose()?
+                .unwrap_or_default(),
+            by_weekno: map
+                .get("BYWEEKNO")
+                .map(|x| by(x))
+                .transpose()?
+                .unwrap_or_default(),
+            by_month: map
+                .get("BYMONTH")
+                .map(|x| by(x))
+                .transpose()?
+                .unwrap_or_default(),
+            by_setpos: map
+                .get("BYSETPOS")
+                .map(|x| by(x))
+                .transpose()?
+                .unwrap_or_default(),
+            wkst: map.get("WKST").map(|x| x.parse()).transpose()?,
         };
 
         Ok::<_, crate::Error>(recur)
