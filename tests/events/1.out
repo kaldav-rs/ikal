@@ -1,0 +1,45 @@
+Ok(
+    VEvent {
+        dtstamp: 2017-02-09T19:23:58+01:00,
+        uid: "5UILHLI7RI6K2IDRAQX7O",
+        dt_start: 2017-02-09T00:00:00+01:00,
+        dt_end: 2017-02-10T00:00:00+01:00,
+        class: Some(
+            Public,
+        ),
+        created: Some(
+            2017-02-09T19:23:58+01:00,
+        ),
+        description: None,
+        geo: None,
+        last_modified: Some(
+            2017-02-09T19:23:58+01:00,
+        ),
+        location: None,
+        organizer: None,
+        priority: None,
+        seq: None,
+        status: Some(
+            Confirmed,
+        ),
+        summary: Some(
+            "Vers",
+        ),
+        transp: None,
+        url: None,
+        recurid: None,
+        rrule: None,
+        attach: [],
+        attendee: [],
+        categories: [],
+        comment: [],
+        contact: [],
+        exdate: [],
+        rstatus: [],
+        related: [],
+        resources: [],
+        rdate: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

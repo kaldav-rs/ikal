@@ -151,3 +151,11 @@ impl TryFrom<String> for VEvent {
             .map(|(_, x)| x)
     }
 }
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn test_parse_vevent() {
+        crate::test::test_files::<crate::VEvent>("events")
+    }
+}

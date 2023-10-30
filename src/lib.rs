@@ -139,44 +139,13 @@ CALSCALE:GREGORIAN
     fn test_component() {}
 
     #[test]
-    fn test_parse_vevent() {
-        let line = "BEGIN:VEVENT
-CREATED:20170209T192358
-DTSTAMP:20170209T192358
-LAST-MODIFIED:20170209T192358
-UID:5UILHLI7RI6K2IDRAQX7O
-SUMMARY:Vers
-CLASS:PUBLIC
-STATUS:CONFIRMED
-DTSTART;VALUE=DATE:20170209
-DTEND;VALUE=DATE:20170210
-END:VEVENT
-";
-
-        assert_eq!(
-            crate::parser::parse_vevent(line),
-            Ok((
-                "",
-                crate::VEvent {
-                    created: Some(crate::parser::parse_date("20170209T192358").unwrap()),
-                    dtstamp: crate::parser::parse_date("20170209T192358").unwrap(),
-                    last_modified: Some(crate::parser::parse_date("20170209T192358").unwrap()),
-                    uid: "5UILHLI7RI6K2IDRAQX7O".into(),
-                    summary: Some("Vers".into()),
-                    class: Some(crate::Class::Public),
-                    status: Some(crate::Status::Confirmed),
-                    dt_start: crate::parser::parse_date("20170209").unwrap(),
-                    dt_end: crate::parser::parse_date("20170210").unwrap(),
-
-                    ..Default::default()
-                }
-            ))
-        );
+    fn test_parse_vcalendar() {
+        test_files::<crate::VCalendar>("calendars")
     }
 
-    #[test]
-    fn test_parse_vcalendar() {
-        let tests = std::path::Path::new("tests");
+    pub(crate) fn test_files<T: std::fmt::Debug + TryFrom<String, Error = crate::Error>>(path: &str) {
+        let tests = std::path::Path::new("tests")
+            .join(path);
 
         for entry in tests.read_dir().expect("Unable to open tests dir") {
             let file = match entry {
@@ -203,8 +172,8 @@ END:VEVENT
                     Err(_) => continue,
                 };
 
-                let vcalendar = crate::parser::parse_vcalendar(input.as_str());
-                let expected = format!("{:#?}\n", vcalendar);
+                let component: crate::Result<T> = input.try_into();
+                let expected = format!("{component:#?}\n");
 
                 if actual != expected {
                     let path = file.with_extension("fail");
