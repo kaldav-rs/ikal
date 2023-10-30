@@ -5,6 +5,7 @@ Ok(
         calscale: Some(
             "GREGORIAN",
         ),
+        method: None,
         content: Event(
             VEvent {
                 dtstamp: 2017-02-09T19:23:58+01:00,

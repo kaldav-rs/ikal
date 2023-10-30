@@ -11,12 +11,22 @@ pub use properties::*;
 
 type DateTime = chrono::DateTime<chrono::Local>;
 
+/**
+ * See [3.6. Calendar Components](https://datatracker.ietf.org/doc/html/rfc5545#section-3.4)
+ */
 #[derive(Debug, PartialEq)]
 pub struct VCalendar {
     pub prodid: String,
     pub version: String,
     pub calscale: Option<String>,
+    pub method: Option<String>,
     pub content: Content,
+}
+
+impl Default for VCalendar {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl VCalendar {
@@ -25,6 +35,7 @@ impl VCalendar {
             prodid: String::new(),
             version: String::new(),
             calscale: None,
+            method: None,
             content: Content::default(),
         }
     }
@@ -41,6 +52,7 @@ impl TryFrom<BTreeMap<String, String>> for VCalendar {
                 "PRODID" => vcalendar.prodid = value,
                 "VERSION" => vcalendar.version = value,
                 "CALSCALE" => vcalendar.calscale = Some(value),
+                "METHOD" => vcalendar.method = Some(value),
                 _ => return Err(Error::Key(key.to_string())),
             };
         }
