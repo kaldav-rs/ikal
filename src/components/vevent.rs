@@ -3,12 +3,12 @@ use std::collections::BTreeMap;
 /**
  * See [3.6.1. Event Component](https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.1)
  */
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct VEvent {
     pub dtstamp: crate::DateTime,
     pub uid: String,
-    pub dt_start: crate::DateTime,
-    pub dt_end: crate::DateTime,
+    pub dtstart: crate::DateTime,
+    pub dtend: crate::DateTime,
     pub class: Option<crate::Class>,
     pub created: Option<crate::DateTime>,
     pub description: Option<String>,
@@ -38,47 +38,10 @@ pub struct VEvent {
     pub iana_prop: BTreeMap<String, String>,
 }
 
-impl Default for VEvent {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl VEvent {
+    #[must_use]
     pub fn new() -> Self {
-        Self {
-            dtstamp: chrono::Local::now(),
-            uid: String::new(),
-            dt_start: chrono::Local::now(),
-            dt_end: chrono::Local::now(),
-            class: None,
-            created: None,
-            description: None,
-            geo: None,
-            last_modified: None,
-            location: None,
-            organizer: None,
-            priority: None,
-            seq: None,
-            status: None,
-            summary: None,
-            transp: None,
-            url: None,
-            recurid: None,
-            rrule: None,
-            attach: Vec::new(),
-            attendee: Vec::new(),
-            categories: Vec::new(),
-            comment: Vec::new(),
-            contact: Vec::new(),
-            exdate: Vec::new(),
-            rstatus: Vec::new(),
-            related: Vec::new(),
-            resources: Vec::new(),
-            rdate: Vec::new(),
-            x_prop: BTreeMap::new(),
-            iana_prop: BTreeMap::new(),
-        }
+        Self::default()
     }
 }
 
@@ -92,10 +55,11 @@ impl TryFrom<BTreeMap<String, String>> for VEvent {
             match key.as_str() {
                 "DTSTAMP" => vevent.dtstamp = crate::parser::parse_date(value)?,
                 "UID" => vevent.uid = value,
-                "DTSTART" => vevent.dt_start = crate::parser::parse_date(value)?,
-                "DTEND" => vevent.dt_end = crate::parser::parse_date(value)?,
+                "DTSTART" => vevent.dtstart = crate::parser::parse_date(value)?,
+                "DTEND" => vevent.dtend = crate::parser::parse_date(value)?,
                 "DURATION" => {
-                    vevent.dt_end = vevent.dt_start + crate::parser::parse_duration(&value)?
+                    vevent.dtend =
+                        vevent.dtstart + crate::parser::parse_duration(value.as_str().into())?
                 }
                 "CLASS" => vevent.class = Some(value.into()),
                 "CREATED" => vevent.created = Some(crate::parser::parse_date(value)?),
@@ -127,7 +91,9 @@ impl TryFrom<BTreeMap<String, String>> for VEvent {
                 "RESOURCES" => vevent
                     .resources
                     .append(&mut crate::parser::parse_resources(&value)),
-                "RDATE" => vevent.rdate.append(&mut crate::parser::parse_rdate(&value)?),
+                "RDATE" => vevent
+                    .rdate
+                    .append(&mut crate::parser::parse_rdate(&value)?),
                 _ => {
                     if key.starts_with("X-") {
                         vevent.x_prop.insert(key, value);
@@ -146,7 +112,7 @@ impl TryFrom<String> for VEvent {
     type Error = crate::Error;
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::parse_vevent(raw.as_str())
+        crate::parser::parse_vevent(raw.as_str().into())
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }
@@ -156,6 +122,6 @@ impl TryFrom<String> for VEvent {
 mod test {
     #[test]
     fn test_parse_vevent() {
-        crate::test::test_files::<crate::VEvent>("events")
+        crate::test::test_files::<crate::VEvent>("events");
     }
 }

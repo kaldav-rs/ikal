@@ -1,37 +1,35 @@
 Ok(
     VCalendar {
-        prodid: "-//Nextcloud calendar v1.5.0",
-        version: "2.0",
-        calscale: Some(
-            "GREGORIAN",
-        ),
+        prodid: "",
+        version: "",
+        calscale: None,
         method: None,
         events: [
             VEvent {
-                dtstamp: 2017-02-09T19:23:58+01:00,
-                uid: "5UILHLI7RI6K2IDRAQX7O",
-                dtstart: 2015-02-19T19:00:00+01:00,
-                dtend: 2017-02-10T00:00:00+01:00,
+                dtstamp: 2014-07-09T20:20:46+02:00,
+                uid: "1686cebb-a816-4657-8d5e-3b2ce0c0589c",
+                dtstart: 2013-05-16T19:30:00+02:00,
+                dtend: 2013-05-16T20:30:00+02:00,
                 class: Some(
                     Public,
                 ),
                 created: Some(
-                    2017-02-09T19:23:58+01:00,
+                    2013-05-03T07:37:45+02:00,
                 ),
-                description: None,
+                description: Some(
+                    "Bonjour\\,\\n\\nAprès un peu de retard\\, nous sommes prêts pour organiser l\\'Assemblée\\nGénérale Ordinaire.\\n\\nEn tant que membre de l\\'association Faimaison\\, vous êtes convoqué à\\nl\\'assemblée Générale Ordinaire.\\n\\nCelle-ci aura lieu le 16 Mai à B17 (17\\, rue Paul Bellamy)à 19h30.\\n\\nComme expliqué dans les derniers échanges\\, il y aura un renouvellement\\nde bureau avec changement de président.\\n\\nL\\'ordre du joursera donc le suivant :\\n\\n- Bilan Moral\\n- Bilan Financier\\n- Renouvellement du bureau.\\n- Projets en cours\\n\\nSi vous ne pouvez pas participer vous pouvez donner procuration à un\\nmembre de votre choix.\\nPour cela\\, envoyez un mail à bureau@faimaison.net en indiquant la personne\\nmandatée.\\n\\nÀ très bientot ! \\n\\n-- \\nGuillaume Douté",
+                ),
                 geo: None,
                 last_modified: Some(
-                    2017-02-09T19:23:58+01:00,
+                    2014-07-09T20:20:46+02:00,
                 ),
                 location: None,
                 organizer: None,
                 priority: None,
                 seq: None,
-                status: Some(
-                    Confirmed,
-                ),
+                status: None,
                 summary: Some(
-                    "Vers",
+                    "Assemblée Générale Ordinaire 2013",
                 ),
                 transp: None,
                 url: None,
@@ -48,13 +46,15 @@ Ok(
                 resources: [],
                 rdate: [],
                 x_prop: {},
-                iana_prop: {},
+                iana_prop: {
+                    "TRANSP": "OPAQUE",
+                },
             },
         ],
         todo: [],
         timezones: [
             VTimezone {
-                tzid: "Europe/Berlin",
+                tzid: "Europe/Paris",
                 last_modified: None,
                 tzurl: None,
                 standard: [
@@ -126,7 +126,7 @@ Ok(
                     },
                 ],
                 x_prop: {
-                    "X-LIC-LOCATION": "Europe/Berlin",
+                    "X-LIC-LOCATION": "Europe/Paris",
                 },
                 iana_prop: {},
             },

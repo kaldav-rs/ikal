@@ -3,14 +3,14 @@ use std::collections::BTreeMap;
 /**
  * See [3.6.2. To-Do Component](https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.2)
  */
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Default, Debug, PartialEq)]
 pub struct VTodo {
     pub dtstamp: crate::DateTime,
     pub uid: String,
     pub class: Option<crate::Class>,
     pub completed: Option<crate::DateTime>,
     pub created: Option<crate::DateTime>,
-    pub dt_start: Option<crate::DateTime>,
+    pub dtstart: Option<crate::DateTime>,
     pub geo: Option<crate::Geo>,
     pub last_modified: Option<crate::DateTime>,
     pub location: Option<String>,
@@ -39,48 +39,10 @@ pub struct VTodo {
     pub iana_prop: BTreeMap<String, String>,
 }
 
-impl Default for VTodo {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl VTodo {
+    #[must_use]
     pub fn new() -> Self {
-        Self {
-            dtstamp: chrono::Local::now(),
-            uid: String::new(),
-            class: None,
-            completed: None,
-            created: None,
-            dt_start: None,
-            geo: None,
-            last_modified: None,
-            location: None,
-            organizer: None,
-            percent_complete: None,
-            priority: None,
-            recurid: None,
-            seq: None,
-            status: None,
-            summary: None,
-            url: None,
-            rrule: None,
-            due: None,
-            duration: None,
-            attach: Vec::new(),
-            attendee: Vec::new(),
-            categories: Vec::new(),
-            comment: Vec::new(),
-            contact: Vec::new(),
-            exdate: Vec::new(),
-            rstatus: Vec::new(),
-            related: Vec::new(),
-            resources: Vec::new(),
-            rdate: Vec::new(),
-            x_prop: BTreeMap::new(),
-            iana_prop: BTreeMap::new(),
-        }
+        Self::default()
     }
 }
 
@@ -97,7 +59,7 @@ impl TryFrom<BTreeMap<String, String>> for VTodo {
                 "CLASS" => vtodo.class = Some(value.into()),
                 "COMPLETED" => vtodo.completed = Some(crate::parser::parse_date(value)?),
                 "CREATED" => vtodo.created = Some(crate::parser::parse_date(value)?),
-                "DTSTART" => vtodo.dt_start = Some(crate::parser::parse_date(value)?),
+                "DTSTART" => vtodo.dtstart = Some(crate::parser::parse_date(value)?),
                 "GEO" => vtodo.geo = Some(value.try_into()?),
                 "LAST-MODIFIED" => vtodo.last_modified = Some(crate::parser::parse_date(value)?),
                 "LOCATION" => vtodo.location = Some(value),
@@ -111,7 +73,9 @@ impl TryFrom<BTreeMap<String, String>> for VTodo {
                 "URL" => vtodo.url = Some(value),
                 "RRULE" => vtodo.rrule = Some(value.try_into()?),
                 "DUE" => vtodo.due = Some(crate::parser::parse_date(value)?),
-                "DURATION" => vtodo.duration = Some(crate::parser::parse_duration(&value)?),
+                "DURATION" => {
+                    vtodo.duration = Some(crate::parser::parse_duration(value.as_str().into())?)
+                }
                 "ATTACH" => vtodo.attach.push(crate::parser::parse_attach(&value)),
                 "ATTENDEE" => vtodo.attendee.push(crate::parser::parse_attendee(&value)),
                 "CATEGORIES" => vtodo
@@ -146,7 +110,7 @@ impl TryFrom<String> for VTodo {
     type Error = crate::Error;
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::parse_vtodo(raw.as_str())
+        crate::parser::parse_vtodo(raw.as_str().into())
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }

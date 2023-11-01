@@ -1,37 +1,31 @@
+use std::collections::BTreeMap;
+
 /**
  * See [3.6. Calendar Components](https://datatracker.ietf.org/doc/html/rfc5545#section-3.4)
  */
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Default, PartialEq)]
 pub struct VCalendar {
     pub prodid: String,
     pub version: String,
     pub calscale: Option<String>,
     pub method: Option<String>,
-    pub components: Vec<crate::Component>,
-}
-
-impl Default for VCalendar {
-    fn default() -> Self {
-        Self::new()
-    }
+    pub events: Vec<crate::VEvent>,
+    pub todo: Vec<crate::VTodo>,
+    pub timezones: Vec<crate::VTimezone>,
+    pub x_prop: BTreeMap<String, String>,
+    pub iana_prop: BTreeMap<String, String>,
 }
 
 impl VCalendar {
     fn new() -> Self {
-        Self {
-            prodid: String::new(),
-            version: String::new(),
-            calscale: None,
-            method: None,
-            components: Vec::new(),
-        }
+        Self::default()
     }
 }
 
 impl TryFrom<std::collections::BTreeMap<String, String>> for VCalendar {
     type Error = crate::Error;
 
-    fn try_from(properties: std::collections::BTreeMap<String, String>) -> Result<Self, Self::Error> {
+    fn try_from(properties: BTreeMap<String, String>) -> Result<Self, Self::Error> {
         let mut vcalendar = VCalendar::new();
 
         for (key, value) in properties {
@@ -40,7 +34,13 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VCalendar {
                 "VERSION" => vcalendar.version = value,
                 "CALSCALE" => vcalendar.calscale = Some(value),
                 "METHOD" => vcalendar.method = Some(value),
-                _ => return Err(crate::Error::Key(key.to_string())),
+                _ => {
+                    if key.starts_with("X-") {
+                        vcalendar.x_prop.insert(key, value);
+                    } else {
+                        vcalendar.iana_prop.insert(key, value);
+                    }
+                }
             };
         }
 
@@ -52,7 +52,7 @@ impl TryFrom<String> for VCalendar {
     type Error = crate::Error;
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::parse_vcalendar(raw.as_str())
+        crate::parser::parse_vcalendar(raw.as_str().into())
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }

@@ -1,0 +1,42 @@
+BEGIN:VCALENDAR
+BEGIN:VTIMEZONE
+TZID:Europe/Paris
+X-LIC-LOCATION:Europe/Paris
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+CREATED:20130503T053745Z
+LAST-MODIFIED:20140709T182046Z
+DTSTAMP:20140709T182046Z
+UID:1686cebb-a816-4657-8d5e-3b2ce0c0589c
+SUMMARY:Assemblée Générale Ordinaire 2013
+DTSTART;TZID=Europe/Paris:20130516T193000
+DTEND;TZID=Europe/Paris:20130516T203000
+DESCRIPTION:Bonjour\,\n\nAprès un peu de retard\, nous sommes prêts pour
+  organiser l\'Assemblée\nGénérale Ordinaire.\n\nEn tant que membre de l\'
+ association Faimaison\, vous êtes convoqué à\nl\'assemblée Générale O
+ rdinaire.\n\nCelle-ci aura lieu le 16 Mai à B17 (17\, rue Paul Bellamy)
+ à 19h30.\n\nComme expliqué dans les derniers échanges\, il y aura un re
+ nouvellement\nde bureau avec changement de président.\n\nL\'ordre du jour
+ sera donc le suivant :\n\n- Bilan Moral\n- Bilan Financier\n- Renouvelleme
+ nt du bureau.\n- Projets en cours\n\nSi vous ne pouvez pas participer vous
+  pouvez donner procuration à un\nmembre de votre choix.\nPour cela\, envo
+ yez un mail à bureau@faimaison.net en indiquant la personne\nmandatée.\n
+ \nÀ très bientot ! \n\n-- \nGuillaume Douté
+CLASS:PUBLIC
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR

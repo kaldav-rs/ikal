@@ -12,13 +12,13 @@ type DateTime = chrono::DateTime<chrono::Local>;
 #[cfg(test)]
 mod test {
     #[test]
-    fn test_property() {
+    fn test_content_line() {
         let line = "VERSION:2.0
 PRODID:-//Nextcloud calendar v1.5.0";
 
-        let expected = ("VERSION".to_owned(), "2.0".to_owned());
+        let expected = ("VERSION", "2.0".to_string());
         assert_eq!(
-            crate::parser::property(line),
+            crate::parser::content_line(line),
             Ok(("PRODID:-//Nextcloud calendar v1.5.0", expected))
         );
     }
@@ -31,12 +31,12 @@ PRODID:-//Nextcloud calendar v1.5.0";
 PRODID:-//Nextcloud calendar v1.5.0";
 
         let expected = (
-            String::from("DESCRIPTION"),
-            String::from("This is a long description that exists on a long line."),
+            "DESCRIPTION",
+            "This is a long description that exists on a long line.".to_string(),
         );
 
         assert_eq!(
-            crate::parser::property(line),
+            crate::parser::content_line(line),
             Ok(("PRODID:-//Nextcloud calendar v1.5.0", expected))
         );
     }
@@ -54,28 +54,29 @@ PRODID:-//Nextcloud calendar v1.5.0";
 ";
 
         let mut expected = std::collections::BTreeMap::new();
-        expected.insert("CREATED".into(), "20141009T141617Z".into());
+        expected.insert("CREATED".to_string(), "20141009T141617Z".to_string());
 
-        assert_eq!(crate::parser::properties(line), Ok(("\n", expected)));
+        assert_eq!(crate::parser::content_lines(line), Ok(("\n", expected)));
     }
 
     #[test]
-    fn test_properties() {
+    fn test_content_lines() {
         let line = "VERSION:2.0
 CALSCALE:GREGORIAN
 
 ";
 
         let mut expected = std::collections::BTreeMap::new();
-        expected.insert("VERSION".into(), "2.0".into());
-        expected.insert("CALSCALE".into(), "GREGORIAN".into());
+        expected.insert("VERSION".to_string(), "2.0".to_string());
+        expected.insert("CALSCALE".to_string(), "GREGORIAN".to_string());
 
-        assert_eq!(crate::parser::properties(line), Ok(("\n", expected)));
+        assert_eq!(crate::parser::content_lines(line), Ok(("\n", expected)));
     }
 
-    pub(crate) fn test_files<T: std::fmt::Debug + TryFrom<String, Error = crate::Error>>(path: &str) {
-        let tests = std::path::Path::new("tests")
-            .join(path);
+    pub(crate) fn test_files<T: std::fmt::Debug + TryFrom<String, Error = crate::Error>>(
+        path: &str,
+    ) {
+        let tests = std::path::Path::new("tests").join(path);
 
         for entry in tests.read_dir().expect("Unable to open tests dir") {
             let file = match entry {
@@ -97,17 +98,19 @@ CALSCALE:GREGORIAN
                     Err(_) => continue,
                 };
 
-                let actual = match file_get_contents(&file.with_extension("out")) {
-                    Ok(actual) => actual,
+                let expected = match file_get_contents(&file.with_extension("out")) {
+                    Ok(expected) => expected,
                     Err(_) => continue,
                 };
 
+                let fail = file.with_extension("fail");
+                std::fs::remove_file(&fail).ok();
+
                 let component: crate::Result<T> = input.try_into();
-                let expected = format!("{component:#?}\n");
+                let actual = format!("{component:#?}\n");
 
                 if actual != expected {
-                    let path = file.with_extension("fail");
-                    std::fs::write(path, &expected).unwrap();
+                    std::fs::write(&fail, &actual).unwrap();
                 }
 
                 assert_eq!(actual, expected, "{file:?}");

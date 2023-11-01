@@ -72,7 +72,7 @@ impl std::str::FromStr for WeekdayNum {
     type Err = crate::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        crate::parser::parse_weekdaynum(s)
+        crate::parser::parse_weekdaynum(s.into())
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }
@@ -93,7 +93,7 @@ impl std::str::FromStr for Weekday {
     type Err = crate::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        crate::parser::parse_weekday(s)
+        crate::parser::parse_weekday(s.into())
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }
