@@ -59,7 +59,7 @@ impl TryFrom<BTreeMap<String, String>> for VEvent {
                 "DTEND" => vevent.dtend = crate::parser::date(value)?,
                 "DURATION" => {
                     vevent.dtend =
-                        vevent.dtstart + crate::parser::duration(value.as_str().into())?
+                        vevent.dtstart + crate::parser::duration(&value)?
                 }
                 "CLASS" => vevent.class = Some(value.into()),
                 "CREATED" => vevent.created = Some(crate::parser::date(value)?),
@@ -112,7 +112,7 @@ impl TryFrom<String> for VEvent {
     type Error = crate::Error;
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::vevent(raw.as_str().into())
+        crate::parser::vevent(&raw)
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }

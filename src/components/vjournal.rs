@@ -93,7 +93,7 @@ impl TryFrom<String> for VJournal {
     type Error = crate::Error;
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::vjournal(raw.as_str().into())
+        crate::parser::vjournal(&raw)
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }

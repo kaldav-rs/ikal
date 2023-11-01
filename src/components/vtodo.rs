@@ -74,7 +74,7 @@ impl TryFrom<BTreeMap<String, String>> for VTodo {
                 "RRULE" => vtodo.rrule = Some(value.try_into()?),
                 "DUE" => vtodo.due = Some(crate::parser::date(value)?),
                 "DURATION" => {
-                    vtodo.duration = Some(crate::parser::duration(value.as_str().into())?)
+                    vtodo.duration = Some(crate::parser::duration(&value)?)
                 }
                 "ATTACH" => vtodo.attach.push(crate::parser::attach(&value)),
                 "ATTENDEE" => vtodo.attendee.push(crate::parser::attendee(&value)),
@@ -110,7 +110,7 @@ impl TryFrom<String> for VTodo {
     type Error = crate::Error;
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::vtodo(raw.as_str().into())
+        crate::parser::vtodo(&raw)
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }

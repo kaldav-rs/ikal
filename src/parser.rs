@@ -255,7 +255,7 @@ where
     }
 
     let dt = chrono::NaiveDateTime::parse_from_str(
-        date.as_str().trim_end_matches('Z'),
+        date.trim_end_matches('Z'),
         "%Y%m%dT%H%M%S",
     )?;
 

@@ -25,7 +25,7 @@ impl TryFrom<String> for Recur {
     type Error = crate::Error;
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::rrule(raw.as_str())
+        crate::parser::rrule(&raw)
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }
@@ -72,7 +72,7 @@ impl std::str::FromStr for WeekdayNum {
     type Err = crate::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        crate::parser::weekdaynum(s.into())
+        crate::parser::weekdaynum(s)
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }
@@ -93,7 +93,7 @@ impl std::str::FromStr for Weekday {
     type Err = crate::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        crate::parser::weekday(s.into())
+        crate::parser::weekday(s)
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }

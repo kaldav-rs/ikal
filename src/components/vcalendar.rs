@@ -53,7 +53,7 @@ impl TryFrom<String> for VCalendar {
     type Error = crate::Error;
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::vcalendar(raw.as_str().into())
+        crate::parser::vcalendar(&raw)
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }
