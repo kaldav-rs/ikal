@@ -9,7 +9,5 @@ impl TryFrom<String> for Geo {
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
         crate::parser::geo(&raw)
-            .map_err(crate::Error::from)
-            .map(|(_, x)| x)
     }
 }

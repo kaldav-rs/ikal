@@ -1,14 +1,11 @@
-use std::collections::BTreeMap;
-
 /**
  * See [3.6.1. Event Component](https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.1)
  */
-#[derive(Clone, Debug, Default, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq, crate::Component)]
 pub struct VEvent {
     pub dtstamp: crate::DateTime,
     pub uid: String,
     pub dtstart: crate::DateTime,
-    pub dtend: crate::DateTime,
     pub class: Option<crate::Class>,
     pub created: Option<crate::DateTime>,
     pub description: Option<String>,
@@ -17,25 +14,33 @@ pub struct VEvent {
     pub location: Option<String>,
     pub organizer: Option<String>,
     pub priority: Option<u8>,
-    pub seq: Option<u32>,
+    pub sequence: Option<u32>,
     pub status: Option<crate::Status>,
     pub summary: Option<String>,
     pub transp: Option<crate::TimeTransparency>,
     pub url: Option<String>,
     pub recurid: Option<String>,
     pub rrule: Option<crate::Recur>,
+    pub dtend: Option<crate::DateTime>,
+    pub duration: Option<chrono::Duration>,
     pub attach: Vec<String>,
     pub attendee: Vec<String>,
+    #[component(append)]
     pub categories: Vec<String>,
     pub comment: Vec<String>,
     pub contact: Vec<String>,
+    #[component(append)]
     pub exdate: Vec<crate::DateTime>,
     pub rstatus: Vec<String>,
-    pub related: Vec<String>,
+    pub related_to: Vec<String>,
+    #[component(append)]
     pub resources: Vec<String>,
+    #[component(append)]
     pub rdate: Vec<String>,
-    pub x_prop: BTreeMap<String, String>,
-    pub iana_prop: BTreeMap<String, String>,
+    #[component(ignore)]
+    pub x_prop: std::collections::BTreeMap<String, String>,
+    #[component(ignore)]
+    pub iana_prop: std::collections::BTreeMap<String, String>,
 }
 
 impl VEvent {
@@ -44,80 +49,6 @@ impl VEvent {
         Self::default()
     }
 }
-
-impl TryFrom<BTreeMap<String, String>> for VEvent {
-    type Error = crate::Error;
-
-    fn try_from(properties: BTreeMap<String, String>) -> crate::Result<Self> {
-        let mut vevent = Self::new();
-
-        for (key, value) in properties {
-            match key.as_str() {
-                "DTSTAMP" => vevent.dtstamp = crate::parser::date(value)?,
-                "UID" => vevent.uid = value,
-                "DTSTART" => vevent.dtstart = crate::parser::date(value)?,
-                "DTEND" => vevent.dtend = crate::parser::date(value)?,
-                "DURATION" => {
-                    vevent.dtend =
-                        vevent.dtstart + crate::parser::duration(&value)?
-                }
-                "CLASS" => vevent.class = Some(value.into()),
-                "CREATED" => vevent.created = Some(crate::parser::date(value)?),
-                "DESCRIPTION" => vevent.description = Some(value),
-                "GEO" => vevent.geo = Some(value.try_into()?),
-                "LAST-MODIFIED" => vevent.last_modified = Some(crate::parser::date(value)?),
-                "LOCATION" => vevent.location = Some(value),
-                "ORGANIZER" => vevent.organizer = Some(crate::parser::organizer(&value)?),
-                "PRIORITY" => vevent.priority = Some(crate::parser::priority(&value)?),
-                "SEQ" => vevent.seq = Some(crate::parser::sequence(&value)?),
-                "STATUS" => vevent.status = Some(value.try_into()?),
-                "SUMMARY" => vevent.summary = Some(value),
-                "STRANSP" => vevent.transp = Some(value.try_into()?),
-                "URL" => vevent.url = Some(value),
-                "RECURID" => vevent.recurid = Some(crate::parser::recurid(&value)?),
-                "RRULE" => vevent.rrule = Some(value.try_into()?),
-                "ATTACH" => vevent.attach.push(crate::parser::attach(&value)),
-                "ATTENDEE" => vevent.attendee.push(crate::parser::attendee(&value)),
-                "CATEGORIES" => vevent
-                    .categories
-                    .append(&mut crate::parser::categories(&value)),
-                "COMMENT" => vevent.comment.push(crate::parser::comment(&value)),
-                "CONTACT" => vevent.contact.push(crate::parser::contact(&value)),
-                "EXDATE" => vevent
-                    .exdate
-                    .append(&mut crate::parser::exdate(&value)?),
-                "RSTATUS" => vevent.rstatus.push(crate::parser::rstatus(&value)?),
-                "RELATED-TO" => vevent.related.push(crate::parser::related(&value)),
-                "RESOURCES" => vevent
-                    .resources
-                    .append(&mut crate::parser::resources(&value)),
-                "RDATE" => vevent
-                    .rdate
-                    .append(&mut crate::parser::rdate(&value)?),
-                _ => {
-                    if key.starts_with("X-") {
-                        vevent.x_prop.insert(key, value);
-                    } else {
-                        vevent.iana_prop.insert(key, value);
-                    }
-                }
-            };
-        }
-
-        Ok(vevent)
-    }
-}
-
-impl TryFrom<String> for VEvent {
-    type Error = crate::Error;
-
-    fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::vevent(&raw)
-            .map_err(crate::Error::from)
-            .map(|(_, x)| x)
-    }
-}
-
 #[cfg(test)]
 mod test {
     #[test]

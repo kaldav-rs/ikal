@@ -26,8 +26,6 @@ impl TryFrom<String> for Recur {
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
         crate::parser::rrule(&raw)
-            .map_err(crate::Error::from)
-            .map(|(_, x)| x)
     }
 }
 

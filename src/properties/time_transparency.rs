@@ -11,11 +11,11 @@ pub enum TimeTransparency {
     Transparent,
 }
 
-impl TryFrom<String> for TimeTransparency {
-    type Error = crate::Error;
+impl std::str::FromStr for TimeTransparency {
+    type Err = crate::Error;
 
-    fn try_from(value: String) -> crate::Result<Self> {
-        let status = match value.as_str() {
+    fn from_str(value: &str) -> crate::Result<Self> {
+        let status = match value {
             "OPAQUE" => Self::Opaque,
             "TRANSPARENT" => Self::Transparent,
 

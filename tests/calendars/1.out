@@ -11,7 +11,6 @@ Ok(
                 dtstamp: 2017-02-09T19:23:58+01:00,
                 uid: "5UILHLI7RI6K2IDRAQX7O",
                 dtstart: 2015-02-19T19:00:00+01:00,
-                dtend: 2017-02-10T00:00:00+01:00,
                 class: Some(
                     Public,
                 ),
@@ -26,7 +25,7 @@ Ok(
                 location: None,
                 organizer: None,
                 priority: None,
-                seq: None,
+                sequence: None,
                 status: Some(
                     Confirmed,
                 ),
@@ -37,6 +36,10 @@ Ok(
                 url: None,
                 recurid: None,
                 rrule: None,
+                dtend: Some(
+                    2017-02-10T00:00:00+01:00,
+                ),
+                duration: None,
                 attach: [],
                 attendee: [],
                 categories: [],
@@ -44,7 +47,7 @@ Ok(
                 contact: [],
                 exdate: [],
                 rstatus: [],
-                related: [],
+                related_to: [],
                 resources: [],
                 rdate: [],
                 x_prop: {},
@@ -83,11 +86,11 @@ Ok(
                                 wkst: None,
                             },
                         ),
-                        comment: [
+                        comment: [],
+                        rdate: [],
+                        tzname: [
                             "CET",
                         ],
-                        rdate: [],
-                        tzname: [],
                         x_prop: {},
                         iana_prop: {},
                     },
@@ -117,11 +120,11 @@ Ok(
                                 wkst: None,
                             },
                         ),
-                        comment: [
+                        comment: [],
+                        rdate: [],
+                        tzname: [
                             "CEST",
                         ],
-                        rdate: [],
-                        tzname: [],
                         x_prop: {},
                         iana_prop: {},
                     },

@@ -1,14 +1,18 @@
 use std::collections::BTreeMap;
 
-#[derive(Debug, Default, PartialEq)]
+#[derive(Debug, Default, PartialEq, crate::Component)]
 pub struct VTimezone {
     pub tzid: String,
-    pub last_modified: Option<String>,
+    pub last_modified: Option<crate::DateTime>,
     pub tzurl: Option<String>,
+    #[component(ignore)]
     pub standard: Vec<Prop>,
+    #[component(ignore)]
     pub daylight: Vec<Prop>,
-    pub x_prop: BTreeMap<String, String>,
-    pub iana_prop: BTreeMap<String, String>,
+    #[component(ignore)]
+    pub x_prop: std::collections::BTreeMap<String, String>,
+    #[component(ignore)]
+    pub iana_prop: std::collections::BTreeMap<String, String>,
 }
 
 impl VTimezone {
@@ -18,47 +22,25 @@ impl VTimezone {
     }
 }
 
-impl TryFrom<std::collections::BTreeMap<String, String>> for VTimezone {
-    type Error = crate::Error;
-
-    fn try_from(properties: std::collections::BTreeMap<String, String>) -> crate::Result<Self> {
-        let mut vtimezone = Self::new();
-
-        for (key, value) in properties {
-            match key.as_str() {
-                "TZID" => vtimezone.tzid = value,
-                "LAST-MODIFIED" => vtimezone.last_modified = Some(value),
-                "TZURL" => vtimezone.tzurl = Some(value),
-                _ => {
-                    if key.starts_with("X-") {
-                        vtimezone.x_prop.insert(key, value);
-                    } else {
-                        vtimezone.iana_prop.insert(key, value);
-                    }
-                }
-            }
-        }
-
-        Ok(vtimezone)
-    }
-}
-
 #[derive(Debug, PartialEq)]
 pub(crate) enum Component {
     Standard(Prop),
     Daylight(Prop),
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, crate::Component)]
 pub struct Prop {
     pub dtstart: crate::DateTime,
     pub tzoffsetto: chrono::offset::FixedOffset,
     pub tzoffsetfrom: chrono::offset::FixedOffset,
     pub rrule: Option<crate::Recur>,
     pub comment: Vec<String>,
+    #[component(append)]
     pub rdate: Vec<String>,
     pub tzname: Vec<String>,
+    #[component(ignore)]
     pub x_prop: BTreeMap<String, String>,
+    #[component(ignore)]
     pub iana_prop: BTreeMap<String, String>,
 }
 
@@ -82,34 +64,5 @@ impl Prop {
             x_prop: BTreeMap::new(),
             iana_prop: BTreeMap::new(),
         }
-    }
-}
-
-impl TryFrom<std::collections::BTreeMap<String, String>> for Prop {
-    type Error = crate::Error;
-
-    fn try_from(properties: std::collections::BTreeMap<String, String>) -> crate::Result<Self> {
-        let mut prop = Self::new();
-
-        for (key, value) in properties {
-            match key.as_str() {
-                "DTSTART" => prop.dtstart = crate::parser::date(value)?,
-                "TZOFFSETTO" => prop.tzoffsetto = crate::parser::tzoffset(&value)?,
-                "TZOFFSETFROM" => prop.tzoffsetfrom = crate::parser::tzoffset(&value)?,
-                "RRULE" => prop.rrule = Some(value.try_into()?),
-                "COMMENT" => prop.comment.push(crate::parser::comment(&value)),
-                "TZNAME" => prop.comment.push(value),
-                "RDATE" => prop.rdate.append(&mut crate::parser::rdate(&value)?),
-                _ => {
-                    if key.starts_with("X-") {
-                        prop.x_prop.insert(key, value);
-                    } else {
-                        prop.iana_prop.insert(key, value);
-                    }
-                }
-            }
-        }
-
-        Ok(prop)
     }
 }

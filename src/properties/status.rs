@@ -23,11 +23,11 @@ pub enum Status {
     Final,
 }
 
-impl TryFrom<String> for Status {
-    type Error = crate::Error;
+impl std::str::FromStr for Status {
+    type Err = crate::Error;
 
-    fn try_from(value: String) -> crate::Result<Self> {
-        let status = match value.as_str() {
+    fn from_str(value: &str) -> crate::Result<Self> {
+        let status = match value {
             "TENTATIVE" => Self::Tentative,
             "CONFIRMED" => Self::Confirmed,
             "CANCELLED" => Self::Cancelled,

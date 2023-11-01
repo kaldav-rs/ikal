@@ -11,13 +11,17 @@ pub enum Class {
     Custom(String),
 }
 
-impl From<String> for Class {
-    fn from(value: String) -> Self {
-        match value.as_str() {
+impl std::str::FromStr for Class {
+    type Err = crate::Error;
+
+    fn from_str(value: &str) -> crate::Result<Self> {
+        let class = match value {
             "PUBLIC" => Self::Public,
             "PRIVATE" => Self::Private,
             "CONFIDENTIAL" => Self::Confidential,
             c => Self::Custom(c.to_string()),
-        }
+        };
+
+        Ok(class)
     }
 }

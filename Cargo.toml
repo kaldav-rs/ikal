@@ -1,3 +1,6 @@
+[workspace]
+members = [".", "derive"]
+
 [package]
 name = "ical-parser"
 description = "Parse icalendar object"
@@ -18,3 +21,7 @@ thiserror = "1.0"
 version = "0.4"
 default-features = false
 features = ["clock", "std"]
+
+[dependencies.ical-derive]
+version = "0.1"
+path = "derive"

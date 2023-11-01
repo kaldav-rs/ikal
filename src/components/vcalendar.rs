@@ -1,61 +1,29 @@
-use std::collections::BTreeMap;
-
 /**
  * See [3.6. Calendar Components](https://datatracker.ietf.org/doc/html/rfc5545#section-3.4)
  */
-#[derive(Debug, Default, PartialEq)]
+#[derive(Debug, Default, PartialEq, crate::Component)]
 pub struct VCalendar {
     pub prodid: String,
     pub version: String,
     pub calscale: Option<String>,
     pub method: Option<String>,
+    #[component(ignore)]
     pub events: Vec<crate::VEvent>,
+    #[component(ignore)]
     pub journals: Vec<crate::VJournal>,
+    #[component(ignore)]
     pub todo: Vec<crate::VTodo>,
+    #[component(ignore)]
     pub timezones: Vec<crate::VTimezone>,
-    pub x_prop: BTreeMap<String, String>,
-    pub iana_prop: BTreeMap<String, String>,
+    #[component(ignore)]
+    pub x_prop: std::collections::BTreeMap<String, String>,
+    #[component(ignore)]
+    pub iana_prop: std::collections::BTreeMap<String, String>,
 }
 
 impl VCalendar {
     fn new() -> Self {
         Self::default()
-    }
-}
-
-impl TryFrom<std::collections::BTreeMap<String, String>> for VCalendar {
-    type Error = crate::Error;
-
-    fn try_from(properties: BTreeMap<String, String>) -> Result<Self, Self::Error> {
-        let mut vcalendar = VCalendar::new();
-
-        for (key, value) in properties {
-            match key.as_str() {
-                "PRODID" => vcalendar.prodid = value,
-                "VERSION" => vcalendar.version = value,
-                "CALSCALE" => vcalendar.calscale = Some(value),
-                "METHOD" => vcalendar.method = Some(value),
-                _ => {
-                    if key.starts_with("X-") {
-                        vcalendar.x_prop.insert(key, value);
-                    } else {
-                        vcalendar.iana_prop.insert(key, value);
-                    }
-                }
-            };
-        }
-
-        Ok(vcalendar)
-    }
-}
-
-impl TryFrom<String> for VCalendar {
-    type Error = crate::Error;
-
-    fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::vcalendar(&raw)
-            .map_err(crate::Error::from)
-            .map(|(_, x)| x)
     }
 }
 
