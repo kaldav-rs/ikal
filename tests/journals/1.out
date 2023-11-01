@@ -1,0 +1,33 @@
+Ok(
+    VJournal {
+        dtstamp: 1997-09-01T15:00:00+02:00,
+        uid: "19970901T130000Z-123405@example.com",
+        class: None,
+        created: None,
+        dtstart: 1997-03-17T00:00:00+01:00,
+        last_modified: None,
+        organizer: None,
+        recurid: None,
+        seq: None,
+        status: None,
+        summary: Some(
+            "Staff meeting minutes",
+        ),
+        url: None,
+        rrule: None,
+        attach: [],
+        attendee: [],
+        categories: [],
+        comment: [],
+        contact: [],
+        description: [
+            "1. Staff meeting: Participants include Joe\\,Lisa\\, and Bob. Aurora project plans were reviewed.There is currently no budget reserves for this project.Lisa will escalate to management. Next meeting on Tuesday.\\n2. Telephone Conference: ABC Corp. sales representativecalled to discuss new printer. Promised to get us a demo byFriday.\\n3. Henry Miller (Handsoff Insurance): Car wastotaled by tree. Is looking into a loaner car. 555-2323(tel).",
+        ],
+        exdate: [],
+        related: [],
+        rdate: [],
+        rstatus: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

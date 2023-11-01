@@ -51,6 +51,7 @@ Ok(
                 iana_prop: {},
             },
         ],
+        journals: [],
         todo: [],
         timezones: [
             VTimezone {

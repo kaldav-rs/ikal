@@ -5,6 +5,7 @@ Ok(
         calscale: None,
         method: None,
         events: [],
+        journals: [],
         todo: [
             VTodo {
                 dtstamp: 2016-05-15T18:43:10+02:00,

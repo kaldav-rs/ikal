@@ -51,6 +51,7 @@ Ok(
                 },
             },
         ],
+        journals: [],
         todo: [],
         timezones: [
             VTimezone {

@@ -10,6 +10,7 @@ pub struct VCalendar {
     pub calscale: Option<String>,
     pub method: Option<String>,
     pub events: Vec<crate::VEvent>,
+    pub journals: Vec<crate::VJournal>,
     pub todo: Vec<crate::VTodo>,
     pub timezones: Vec<crate::VTimezone>,
     pub x_prop: BTreeMap<String, String>,
@@ -61,7 +62,7 @@ impl TryFrom<String> for VCalendar {
 #[cfg(test)]
 mod test {
     #[test]
-    fn test_parse_vcalendar() {
+    fn parse() {
         crate::test::test_files::<crate::VCalendar>("calendars")
     }
 }

@@ -121,7 +121,7 @@ impl TryFrom<String> for VEvent {
 #[cfg(test)]
 mod test {
     #[test]
-    fn test_parse_vevent() {
+    fn parse() {
         crate::test::test_files::<crate::VEvent>("events");
     }
 }

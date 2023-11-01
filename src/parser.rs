@@ -109,6 +109,13 @@ pub(crate) fn parse_vevent(input: &str) -> nom::IResult<&str, crate::VEvent> {
     )(input)
 }
 
+pub(crate) fn parse_vjournal(input: &str) -> nom::IResult<&str, crate::VJournal> {
+    map_res(
+        delimited(tag("BEGIN:VJOURNAL\r\n"), content_lines, tag("END:VJOURNAL\r\n")),
+        |values| values.try_into(),
+    )(input)
+}
+
 pub(crate) fn parse_standard(input: &str) -> nom::IResult<&str, crate::vtimezone::Prop> {
     map_res(
         delimited(
@@ -173,6 +180,7 @@ pub(crate) fn parse_vtodo(input: &str) -> nom::IResult<&str, crate::VTodo> {
 pub(crate) fn parse_component(input: &str) -> nom::IResult<&str, crate::Component> {
     alt((
         map(parse_vevent, crate::Component::Event),
+        map(parse_vjournal, crate::Component::Journal),
         map(parse_vtimezone, crate::Component::Timezone),
         map(parse_vtodo, crate::Component::Todo),
     ))(input)
@@ -195,6 +203,7 @@ pub(crate) fn parse_vcalendar(input: &str) -> nom::IResult<&str, crate::VCalenda
             for component in components {
                 match component {
                     crate::Component::Event(event) => vcalendar.events.push(event),
+                    crate::Component::Journal(journal) => vcalendar.journals.push(journal),
                     crate::Component::Todo(todo) => vcalendar.todo.push(todo),
                     crate::Component::Timezone(timezone) => vcalendar.timezones.push(timezone),
                 }

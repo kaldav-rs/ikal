@@ -138,6 +138,7 @@ Ok(
                 },
             },
         ],
+        journals: [],
         todo: [],
         timezones: [],
         x_prop: {

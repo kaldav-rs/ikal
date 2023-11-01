@@ -53,6 +53,7 @@ Ok(
                 iana_prop: {},
             },
         ],
+        journals: [],
         todo: [],
         timezones: [],
         x_prop: {},
