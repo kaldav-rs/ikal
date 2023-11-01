@@ -46,35 +46,35 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VJournal {
 
         for (key, value) in properties {
             match key.as_str() {
-                "DTSTAMP" => vjournal.dtstamp = crate::parser::parse_date(value)?,
+                "DTSTAMP" => vjournal.dtstamp = crate::parser::date(value)?,
                 "UID" => vjournal.uid = value,
                 "CLASS" => vjournal.class = Some(value.into()),
-                "CREATED" => vjournal.created = Some(crate::parser::parse_date(value)?),
-                "DTSTART" => vjournal.dtstart = crate::parser::parse_date(value)?,
-                "LAST-MODIFIED" => vjournal.last_modified = Some(crate::parser::parse_date(value)?),
-                "ORGANIZER" => vjournal.organizer = Some(crate::parser::parse_organizer(&value)?),
-                "RECURID" => vjournal.recurid = Some(crate::parser::parse_recurid(&value)?),
-                "SEQ" => vjournal.seq = Some(crate::parser::parse_sequence(&value)?),
+                "CREATED" => vjournal.created = Some(crate::parser::date(value)?),
+                "DTSTART" => vjournal.dtstart = crate::parser::date(value)?,
+                "LAST-MODIFIED" => vjournal.last_modified = Some(crate::parser::date(value)?),
+                "ORGANIZER" => vjournal.organizer = Some(crate::parser::organizer(&value)?),
+                "RECURID" => vjournal.recurid = Some(crate::parser::recurid(&value)?),
+                "SEQ" => vjournal.seq = Some(crate::parser::sequence(&value)?),
                 "STATUS" => vjournal.status = Some(value.try_into()?),
                 "SUMMARY" => vjournal.summary = Some(value),
                 "URL" => vjournal.url = Some(value),
                 "RRULE" => vjournal.rrule = Some(value.try_into()?),
-                "ATTACH" => vjournal.attach.push(crate::parser::parse_attach(&value)),
-                "ATTENDEE" => vjournal.attendee.push(crate::parser::parse_attendee(&value)),
+                "ATTACH" => vjournal.attach.push(crate::parser::attach(&value)),
+                "ATTENDEE" => vjournal.attendee.push(crate::parser::attendee(&value)),
                 "CATEGORIES" => vjournal
                     .categories
-                    .append(&mut crate::parser::parse_categories(&value)),
-                "COMMENT" => vjournal.comment.push(crate::parser::parse_comment(&value)),
-                "CONTACT" => vjournal.contact.push(crate::parser::parse_contact(&value)),
+                    .append(&mut crate::parser::categories(&value)),
+                "COMMENT" => vjournal.comment.push(crate::parser::comment(&value)),
+                "CONTACT" => vjournal.contact.push(crate::parser::contact(&value)),
                 "DESCRIPTION" => vjournal.description.push(value),
                 "EXDATE" => vjournal
                     .exdate
-                    .append(&mut crate::parser::parse_exdate(&value)?),
-                "RELATED-TO" => vjournal.related.push(crate::parser::parse_related(&value)),
+                    .append(&mut crate::parser::exdate(&value)?),
+                "RELATED-TO" => vjournal.related.push(crate::parser::related(&value)),
                 "RDATE" => vjournal
                     .rdate
-                    .append(&mut crate::parser::parse_rdate(&value)?),
-                "RSTATUS" => vjournal.rstatus.push(crate::parser::parse_rstatus(&value)?),
+                    .append(&mut crate::parser::rdate(&value)?),
+                "RSTATUS" => vjournal.rstatus.push(crate::parser::rstatus(&value)?),
                 _ => {
                     if key.starts_with("X-") {
                         vjournal.x_prop.insert(key, value);
@@ -93,7 +93,7 @@ impl TryFrom<String> for VJournal {
     type Error = crate::Error;
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::parse_vjournal(raw.as_str().into())
+        crate::parser::vjournal(raw.as_str().into())
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }

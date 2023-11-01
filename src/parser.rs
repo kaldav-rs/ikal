@@ -98,7 +98,7 @@ pub(crate) fn content_lines(
     )(input)
 }
 
-pub(crate) fn parse_vevent(input: &str) -> nom::IResult<&str, crate::VEvent> {
+pub(crate) fn vevent(input: &str) -> nom::IResult<&str, crate::VEvent> {
     map_res(
         delimited(
             tag("BEGIN:VEVENT\r\n"),
@@ -109,14 +109,14 @@ pub(crate) fn parse_vevent(input: &str) -> nom::IResult<&str, crate::VEvent> {
     )(input)
 }
 
-pub(crate) fn parse_vjournal(input: &str) -> nom::IResult<&str, crate::VJournal> {
+pub(crate) fn vjournal(input: &str) -> nom::IResult<&str, crate::VJournal> {
     map_res(
         delimited(tag("BEGIN:VJOURNAL\r\n"), content_lines, tag("END:VJOURNAL\r\n")),
         |values| values.try_into(),
     )(input)
 }
 
-pub(crate) fn parse_standard(input: &str) -> nom::IResult<&str, crate::vtimezone::Prop> {
+pub(crate) fn standard(input: &str) -> nom::IResult<&str, crate::vtimezone::Prop> {
     map_res(
         delimited(
             tag("BEGIN:STANDARD\r\n"),
@@ -127,7 +127,7 @@ pub(crate) fn parse_standard(input: &str) -> nom::IResult<&str, crate::vtimezone
     )(input)
 }
 
-pub(crate) fn parse_daylight(input: &str) -> nom::IResult<&str, crate::vtimezone::Prop> {
+pub(crate) fn daylight(input: &str) -> nom::IResult<&str, crate::vtimezone::Prop> {
     map_res(
         delimited(
             tag("BEGIN:DAYLIGHT\r\n"),
@@ -138,15 +138,15 @@ pub(crate) fn parse_daylight(input: &str) -> nom::IResult<&str, crate::vtimezone
     )(input)
 }
 
-pub(crate) fn parse_vtimezone(input: &str) -> nom::IResult<&str, crate::VTimezone> {
+pub(crate) fn vtimezone(input: &str) -> nom::IResult<&str, crate::VTimezone> {
     map_res(
         delimited(
             tag("BEGIN:VTIMEZONE\r\n"),
             tuple((
                 content_lines,
                 many0(alt((
-                    map(parse_standard, crate::vtimezone::Component::Standard),
-                    map(parse_daylight, crate::vtimezone::Component::Daylight),
+                    map(standard, crate::vtimezone::Component::Standard),
+                    map(daylight, crate::vtimezone::Component::Daylight),
                 ))),
             )),
             tag("END:VTIMEZONE\r\n"),
@@ -170,31 +170,31 @@ pub(crate) fn parse_vtimezone(input: &str) -> nom::IResult<&str, crate::VTimezon
     )(input)
 }
 
-pub(crate) fn parse_vtodo(input: &str) -> nom::IResult<&str, crate::VTodo> {
+pub(crate) fn vtodo(input: &str) -> nom::IResult<&str, crate::VTodo> {
     map_res(
         delimited(tag("BEGIN:VTODO\r\n"), content_lines, tag("END:VTODO\r\n")),
         |values| values.try_into(),
     )(input)
 }
 
-pub(crate) fn parse_component(input: &str) -> nom::IResult<&str, crate::Component> {
+pub(crate) fn component(input: &str) -> nom::IResult<&str, crate::Component> {
     alt((
-        map(parse_vevent, crate::Component::Event),
-        map(parse_vjournal, crate::Component::Journal),
-        map(parse_vtimezone, crate::Component::Timezone),
-        map(parse_vtodo, crate::Component::Todo),
+        map(vevent, crate::Component::Event),
+        map(vjournal, crate::Component::Journal),
+        map(vtimezone, crate::Component::Timezone),
+        map(vtodo, crate::Component::Todo),
     ))(input)
 }
 
-pub(crate) fn parse_components(input: &str) -> nom::IResult<&str, Vec<crate::Component>> {
-    many0(parse_component)(input)
+pub(crate) fn components(input: &str) -> nom::IResult<&str, Vec<crate::Component>> {
+    many0(component)(input)
 }
 
-pub(crate) fn parse_vcalendar(input: &str) -> nom::IResult<&str, crate::VCalendar> {
+pub(crate) fn vcalendar(input: &str) -> nom::IResult<&str, crate::VCalendar> {
     map_res(
         delimited(
             tag("BEGIN:VCALENDAR\r\n"),
-            tuple((content_lines, parse_components)),
+            tuple((content_lines, components)),
             tag("END:VCALENDAR\r\n"),
         ),
         |(content_lines, components)| {
@@ -214,7 +214,7 @@ pub(crate) fn parse_vcalendar(input: &str) -> nom::IResult<&str, crate::VCalenda
     )(input)
 }
 
-pub(crate) fn parse_weekday(input: &str) -> nom::IResult<&str, crate::Weekday> {
+pub(crate) fn weekday(input: &str) -> nom::IResult<&str, crate::Weekday> {
     use crate::Weekday::*;
 
     map_res(count(anychar, 2), |s| {
@@ -234,9 +234,9 @@ pub(crate) fn parse_weekday(input: &str) -> nom::IResult<&str, crate::Weekday> {
     })(input)
 }
 
-pub(crate) fn parse_weekdaynum(input: &str) -> nom::IResult<&str, crate::WeekdayNum> {
+pub(crate) fn weekdaynum(input: &str) -> nom::IResult<&str, crate::WeekdayNum> {
     map(
-        tuple((nom::character::complete::i8, parse_weekday)),
+        tuple((nom::character::complete::i8, weekday)),
         |(ord, weekday)| crate::WeekdayNum { weekday, ord },
     )(input)
 }
@@ -244,7 +244,7 @@ pub(crate) fn parse_weekdaynum(input: &str) -> nom::IResult<&str, crate::Weekday
 /**
  * See [3.3.5. Date-Time](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.5)
  */
-pub(crate) fn parse_date<S>(date: S) -> crate::Result<crate::DateTime>
+pub(crate) fn date<S>(date: S) -> crate::Result<crate::DateTime>
 where
     S: Into<String>,
 {
@@ -269,7 +269,7 @@ where
 /**
  * See [3.3.6. Duration](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.6)
  */
-pub(crate) fn parse_duration(input: &str) -> crate::Result<chrono::Duration> {
+pub(crate) fn duration(input: &str) -> crate::Result<chrono::Duration> {
     fn week(input: &str) -> nom::IResult<&str, i64> {
         map_res(terminated(digits, tag("W")), |x| str::parse(&x))(input)
     }
@@ -322,28 +322,28 @@ pub(crate) fn parse_duration(input: &str) -> crate::Result<chrono::Duration> {
 /**
  * See [3.8.1.1. Attachment](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.1)
  */
-pub(crate) fn parse_attach(input: &str) -> String {
+pub(crate) fn attach(input: &str) -> String {
     input.to_string()
 }
 
 /**
  * See [3.8.1.2. Categories](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.2)
  */
-pub(crate) fn parse_categories(input: &str) -> Vec<String> {
+pub(crate) fn categories(input: &str) -> Vec<String> {
     input.split(',').map(String::from).collect()
 }
 
 /**
  * See [3.8.1.4. Comment](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.4)
  */
-pub(crate) fn parse_comment(input: &str) -> String {
+pub(crate) fn comment(input: &str) -> String {
     input.to_string()
 }
 
 /**
  * See [3.8.1.6. Geographic Position](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.6)
  */
-pub(crate) fn parse_geo(input: &str) -> nom::IResult<&str, crate::Geo> {
+pub(crate) fn geo(input: &str) -> nom::IResult<&str, crate::Geo> {
     map(separated_pair(float, char(';'), float), |(lat, lon)| {
         crate::Geo { lat, lon }
     })(input)
@@ -352,7 +352,7 @@ pub(crate) fn parse_geo(input: &str) -> nom::IResult<&str, crate::Geo> {
 /**
  * See [3.8.1.9. Priority](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.9)
  */
-pub(crate) fn parse_priority(input: &str) -> crate::Result<u8> {
+pub(crate) fn priority(input: &str) -> crate::Result<u8> {
     let priority = input.parse()?;
 
     if priority > 9 {
@@ -365,7 +365,7 @@ pub(crate) fn parse_priority(input: &str) -> crate::Result<u8> {
 /**
  * See [3.8.1.10. Resources](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.10)
  */
-pub(crate) fn parse_resources(input: &str) -> Vec<String> {
+pub(crate) fn resources(input: &str) -> Vec<String> {
     input.split(',').map(String::from).collect()
 }
 
@@ -373,28 +373,28 @@ pub(crate) fn parse_resources(input: &str) -> Vec<String> {
  * See [3.8.3.3. Time Zone Offset From](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.3.3)
  * See [3.8.3.4. Time Zone Offset To](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.3.4)
  */
-pub(crate) fn parse_tzoffset(input: &str) -> crate::Result<chrono::offset::FixedOffset> {
+pub(crate) fn tzoffset(input: &str) -> crate::Result<chrono::offset::FixedOffset> {
     input.parse().map_err(crate::Error::from)
 }
 
 /**
  * See [3.8.4.1. Attendee](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.1)
  */
-pub(crate) fn parse_attendee(input: &str) -> String {
+pub(crate) fn attendee(input: &str) -> String {
     input.to_string()
 }
 
 /**
  * See [3.8.4.2. Contact](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.2)
  */
-pub(crate) fn parse_contact(input: &str) -> String {
+pub(crate) fn contact(input: &str) -> String {
     input.to_string()
 }
 
 /**
  * See [3.8.4.3. Organizer](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.3)
  */
-pub(crate) fn parse_organizer(input: &str) -> crate::Result<String> {
+pub(crate) fn organizer(input: &str) -> crate::Result<String> {
     // @TODO
     Ok(input.to_string())
 }
@@ -402,7 +402,7 @@ pub(crate) fn parse_organizer(input: &str) -> crate::Result<String> {
 /**
  * See [3.8.4.4. Recurrence ID](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.4)
  */
-pub(crate) fn parse_recurid(input: &str) -> crate::Result<String> {
+pub(crate) fn recurid(input: &str) -> crate::Result<String> {
     // @TODO
     Ok(input.to_string())
 }
@@ -410,21 +410,21 @@ pub(crate) fn parse_recurid(input: &str) -> crate::Result<String> {
 /**
  * See [3.8.4.5. Related To](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.5)
  */
-pub(crate) fn parse_related(input: &str) -> String {
+pub(crate) fn related(input: &str) -> String {
     input.to_string()
 }
 
 /**
  * See [3.8.5.1. Exception Date-Times](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.1)
  */
-pub(crate) fn parse_exdate(input: &str) -> crate::Result<Vec<crate::DateTime>> {
-    input.split(',').map(parse_date).collect()
+pub(crate) fn exdate(input: &str) -> crate::Result<Vec<crate::DateTime>> {
+    input.split(',').map(date).collect()
 }
 
 /**
  * See [3.8.5.2. Recurrence Date-Times](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.2)
  */
-pub(crate) fn parse_rdate(input: &str) -> crate::Result<Vec<String>> {
+pub(crate) fn rdate(input: &str) -> crate::Result<Vec<String>> {
     // @TODO
     Ok(input.split(',').map(String::from).collect())
 }
@@ -432,7 +432,7 @@ pub(crate) fn parse_rdate(input: &str) -> crate::Result<Vec<String>> {
 /**
  * See [3.8.5.3. Recurrence Rule](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3)
  */
-pub(crate) fn parse_rrule(input: &str) -> nom::IResult<&str, crate::Recur> {
+pub(crate) fn rrule(input: &str) -> nom::IResult<&str, crate::Recur> {
     fn item(input: &str) -> nom::IResult<&str, (&str, &str)> {
         terminated(separated_pair(key, char('='), key), opt(char(';')))(input)
     }
@@ -461,7 +461,7 @@ pub(crate) fn parse_rrule(input: &str) -> nom::IResult<&str, crate::Recur> {
             freq: map["FREQ"].parse()?,
             until: map
                 .get("UNTIL")
-                .map(|x| parse_date(x.to_string()))
+                .map(|x| date(x.to_string()))
                 .transpose()?,
             count: map.get("COUNT").map(|x| x.parse()).transpose()?,
             interval: map.get("INTERVAL").map(|x| x.parse()).transpose()?,
@@ -496,14 +496,14 @@ pub(crate) fn parse_rrule(input: &str) -> nom::IResult<&str, crate::Recur> {
 /**
  * See [3.8.7.4. Sequence Number](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.7.4)
  */
-pub(crate) fn parse_sequence(input: &str) -> crate::Result<u32> {
+pub(crate) fn sequence(input: &str) -> crate::Result<u32> {
     input.parse().map_err(crate::Error::from)
 }
 
 /**
  * See [3.8.8.3. Request Status](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.8.3)
  */
-pub(crate) fn parse_rstatus(input: &str) -> crate::Result<String> {
+pub(crate) fn rstatus(input: &str) -> crate::Result<String> {
     // @TODO
     Ok(input.to_string())
 }

@@ -93,13 +93,13 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for Prop {
 
         for (key, value) in properties {
             match key.as_str() {
-                "DTSTART" => prop.dtstart = crate::parser::parse_date(value)?,
-                "TZOFFSETTO" => prop.tzoffsetto = crate::parser::parse_tzoffset(&value)?,
-                "TZOFFSETFROM" => prop.tzoffsetfrom = crate::parser::parse_tzoffset(&value)?,
+                "DTSTART" => prop.dtstart = crate::parser::date(value)?,
+                "TZOFFSETTO" => prop.tzoffsetto = crate::parser::tzoffset(&value)?,
+                "TZOFFSETFROM" => prop.tzoffsetfrom = crate::parser::tzoffset(&value)?,
                 "RRULE" => prop.rrule = Some(value.try_into()?),
-                "COMMENT" => prop.comment.push(crate::parser::parse_comment(&value)),
+                "COMMENT" => prop.comment.push(crate::parser::comment(&value)),
                 "TZNAME" => prop.comment.push(value),
-                "RDATE" => prop.rdate.append(&mut crate::parser::parse_rdate(&value)?),
+                "RDATE" => prop.rdate.append(&mut crate::parser::rdate(&value)?),
                 _ => {
                     if key.starts_with("X-") {
                         prop.x_prop.insert(key, value);

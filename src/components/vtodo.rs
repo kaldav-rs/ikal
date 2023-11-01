@@ -54,44 +54,44 @@ impl TryFrom<BTreeMap<String, String>> for VTodo {
 
         for (key, value) in properties {
             match key.as_str() {
-                "DTSTAMP" => vtodo.dtstamp = crate::parser::parse_date(value)?,
+                "DTSTAMP" => vtodo.dtstamp = crate::parser::date(value)?,
                 "UID" => vtodo.uid = value,
                 "CLASS" => vtodo.class = Some(value.into()),
-                "COMPLETED" => vtodo.completed = Some(crate::parser::parse_date(value)?),
-                "CREATED" => vtodo.created = Some(crate::parser::parse_date(value)?),
-                "DTSTART" => vtodo.dtstart = Some(crate::parser::parse_date(value)?),
+                "COMPLETED" => vtodo.completed = Some(crate::parser::date(value)?),
+                "CREATED" => vtodo.created = Some(crate::parser::date(value)?),
+                "DTSTART" => vtodo.dtstart = Some(crate::parser::date(value)?),
                 "GEO" => vtodo.geo = Some(value.try_into()?),
-                "LAST-MODIFIED" => vtodo.last_modified = Some(crate::parser::parse_date(value)?),
+                "LAST-MODIFIED" => vtodo.last_modified = Some(crate::parser::date(value)?),
                 "LOCATION" => vtodo.location = Some(value),
-                "ORGANIZER" => vtodo.organizer = Some(crate::parser::parse_organizer(&value)?),
+                "ORGANIZER" => vtodo.organizer = Some(crate::parser::organizer(&value)?),
                 "PERCENT-COMPLETE" => vtodo.percent_complete = Some(value.parse()?),
-                "PRIORITY" => vtodo.priority = Some(crate::parser::parse_priority(&value)?),
-                "RECURID" => vtodo.recurid = Some(crate::parser::parse_recurid(&value)?),
-                "SEQ" => vtodo.seq = Some(crate::parser::parse_sequence(&value)?),
+                "PRIORITY" => vtodo.priority = Some(crate::parser::priority(&value)?),
+                "RECURID" => vtodo.recurid = Some(crate::parser::recurid(&value)?),
+                "SEQ" => vtodo.seq = Some(crate::parser::sequence(&value)?),
                 "STATUS" => vtodo.status = Some(value.try_into()?),
                 "SUMMARY" => vtodo.summary = Some(value),
                 "URL" => vtodo.url = Some(value),
                 "RRULE" => vtodo.rrule = Some(value.try_into()?),
-                "DUE" => vtodo.due = Some(crate::parser::parse_date(value)?),
+                "DUE" => vtodo.due = Some(crate::parser::date(value)?),
                 "DURATION" => {
-                    vtodo.duration = Some(crate::parser::parse_duration(value.as_str().into())?)
+                    vtodo.duration = Some(crate::parser::duration(value.as_str().into())?)
                 }
-                "ATTACH" => vtodo.attach.push(crate::parser::parse_attach(&value)),
-                "ATTENDEE" => vtodo.attendee.push(crate::parser::parse_attendee(&value)),
+                "ATTACH" => vtodo.attach.push(crate::parser::attach(&value)),
+                "ATTENDEE" => vtodo.attendee.push(crate::parser::attendee(&value)),
                 "CATEGORIES" => vtodo
                     .categories
-                    .append(&mut crate::parser::parse_categories(&value)),
-                "COMMENT" => vtodo.comment.push(crate::parser::parse_comment(&value)),
-                "CONTACT" => vtodo.contact.push(crate::parser::parse_contact(&value)),
+                    .append(&mut crate::parser::categories(&value)),
+                "COMMENT" => vtodo.comment.push(crate::parser::comment(&value)),
+                "CONTACT" => vtodo.contact.push(crate::parser::contact(&value)),
                 "EXDATE" => vtodo
                     .exdate
-                    .append(&mut crate::parser::parse_exdate(&value)?),
-                "RSTATUS" => vtodo.rstatus.push(crate::parser::parse_rstatus(&value)?),
-                "RELATED-TO" => vtodo.related.push(crate::parser::parse_related(&value)),
+                    .append(&mut crate::parser::exdate(&value)?),
+                "RSTATUS" => vtodo.rstatus.push(crate::parser::rstatus(&value)?),
+                "RELATED-TO" => vtodo.related.push(crate::parser::related(&value)),
                 "RESOURCES" => vtodo
                     .resources
-                    .append(&mut crate::parser::parse_resources(&value)),
-                "RDATE" => vtodo.rdate.append(&mut crate::parser::parse_rdate(&value)?),
+                    .append(&mut crate::parser::resources(&value)),
+                "RDATE" => vtodo.rdate.append(&mut crate::parser::rdate(&value)?),
                 _ => {
                     if key.starts_with("X-") {
                         vtodo.x_prop.insert(key, value);
@@ -110,7 +110,7 @@ impl TryFrom<String> for VTodo {
     type Error = crate::Error;
 
     fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::parse_vtodo(raw.as_str().into())
+        crate::parser::vtodo(raw.as_str().into())
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }
