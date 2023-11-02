@@ -2,6 +2,8 @@ pub type Result<T = ()> = std::result::Result<T, Error>;
 
 #[derive(Debug, PartialEq, thiserror::Error)]
 pub enum Error {
+    #[error("Invalid alarm action: {0}")]
+    Alarm(String),
     #[error("{0}")]
     Date(#[from] chrono::ParseError),
     #[error("Invalid freq {0}")]

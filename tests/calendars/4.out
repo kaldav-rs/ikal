@@ -4,6 +4,7 @@ Ok(
         version: "",
         calscale: None,
         method: None,
+        alarms: [],
         events: [
             VEvent {
                 dtstamp: 2014-07-09T20:20:46+02:00,

@@ -8,6 +8,8 @@ pub struct VCalendar {
     pub calscale: Option<String>,
     pub method: Option<String>,
     #[component(ignore)]
+    pub alarms: Vec<crate::VAlarm>,
+    #[component(ignore)]
     pub events: Vec<crate::VEvent>,
     #[component(ignore)]
     pub freebusy: Vec<crate::VFreebusy>,

@@ -1,6 +1,7 @@
 /**
  * See [3.6. Calendar Components](https://datatracker.ietf.org/doc/html/rfc5545#section-3.6)
  */
+pub mod valarm;
 pub mod vtimezone;
 
 mod vcalendar;
@@ -9,6 +10,7 @@ mod vfreebusy;
 mod vjournal;
 mod vtodo;
 
+pub use valarm::VAlarm;
 pub use vcalendar::*;
 pub use vevent::*;
 pub use vfreebusy::*;
@@ -18,6 +20,7 @@ pub use vtodo::*;
 
 #[derive(Debug, PartialEq)]
 pub(crate) enum Component {
+    Alarm(crate::VAlarm),
     Event(crate::VEvent),
     Freebusy(crate::VFreebusy),
     Journal(crate::VJournal),

@@ -8,6 +8,7 @@ Ok(
         method: Some(
             "PUBLISH",
         ),
+        alarms: [],
         events: [
             VEvent {
                 dtstamp: 2022-11-08T09:01:05+01:00,

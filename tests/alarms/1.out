@@ -1,0 +1,22 @@
+Ok(
+    Audio(
+        Audio {
+            action: "AUDIO",
+            trigger: "19970317T133000Z",
+            duration: Some(
+                Duration {
+                    secs: 0,
+                    nanos: 0,
+                },
+            ),
+            repeat: Some(
+                4,
+            ),
+            attach: [
+                "ftp://example.com/pub/sounds/bell-01.aud",
+            ],
+            x_prop: {},
+            iana_prop: {},
+        },
+    ),
+)

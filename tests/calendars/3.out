@@ -4,6 +4,7 @@ Ok(
         version: "2.0",
         calscale: None,
         method: None,
+        alarms: [],
         events: [],
         freebusy: [],
         journals: [],

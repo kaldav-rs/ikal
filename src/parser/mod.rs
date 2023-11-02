@@ -1,3 +1,4 @@
+mod alarm;
 mod change;
 mod datetime;
 mod descriptive;
@@ -6,6 +7,7 @@ mod recurrence;
 mod relationship;
 mod timezone;
 
+pub(crate) use alarm::*;
 pub(crate) use change::*;
 pub(crate) use datetime::*;
 pub(crate) use descriptive::*;
@@ -127,9 +129,10 @@ macro_rules! component {
                 |values| values.try_into(),
             )(input)
         }
-    }
+    };
 }
 
+component!(valarm, crate::VAlarm);
 component!(vevent, crate::VEvent);
 component!(vfreebusy, crate::VFreebusy);
 component!(vtodo, crate::VTodo);
@@ -138,6 +141,18 @@ component!(standard, crate::vtimezone::Prop);
 component!(daylight, crate::vtimezone::Prop);
 
 pub(crate) fn prop(_: &str) -> nom::IResult<&str, crate::vtimezone::Prop> {
+    unreachable!()
+}
+
+pub(crate) fn audio(_: &str) -> nom::IResult<&str, crate::valarm::Audio> {
+    unreachable!()
+}
+
+pub(crate) fn display(_: &str) -> nom::IResult<&str, crate::valarm::Display> {
+    unreachable!()
+}
+
+pub(crate) fn email(_: &str) -> nom::IResult<&str, crate::valarm::Email> {
     unreachable!()
 }
 
@@ -175,6 +190,7 @@ pub(crate) fn vtimezone(input: &str) -> nom::IResult<&str, crate::VTimezone> {
 
 pub(crate) fn component(input: &str) -> nom::IResult<&str, crate::Component> {
     alt((
+        map(valarm, crate::Component::Alarm),
         map(vevent, crate::Component::Event),
         map(vfreebusy, crate::Component::Freebusy),
         map(vjournal, crate::Component::Journal),
@@ -199,6 +215,7 @@ pub(crate) fn vcalendar(input: &str) -> nom::IResult<&str, crate::VCalendar> {
 
             for component in components {
                 match component {
+                    crate::Component::Alarm(alarm) => vcalendar.alarms.push(alarm),
                     crate::Component::Event(event) => vcalendar.events.push(event),
                     crate::Component::Freebusy(freebusy) => vcalendar.freebusy.push(freebusy),
                     crate::Component::Journal(journal) => vcalendar.journals.push(journal),

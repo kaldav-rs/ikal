@@ -6,6 +6,7 @@ Ok(
             "GREGORIAN",
         ),
         method: None,
+        alarms: [],
         events: [
             VEvent {
                 dtstamp: 2017-02-09T19:23:58+01:00,
