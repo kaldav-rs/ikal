@@ -36,7 +36,7 @@ pub struct Prop {
     pub rrule: Option<crate::Recur>,
     pub comment: Vec<String>,
     #[component(append)]
-    pub rdate: Vec<String>,
+    pub rdate: Vec<crate::DateTime>,
     pub tzname: Vec<String>,
     #[component(ignore)]
     pub x_prop: BTreeMap<String, String>,

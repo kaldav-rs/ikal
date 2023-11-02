@@ -36,7 +36,7 @@ pub struct VTodo {
     #[component(append)]
     pub resources: Vec<String>,
     #[component(append)]
-    pub rdate: Vec<String>,
+    pub rdate: Vec<crate::DateTime>,
     #[component(ignore)]
     pub x_prop: std::collections::BTreeMap<String, String>,
     #[component(ignore)]

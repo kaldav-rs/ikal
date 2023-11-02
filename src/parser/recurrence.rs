@@ -14,9 +14,10 @@ pub(crate) fn exdate(input: &str) -> crate::Result<Vec<crate::DateTime>> {
 /**
  * See [3.8.5.2. Recurrence Date-Times](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.2)
  */
-pub(crate) fn rdate(input: &str) -> crate::Result<Vec<String>> {
-    // @TODO
-    Ok(input.split(',').map(String::from).collect())
+pub(crate) fn rdate(input: &str) -> crate::Result<Vec<crate::DateTime>> {
+    input.split(',')
+        .map(|x| super::datatype::date(x).map(|x| x.1).map_err(crate::Error::from))
+        .collect()
 }
 
 /**
