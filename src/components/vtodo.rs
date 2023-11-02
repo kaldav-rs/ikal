@@ -15,7 +15,7 @@ pub struct VTodo {
     pub organizer: Option<String>,
     pub percent_complete: Option<u8>,
     pub priority: Option<u8>,
-    pub recurid: Option<String>,
+    pub recurid: Option<crate::DateTime>,
     pub sequence: Option<u32>,
     pub status: Option<crate::Status>,
     pub summary: Option<String>,

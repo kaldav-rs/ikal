@@ -19,7 +19,7 @@ pub struct VEvent {
     pub summary: Option<String>,
     pub transp: Option<crate::TimeTransparency>,
     pub url: Option<String>,
-    pub recurid: Option<String>,
+    pub recurid: Option<crate::DateTime>,
     pub rrule: Option<crate::Recur>,
     pub dtend: Option<crate::DateTime>,
     pub duration: Option<chrono::Duration>,

@@ -10,7 +10,7 @@ pub struct VJournal {
     pub dtstart: crate::DateTime,
     pub last_modified: Option<crate::DateTime>,
     pub organizer: Option<String>,
-    pub recurid: Option<String>,
+    pub recurid: Option<crate::DateTime>,
     pub sequence: Option<u32>,
     pub status: Option<crate::Status>,
     pub summary: Option<String>,
