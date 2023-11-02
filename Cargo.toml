@@ -2,13 +2,13 @@
 members = [".", "derive"]
 
 [package]
-name = "ical-parser"
+name = "ikal"
 description = "Parse icalendar object"
 license = "MIT"
 version = "0.1.0"
 authors = ["Sanpi <sanpi@homecomputing.fr>"]
-repository = "https://github.com/sanpii/ical-parser.git"
-documentation = "https://docs.rs/ical-parser/"
+repository = "https://github.com/sanpii/ikal.git"
+documentation = "https://docs.rs/ikal/"
 keywords = ["icalendar"]
 categories = ["parser-implementations", "text-processing"]
 edition = "2021"
@@ -22,6 +22,6 @@ version = "0.4"
 default-features = false
 features = ["clock", "std"]
 
-[dependencies.ical-derive]
+[dependencies.ikal-derive]
 version = "0.1"
 path = "derive"

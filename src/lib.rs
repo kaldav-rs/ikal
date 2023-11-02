@@ -7,7 +7,7 @@ pub use components::*;
 pub use errors::*;
 pub use properties::*;
 
-use ical_derive::Component;
+use ikal_derive::Component;
 
 type DateTime = chrono::DateTime<chrono::Local>;
 
