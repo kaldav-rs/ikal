@@ -10,8 +10,16 @@ pub enum Period {
 impl TryFrom<String> for Period {
     type Error = crate::Error;
 
-    fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::datatype::period(&raw)
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
+impl std::str::FromStr for Period {
+    type Err = crate::Error;
+
+    fn from_str(s: &str) -> crate::Result<Self> {
+        crate::parser::datatype::period(s)
     }
 }
 

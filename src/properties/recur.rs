@@ -22,11 +22,18 @@ pub struct Recur {
 impl TryFrom<String> for Recur {
     type Error = crate::Error;
 
-    fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::rrule(&raw)
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        value.parse()
     }
 }
 
+impl std::str::FromStr for Recur {
+    type Err = crate::Error;
+
+    fn from_str(s: &str) -> crate::Result<Self> {
+        crate::parser::rrule(s)
+    }
+}
 #[derive(Clone, Debug, PartialEq)]
 pub enum Freq {
     Secondly,

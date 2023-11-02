@@ -21,11 +21,27 @@ pub enum Status {
     Final,
 }
 
+impl TryFrom<String> for Status {
+    type Error = crate::Error;
+
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
+impl TryFrom<&str> for Status {
+    type Error = crate::Error;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
 impl std::str::FromStr for Status {
     type Err = crate::Error;
 
-    fn from_str(value: &str) -> crate::Result<Self> {
-        let status = match value {
+    fn from_str(s: &str) -> crate::Result<Self> {
+        let status = match s {
             "TENTATIVE" => Self::Tentative,
             "CONFIRMED" => Self::Confirmed,
             "CANCELLED" => Self::Cancelled,
@@ -35,7 +51,7 @@ impl std::str::FromStr for Status {
             "DRAFT" => Self::Draft,
             "FINAL" => Self::Final,
 
-            _ => return Err(crate::Error::Status(value.to_string())),
+            _ => return Err(crate::Error::Status(s.to_string())),
         };
 
         Ok(status)

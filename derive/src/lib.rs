@@ -92,8 +92,17 @@ fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
         impl #impl_generics TryFrom<String> for #name #ty_generics #where_clause {
             type Error = crate::Error;
 
-            fn try_from(raw: String) -> Result<Self, Self::Error> {
-                crate::parser::#parser(&raw)
+            fn try_from(value: String) -> Result<Self, Self::Error> {
+                value.parse()
+            }
+        }
+
+        #[automatically_derived]
+        impl #impl_generics std::str::FromStr for #name #ty_generics #where_clause {
+            type Err = crate::Error;
+
+            fn from_str(s: &str) -> Result<Self, Self::Err> {
+                crate::parser::#parser(s)
                     .map_err(crate::Error::from)
                     .map(|(_, x)| x)
             }

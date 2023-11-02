@@ -10,7 +10,15 @@ pub struct Geo {
 impl TryFrom<String> for Geo {
     type Error = crate::Error;
 
-    fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::geo(&raw)
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
+impl std::str::FromStr for Geo {
+    type Err = crate::Error;
+
+    fn from_str(s: &str) -> crate::Result<Self> {
+        crate::parser::geo(s)
     }
 }

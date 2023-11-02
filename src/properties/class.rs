@@ -12,8 +12,8 @@ pub enum Class {
 impl std::str::FromStr for Class {
     type Err = crate::Error;
 
-    fn from_str(value: &str) -> crate::Result<Self> {
-        let class = match value {
+    fn from_str(s: &str) -> crate::Result<Self> {
+        let class = match s {
             "PUBLIC" => Self::Public,
             "PRIVATE" => Self::Private,
             "CONFIDENTIAL" => Self::Confidential,

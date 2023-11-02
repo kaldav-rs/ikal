@@ -11,7 +11,15 @@ pub struct RequestStatus {
 impl TryFrom<String> for RequestStatus {
     type Error = crate::Error;
 
-    fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::rstatus(&raw)
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
+impl std::str::FromStr for RequestStatus {
+    type Err = crate::Error;
+
+    fn from_str(s: &str) -> crate::Result<Self> {
+        crate::parser::rstatus(s)
     }
 }

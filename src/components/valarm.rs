@@ -27,8 +27,16 @@ impl TryFrom<std::collections::BTreeMap<String, String>> for VAlarm {
 impl TryFrom<String> for VAlarm {
     type Error = crate::Error;
 
-    fn try_from(raw: String) -> Result<Self, Self::Error> {
-        crate::parser::valarm(&raw)
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
+impl std::str::FromStr for VAlarm {
+    type Err = crate::Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        crate::parser::valarm(s)
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }
