@@ -10,6 +10,8 @@ pub struct VCalendar {
     #[component(ignore)]
     pub events: Vec<crate::VEvent>,
     #[component(ignore)]
+    pub freebusy: Vec<crate::VFreebusy>,
+    #[component(ignore)]
     pub journals: Vec<crate::VJournal>,
     #[component(ignore)]
     pub todo: Vec<crate::VTodo>,

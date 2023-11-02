@@ -31,6 +31,14 @@ pub(crate) fn dtstart(input: &str) -> crate::Result<crate::DateTime> {
 }
 
 /**
+ * See [3.8.2.6. Free/Busy Time](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.6)
+ */
+pub(crate) fn freebusy(input: &str) -> crate::Result<String> {
+    // @TODO
+    Ok(input.to_string())
+}
+
+/**
  * See [3.8.2.7. Time Transparency](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.7)
  */
 pub(crate) fn transp(input: &str) -> crate::Result<crate::TimeTransparency> {

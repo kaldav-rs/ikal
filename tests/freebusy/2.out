@@ -1,0 +1,27 @@
+Ok(
+    VFreebusy {
+        dtstamp: 1997-09-01T12:00:00+02:00,
+        uid: "19970901T095957Z-76A912@example.com",
+        contact: None,
+        dtstart: 1970-01-01T01:00:00+01:00,
+        dtend: None,
+        organizer: Some(
+            "mailto:jane_doe@example.com",
+        ),
+        url: Some(
+            "http://example.com/pub/busy/jpublic-01.ifb",
+        ),
+        attendee: [
+            "mailto:john_public@example.com",
+        ],
+        comment: [
+            "This iCalendar file contains busy time information for the next three months.",
+        ],
+        freebusy: [
+            "19971015T050000Z/PT8H30M,19971015T160000Z/PT5H30M,19971015T223000Z/PT6H30M",
+        ],
+        rstatus: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

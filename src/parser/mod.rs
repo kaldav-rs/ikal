@@ -131,6 +131,7 @@ macro_rules! component {
 }
 
 component!(vevent, crate::VEvent);
+component!(vfreebusy, crate::VFreebusy);
 component!(vtodo, crate::VTodo);
 component!(vjournal, crate::VJournal);
 component!(standard, crate::vtimezone::Prop);
@@ -175,6 +176,7 @@ pub(crate) fn vtimezone(input: &str) -> nom::IResult<&str, crate::VTimezone> {
 pub(crate) fn component(input: &str) -> nom::IResult<&str, crate::Component> {
     alt((
         map(vevent, crate::Component::Event),
+        map(vfreebusy, crate::Component::Freebusy),
         map(vjournal, crate::Component::Journal),
         map(vtimezone, crate::Component::Timezone),
         map(vtodo, crate::Component::Todo),
@@ -198,6 +200,7 @@ pub(crate) fn vcalendar(input: &str) -> nom::IResult<&str, crate::VCalendar> {
             for component in components {
                 match component {
                     crate::Component::Event(event) => vcalendar.events.push(event),
+                    crate::Component::Freebusy(freebusy) => vcalendar.freebusy.push(freebusy),
                     crate::Component::Journal(journal) => vcalendar.journals.push(journal),
                     crate::Component::Todo(todo) => vcalendar.todo.push(todo),
                     crate::Component::Timezone(timezone) => vcalendar.timezones.push(timezone),

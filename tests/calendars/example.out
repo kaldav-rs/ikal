@@ -150,6 +150,7 @@ Ok(
                 iana_prop: {},
             },
         ],
+        freebusy: [],
         journals: [],
         todo: [],
         timezones: [],

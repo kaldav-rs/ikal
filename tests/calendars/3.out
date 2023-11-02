@@ -5,6 +5,7 @@ Ok(
         calscale: None,
         method: None,
         events: [],
+        freebusy: [],
         journals: [],
         todo: [
             VTodo {

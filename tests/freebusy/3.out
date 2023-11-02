@@ -1,0 +1,25 @@
+Ok(
+    VFreebusy {
+        dtstamp: 1997-09-01T14:00:00+02:00,
+        uid: "19970901T115957Z-76A912@example.com",
+        contact: None,
+        dtstart: 1998-03-13T15:17:11+01:00,
+        dtend: Some(
+            1998-04-10T16:17:11+02:00,
+        ),
+        organizer: Some(
+            "jsmith@example.com",
+        ),
+        url: Some(
+            "http://www.example.com/calendar/busytime/jsmith.ifb",
+        ),
+        attendee: [],
+        comment: [],
+        freebusy: [
+            "19980318T030000Z/19980318T040000Z",
+        ],
+        rstatus: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)
