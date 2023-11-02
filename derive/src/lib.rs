@@ -98,6 +98,15 @@ fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
         }
 
         #[automatically_derived]
+        impl #impl_generics TryFrom<&str> for #name #ty_generics #where_clause {
+            type Error = crate::Error;
+
+            fn try_from(value: &str) -> Result<Self, Self::Error> {
+                value.parse()
+            }
+        }
+
+        #[automatically_derived]
         impl #impl_generics std::str::FromStr for #name #ty_generics #where_clause {
             type Err = crate::Error;
 

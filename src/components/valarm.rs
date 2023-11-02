@@ -32,6 +32,14 @@ impl TryFrom<String> for VAlarm {
     }
 }
 
+impl TryFrom<&str> for VAlarm {
+    type Error = crate::Error;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
 impl std::str::FromStr for VAlarm {
     type Err = crate::Error;
 

@@ -15,6 +15,14 @@ impl TryFrom<String> for Geo {
     }
 }
 
+impl TryFrom<&str> for Geo {
+    type Error = crate::Error;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
 impl std::str::FromStr for Geo {
     type Err = crate::Error;
 

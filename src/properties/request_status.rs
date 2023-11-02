@@ -16,6 +16,14 @@ impl TryFrom<String> for RequestStatus {
     }
 }
 
+impl TryFrom<&str> for RequestStatus {
+    type Error = crate::Error;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
 impl std::str::FromStr for RequestStatus {
     type Err = crate::Error;
 

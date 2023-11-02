@@ -27,6 +27,14 @@ impl TryFrom<String> for Recur {
     }
 }
 
+impl TryFrom<&str> for Recur {
+    type Error = crate::Error;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
 impl std::str::FromStr for Recur {
     type Err = crate::Error;
 
@@ -43,6 +51,14 @@ pub enum Freq {
     Weekly,
     Monthly,
     Yearly,
+}
+
+impl TryFrom<&str> for Freq {
+    type Error = crate::Error;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        value.parse()
+    }
 }
 
 impl std::str::FromStr for Freq {
@@ -71,6 +87,14 @@ pub struct WeekdayNum {
     pub ord: i8,
 }
 
+impl TryFrom<&str> for WeekdayNum {
+    type Error = crate::Error;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
 impl std::str::FromStr for WeekdayNum {
     type Err = crate::Error;
 
@@ -90,6 +114,14 @@ pub enum Weekday {
     Thurday,
     Friday,
     Saturday,
+}
+
+impl TryFrom<&str> for Weekday {
+    type Error = crate::Error;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        value.parse()
+    }
 }
 
 impl std::str::FromStr for Weekday {

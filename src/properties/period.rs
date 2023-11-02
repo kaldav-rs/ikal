@@ -15,6 +15,14 @@ impl TryFrom<String> for Period {
     }
 }
 
+impl TryFrom<&str> for Period {
+    type Error = crate::Error;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
 impl std::str::FromStr for Period {
     type Err = crate::Error;
 
