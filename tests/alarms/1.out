@@ -5,7 +5,7 @@ Ok(
             trigger: "19970317T133000Z",
             duration: Some(
                 Duration {
-                    secs: 0,
+                    secs: 900,
                     nanos: 0,
                 },
             ),

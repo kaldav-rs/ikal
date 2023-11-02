@@ -16,7 +16,12 @@ Ok(
         attendee: [],
         comment: [],
         freebusy: [
-            "19980318T030000Z/19980318T040000Z",
+            StartEnd(
+                StartEnd {
+                    start: 1998-03-18T04:00:00+01:00,
+                    end: 1998-03-18T05:00:00+01:00,
+                },
+            ),
         ],
         rstatus: [],
         x_prop: {},

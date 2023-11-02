@@ -1,7 +1,8 @@
+pub(crate) mod datatype;
+
 mod alarm;
 mod change;
 mod components;
-mod datatype;
 mod datetime;
 mod descriptive;
 mod misc;

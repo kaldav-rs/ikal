@@ -49,7 +49,7 @@ pub(crate) fn duration(input: &str) -> crate::Result<chrono::Duration> {
 
     fn time(input: &str) -> nom::IResult<&str, (i64, i64, i64)> {
         let (input, (h, i, s)) =
-            preceded(tag("H"), tuple((opt(hour), opt(minute), opt(seconde))))(input)?;
+            preceded(tag("T"), tuple((opt(hour), opt(minute), opt(seconde))))(input)?;
 
         Ok((
             input,
@@ -86,6 +86,33 @@ pub(crate) fn duration(input: &str) -> crate::Result<chrono::Duration> {
     }
 
     Ok(duration)
+}
+
+/**
+ * See [3.3.9. Period of Time](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.9)
+ */
+pub(crate) fn period(input: &str) -> crate::Result<crate::Period> {
+    let tokens = input.splitn(2, '/').collect::<Vec<_>>();
+
+    let start = date(tokens[0])?;
+
+    let period = if tokens[1].starts_with('P') {
+        crate::Period::StartDur(
+            crate::period::StartDur {
+                start,
+                duration: duration(tokens[1])?,
+            }
+        )
+    } else {
+        crate::Period::StartEnd(
+            crate::period::StartEnd {
+                start,
+                end: date(tokens[1])?,
+            }
+        )
+    };
+
+    Ok(period)
 }
 
 /**

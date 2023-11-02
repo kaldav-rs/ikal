@@ -6,7 +6,7 @@ Ok(
             description: "Breakfast meeting with executive\\nteam at 8:30 AM EST.",
             duration: Some(
                 Duration {
-                    secs: 0,
+                    secs: 900,
                     nanos: 0,
                 },
             ),

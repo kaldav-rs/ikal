@@ -18,7 +18,33 @@ Ok(
             "This iCalendar file contains busy time information for the next three months.",
         ],
         freebusy: [
-            "19971015T050000Z/PT8H30M,19971015T160000Z/PT5H30M,19971015T223000Z/PT6H30M",
+            StartDur(
+                StartDur {
+                    start: 1997-10-15T07:00:00+02:00,
+                    duration: Duration {
+                        secs: 30600,
+                        nanos: 0,
+                    },
+                },
+            ),
+            StartDur(
+                StartDur {
+                    start: 1997-10-15T18:00:00+02:00,
+                    duration: Duration {
+                        secs: 19800,
+                        nanos: 0,
+                    },
+                },
+            ),
+            StartDur(
+                StartDur {
+                    start: 1997-10-16T00:30:00+02:00,
+                    duration: Duration {
+                        secs: 23400,
+                        nanos: 0,
+                    },
+                },
+            ),
         ],
         rstatus: [],
         x_prop: {},
