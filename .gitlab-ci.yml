@@ -16,7 +16,6 @@ lint:clippy:
     before_script:
         - rustup component add clippy
     script: cargo clippy -- --deny warnings
-    allow_failure: true
 
 test:debug:
     stage: test
