@@ -13,8 +13,7 @@ pub(crate) fn action(input: &str) -> crate::Result<String> {
  * See [3.8.6.2. Repeat Count](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.6.2)
  */
 pub(crate) fn repeat(input: &str) -> crate::Result<u32> {
-    input.parse()
-        .map_err(crate::Error::from)
+    input.parse().map_err(crate::Error::from)
 }
 
 /**

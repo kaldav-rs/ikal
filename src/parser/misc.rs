@@ -5,7 +5,88 @@
 /**
  * See [3.8.8.3. Request Status](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.8.3)
  */
-pub(crate) fn rstatus(input: &str) -> crate::Result<String> {
-    // @TODO
-    Ok(input.to_string())
+pub(crate) fn rstatus(input: &str) -> crate::Result<crate::RequestStatus> {
+    use nom::bytes::complete::{take_till, take_while};
+    use nom::character::complete::char;
+    use nom::combinator::{map, opt};
+    use nom::number::complete::float;
+    use nom::sequence::{preceded, tuple};
+
+    fn text(input: &str) -> nom::IResult<&str, &str> {
+        take_till(|c| c == ';')(input)
+    }
+
+    fn end(input: &str) -> nom::IResult<&str, &str> {
+        take_while(|_| true)(input)
+    }
+
+    map(
+        tuple((
+            float,
+            char(';'),
+            map(text, String::from),
+            opt(preceded(char(';'), map(end, String::from))),
+        )),
+        |(statcode, _, statdesc, extdata)| crate::RequestStatus {
+            statcode,
+            statdesc,
+            extdata,
+        },
+    )(input)
+    .map_err(crate::Error::from)
+    .map(|(_, x)| x)
+}
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn rstatus() {
+        assert_eq!(
+            crate::parser::rstatus("2.0;Success").unwrap(),
+            crate::RequestStatus {
+                statcode: 2.0,
+                statdesc: "Success".to_string(),
+                extdata: None,
+            }
+        );
+
+        assert_eq!(
+            crate::parser::rstatus("3.1;Invalid property value;DTSTART:96-Apr-01").unwrap(),
+            crate::RequestStatus {
+                statcode: 3.1,
+                statdesc: "Invalid property value".to_string(),
+                extdata: Some("DTSTART:96-Apr-01".to_string()),
+            }
+        );
+
+        assert_eq!(
+            crate::parser::rstatus("2.8; Success\\, repeating event ignored. Scheduled\r\n as a single event.;RRULE:FREQ=WEEKLY\\;INTERVAL=2").unwrap(),
+            crate::RequestStatus {
+                statcode: 2.8,
+                statdesc: " Success\\, repeating event ignored. Scheduled\r\n as a single event.".to_string(),
+                extdata: Some("RRULE:FREQ=WEEKLY\\;INTERVAL=2".to_string()),
+            }
+        );
+
+        assert_eq!(
+            crate::parser::rstatus("4.1;Event conflict.  Date-time is busy.").unwrap(),
+            crate::RequestStatus {
+                statcode: 4.1,
+                statdesc: "Event conflict.  Date-time is busy.".to_string(),
+                extdata: None,
+            }
+        );
+
+        assert_eq!(
+            crate::parser::rstatus(
+                "3.7;Invalid calendar user;ATTENDEE:\r\n mailto:jsmith@example.com"
+            )
+            .unwrap(),
+            crate::RequestStatus {
+                statcode: 3.7,
+                statdesc: "Invalid calendar user".to_string(),
+                extdata: Some("ATTENDEE:\r\n mailto:jsmith@example.com".to_string()),
+            }
+        );
+    }
 }

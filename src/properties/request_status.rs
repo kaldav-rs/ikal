@@ -1,0 +1,17 @@
+/**
+ * See [3.8.8.3. Request Status](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.8.3)
+ */
+#[derive(Clone, Debug, PartialEq)]
+pub struct RequestStatus {
+    pub statcode: f32,
+    pub statdesc: String,
+    pub extdata: Option<String>,
+}
+
+impl TryFrom<String> for RequestStatus {
+    type Error = crate::Error;
+
+    fn try_from(raw: String) -> Result<Self, Self::Error> {
+        crate::parser::rstatus(&raw)
+    }
+}

@@ -31,7 +31,7 @@ pub struct VEvent {
     pub contact: Vec<String>,
     #[component(append)]
     pub exdate: Vec<crate::DateTime>,
-    pub rstatus: Vec<String>,
+    pub rstatus: Vec<crate::RequestStatus>,
     pub related_to: Vec<String>,
     #[component(append)]
     pub resources: Vec<String>,

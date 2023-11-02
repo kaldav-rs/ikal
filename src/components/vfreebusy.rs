@@ -13,7 +13,7 @@ pub struct VFreebusy {
     pub attendee: Vec<String>,
     pub comment: Vec<String>,
     pub freebusy: Vec<String>,
-    pub rstatus: Vec<String>,
+    pub rstatus: Vec<crate::RequestStatus>,
     #[component(ignore)]
     pub x_prop: std::collections::BTreeMap<String, String>,
     #[component(ignore)]

@@ -28,7 +28,7 @@ pub struct VJournal {
     pub related_to: Vec<String>,
     #[component(append)]
     pub rdate: Vec<String>,
-    pub rstatus: Vec<String>,
+    pub rstatus: Vec<crate::RequestStatus>,
     #[component(ignore)]
     pub x_prop: std::collections::BTreeMap<String, String>,
     #[component(ignore)]
