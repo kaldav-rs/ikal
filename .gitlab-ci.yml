@@ -1,5 +1,8 @@
 image: "rust:latest"
 
+variables:
+    TZ: CET
+
 stages:
     - lint
     - test
