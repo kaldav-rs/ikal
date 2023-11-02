@@ -64,10 +64,10 @@ pub(crate) fn vtimezone(input: &str) -> nom::IResult<&str, crate::VTimezone> {
             for component in components {
                 match component {
                     crate::vtimezone::Component::Standard(standard) => {
-                        vtimezone.standard.push(standard)
+                        vtimezone.standard.push(standard);
                     }
                     crate::vtimezone::Component::Daylight(daylight) => {
-                        vtimezone.daylight.push(daylight)
+                        vtimezone.daylight.push(daylight);
                     }
                 }
             }

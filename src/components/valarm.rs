@@ -48,6 +48,7 @@ pub struct Audio {
 }
 
 impl Audio {
+    #[must_use]
     pub fn new() -> Self {
         Self::default()
     }
@@ -67,6 +68,7 @@ pub struct Display {
 }
 
 impl Display {
+    #[must_use]
     pub fn new() -> Self {
         Self::default()
     }
@@ -89,6 +91,7 @@ pub struct Email {
 }
 
 impl Email {
+    #[must_use]
     pub fn new() -> Self {
         Self::default()
     }

@@ -63,8 +63,10 @@ pub(crate) fn rrule(input: &str) -> crate::Result<crate::Recur> {
     }
 
     map_res(many1(item), |items| {
-        let map =
-            std::collections::BTreeMap::from_iter(items.iter().map(|(k, v)| (k.to_string(), v)));
+        let map = items
+            .iter()
+            .map(|(k, v)| ((*k).to_string(), v))
+            .collect::<std::collections::BTreeMap<_, _>>();
 
         let recur = crate::Recur {
             freq: map["FREQ"].parse()?,
