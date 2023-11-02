@@ -6,7 +6,7 @@
  * See [3.8.4.1. Attendee](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.1)
  */
 pub(crate) fn attendee(input: &str) -> crate::Result<String> {
-    Ok(input.to_string())
+    super::datatype::cal_address(input)
 }
 
 /**
@@ -20,8 +20,7 @@ pub(crate) fn contact(input: &str) -> crate::Result<String> {
  * See [3.8.4.3. Organizer](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.3)
  */
 pub(crate) fn organizer(input: &str) -> crate::Result<String> {
-    // @TODO
-    Ok(input.to_string())
+    super::datatype::cal_address(input)
 }
 
 /**
