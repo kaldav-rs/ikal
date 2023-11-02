@@ -1,6 +1,4 @@
 /**
- * This property defines whether or not an event is transparent to busy time searches.
- *
  * See [3.8.2.7. Time Transparency](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.7)
  */
 #[derive(Clone, Debug, PartialEq)]

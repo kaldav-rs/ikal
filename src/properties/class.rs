@@ -1,6 +1,4 @@
 /**
- * This property defines the access classification for a calendar component.
- *
  * See [3.8.1.3. Classification](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.3)
  */
 #[derive(Clone, Debug, PartialEq)]

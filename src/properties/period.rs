@@ -1,3 +1,6 @@
+/**
+ * See [3.3.9. Period of Time](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.9)
+ */
 #[derive(Clone, Debug, PartialEq)]
 pub enum Period {
     StartEnd(StartEnd),

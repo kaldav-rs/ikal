@@ -1,5 +1,8 @@
 use std::collections::BTreeMap;
 
+/**
+ * See [3.6.5. Time Zone Component](https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.5)
+ */
 #[derive(Debug, Default, PartialEq, crate::Component)]
 pub struct VTimezone {
     pub tzid: String,

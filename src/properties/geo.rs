@@ -1,3 +1,6 @@
+/**
+ * See [3.8.1.6. Geographic Position](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.6)
+ */
 #[derive(Clone, Debug, PartialEq)]
 pub struct Geo {
     pub lat: f32,

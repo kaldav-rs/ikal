@@ -64,6 +64,7 @@ fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
 
     let traits = quote::quote! {
         #[automatically_derived]
+        #[doc(hidden)]
         impl #impl_generics TryFrom<std::collections::BTreeMap<String, String>> for #name #ty_generics #where_clause {
             type Error = crate::Error;
 

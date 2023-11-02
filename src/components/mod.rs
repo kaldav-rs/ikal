@@ -1,14 +1,14 @@
 /**
  * See [3.6. Calendar Components](https://datatracker.ietf.org/doc/html/rfc5545#section-3.6)
  */
-pub mod valarm;
-pub mod vtimezone;
-
 mod vcalendar;
 mod vevent;
 mod vfreebusy;
 mod vjournal;
 mod vtodo;
+
+pub mod valarm;
+pub mod vtimezone;
 
 pub use valarm::VAlarm;
 pub use vcalendar::*;

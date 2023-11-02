@@ -1,6 +1,4 @@
 /**
- * This value type is used to identify properties that contain a recurrence rule specification.
- *
  * See [3.3.10. Recurrence Rule](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3)
  */
 #[derive(Clone, Debug, PartialEq)]

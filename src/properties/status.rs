@@ -1,6 +1,4 @@
 /**
- * This property defines the overall status or confirmation for the calendar component.
- *
  * See [3.8.1.11. Status](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.11)
  */
 #[derive(Clone, Debug, PartialEq)]
