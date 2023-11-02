@@ -51,9 +51,7 @@ pub(crate) fn duration(input: &str) -> crate::Result<chrono::Duration> {
  * See [3.8.2.6. Free/Busy Time](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.6)
  */
 pub(crate) fn freebusy(input: &str) -> crate::Result<Vec<crate::Period>> {
-    input.split(',')
-        .map(super::datatype::period)
-        .collect()
+    input.split(',').map(super::datatype::period).collect()
 }
 
 /**

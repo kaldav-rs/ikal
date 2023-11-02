@@ -6,8 +6,13 @@
  * See [3.8.5.1. Exception Date-Times](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.1)
  */
 pub(crate) fn exdate(input: &str) -> crate::Result<Vec<crate::DateTime>> {
-    input.split(',')
-        .map(|x| super::datatype::date(x).map(|x| x.1).map_err(crate::Error::from))
+    input
+        .split(',')
+        .map(|x| {
+            super::datatype::date(x)
+                .map(|x| x.1)
+                .map_err(crate::Error::from)
+        })
         .collect()
 }
 
@@ -15,8 +20,13 @@ pub(crate) fn exdate(input: &str) -> crate::Result<Vec<crate::DateTime>> {
  * See [3.8.5.2. Recurrence Date-Times](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.2)
  */
 pub(crate) fn rdate(input: &str) -> crate::Result<Vec<crate::DateTime>> {
-    input.split(',')
-        .map(|x| super::datatype::date(x).map(|x| x.1).map_err(crate::Error::from))
+    input
+        .split(',')
+        .map(|x| {
+            super::datatype::date(x)
+                .map(|x| x.1)
+                .map_err(crate::Error::from)
+        })
         .collect()
 }
 
@@ -60,7 +70,11 @@ pub(crate) fn rrule(input: &str) -> crate::Result<crate::Recur> {
             freq: map["FREQ"].parse()?,
             until: map
                 .get("UNTIL")
-                .map(|x| super::datatype::date(x).map(|x| x.1).map_err(crate::Error::from))
+                .map(|x| {
+                    super::datatype::date(x)
+                        .map(|x| x.1)
+                        .map_err(crate::Error::from)
+                })
                 .transpose()?,
             count: map.get("COUNT").map(|x| x.parse()).transpose()?,
             interval: map.get("INTERVAL").map(|x| x.parse()).transpose()?,

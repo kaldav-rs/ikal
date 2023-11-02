@@ -1,6 +1,6 @@
 use nom::bytes::complete::tag;
-use nom::combinator::{map_res, opt, map};
-use nom::sequence::{preceded, terminated, tuple, pair};
+use nom::combinator::{map, map_res, opt};
+use nom::sequence::{pair, preceded, terminated, tuple};
 
 /**
  * See [3.3. Property Value Data Types](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.5)
@@ -74,9 +74,7 @@ pub(crate) fn duration(input: &str) -> nom::IResult<&str, chrono::Duration> {
     map(
         pair(
             opt(tag("-")),
-            preceded(
-                tag("P"), tuple((opt(week), opt(day), opt(time)))
-            ),
+            preceded(tag("P"), tuple((opt(week), opt(day), opt(time)))),
         ),
         |(neg, (w, d, t))| {
             let mut duration = chrono::Duration::weeks(w.unwrap_or_default())
@@ -94,7 +92,7 @@ pub(crate) fn duration(input: &str) -> nom::IResult<&str, chrono::Duration> {
             } else {
                 duration
             }
-        }
+        },
     )(input)
 }
 
@@ -107,19 +105,15 @@ pub(crate) fn period(input: &str) -> crate::Result<crate::Period> {
     let start = date(tokens[0])?.1;
 
     let period = if tokens[1].starts_with('P') {
-        crate::Period::StartDur(
-            crate::period::StartDur {
-                start,
-                duration: super::duration(tokens[1])?,
-            }
-        )
+        crate::Period::StartDur(crate::period::StartDur {
+            start,
+            duration: super::duration(tokens[1])?,
+        })
     } else {
-        crate::Period::StartEnd(
-            crate::period::StartEnd {
-                start,
-                end: date(tokens[1])?.1,
-            }
-        )
+        crate::Period::StartEnd(crate::period::StartEnd {
+            start,
+            end: date(tokens[1])?.1,
+        })
     };
 
     Ok(period)
