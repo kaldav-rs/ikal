@@ -1,6 +1,6 @@
 use nom::bytes::complete::tag;
-use nom::combinator::{map_res, opt};
-use nom::sequence::{preceded, terminated, tuple};
+use nom::combinator::{map_res, opt, map};
+use nom::sequence::{preceded, terminated, tuple, pair};
 
 /**
  * See [3.3. Property Value Data Types](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.5)
@@ -16,29 +16,27 @@ pub(crate) fn cal_address(input: &str) -> crate::Result<String> {
 /**
  * See [3.3.5. Date-Time](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.5)
  */
-pub(crate) fn date<S>(date: S) -> crate::Result<crate::DateTime>
-where
-    S: Into<String>,
-{
-    let mut date = date.into();
+pub(crate) fn date(input: &str) -> nom::IResult<&str, crate::DateTime> {
+    let mut date = input.to_string();
 
     if date.len() == 8 {
         date.push_str("T000000");
     }
 
-    let dt = chrono::NaiveDateTime::parse_from_str(date.trim_end_matches('Z'), "%Y%m%dT%H%M%S")?;
+    let dt = chrono::NaiveDateTime::parse_from_str(date.trim_end_matches('Z'), "%Y%m%dT%H%M%S")
+        .map_err(|_| nom::Err::Error(nom::error::Error::new(input, nom::error::ErrorKind::Fail)))?;
 
     if date.ends_with('Z') {
-        Ok(dt.and_utc().with_timezone(&chrono::Local))
+        Ok(("", dt.and_utc().with_timezone(&chrono::Local)))
     } else {
-        Ok(dt.and_local_timezone(chrono::Local).unwrap())
+        Ok(("", dt.and_local_timezone(chrono::Local).unwrap()))
     }
 }
 
 /**
  * See [3.3.6. Duration](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.6)
  */
-pub(crate) fn duration(input: &str) -> crate::Result<chrono::Duration> {
+pub(crate) fn duration(input: &str) -> nom::IResult<&str, chrono::Duration> {
     fn week(input: &str) -> nom::IResult<&str, i64> {
         map_res(terminated(super::digits, tag("W")), str::parse)(input)
     }
@@ -73,19 +71,31 @@ pub(crate) fn duration(input: &str) -> crate::Result<chrono::Duration> {
         map_res(terminated(super::digits, tag("S")), str::parse)(input)
     }
 
-    let (_, (w, d, t)) = preceded(tag("P"), tuple((opt(week), opt(day), opt(time))))(input)?;
+    map(
+        pair(
+            opt(tag("-")),
+            preceded(
+                tag("P"), tuple((opt(week), opt(day), opt(time)))
+            ),
+        ),
+        |(neg, (w, d, t))| {
+            let mut duration = chrono::Duration::weeks(w.unwrap_or_default())
+                + chrono::Duration::days(d.unwrap_or_default());
 
-    let mut duration = chrono::Duration::weeks(w.unwrap_or_default())
-        + chrono::Duration::days(d.unwrap_or_default());
+            if let Some((h, i, s)) = t {
+                duration = duration
+                    + chrono::Duration::hours(h)
+                    + chrono::Duration::minutes(i)
+                    + chrono::Duration::seconds(s);
+            }
 
-    if let Some((h, i, s)) = t {
-        duration = duration
-            + chrono::Duration::hours(h)
-            + chrono::Duration::minutes(i)
-            + chrono::Duration::seconds(s);
-    }
-
-    Ok(duration)
+            if neg.is_some() {
+                -duration
+            } else {
+                duration
+            }
+        }
+    )(input)
 }
 
 /**
@@ -94,20 +104,20 @@ pub(crate) fn duration(input: &str) -> crate::Result<chrono::Duration> {
 pub(crate) fn period(input: &str) -> crate::Result<crate::Period> {
     let tokens = input.splitn(2, '/').collect::<Vec<_>>();
 
-    let start = date(tokens[0])?;
+    let start = date(tokens[0])?.1;
 
     let period = if tokens[1].starts_with('P') {
         crate::Period::StartDur(
             crate::period::StartDur {
                 start,
-                duration: duration(tokens[1])?,
+                duration: super::duration(tokens[1])?,
             }
         )
     } else {
         crate::Period::StartEnd(
             crate::period::StartEnd {
                 start,
-                end: date(tokens[1])?,
+                end: date(tokens[1])?.1,
             }
         )
     };

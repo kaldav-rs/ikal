@@ -37,7 +37,7 @@ impl TryFrom<String> for VAlarm {
 #[derive(Clone, Debug, Default, PartialEq, crate::Component)]
 pub struct Audio {
     pub action: String,
-    pub trigger: String,
+    pub trigger: crate::Trigger,
     pub duration: Option<chrono::Duration>,
     pub repeat: Option<u32>,
     pub attach: Vec<String>,
@@ -56,7 +56,7 @@ impl Audio {
 #[derive(Clone, Debug, Default, PartialEq, crate::Component)]
 pub struct Display {
     pub action: String,
-    pub trigger: String,
+    pub trigger: crate::Trigger,
     pub description: String,
     pub duration: Option<chrono::Duration>,
     pub repeat: Option<u32>,
@@ -75,7 +75,7 @@ impl Display {
 #[derive(Clone, Debug, Default, PartialEq, crate::Component)]
 pub struct Email {
     pub action: String,
-    pub trigger: String,
+    pub trigger: crate::Trigger,
     pub description: String,
     pub summary: String,
     pub attendee: Vec<String>,

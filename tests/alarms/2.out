@@ -2,7 +2,12 @@ Ok(
     Display(
         Display {
             action: "DISPLAY",
-            trigger: "-PT30M",
+            trigger: Duration(
+                Duration {
+                    secs: -1800,
+                    nanos: 0,
+                },
+            ),
             description: "Breakfast meeting with executive\\nteam at 8:30 AM EST.",
             duration: Some(
                 Duration {

@@ -2,7 +2,9 @@ Ok(
     Audio(
         Audio {
             action: "AUDIO",
-            trigger: "19970317T133000Z",
+            trigger: DateTime(
+                1997-03-17T14:30:00+01:00,
+            ),
             duration: Some(
                 Duration {
                     secs: 900,

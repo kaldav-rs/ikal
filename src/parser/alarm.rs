@@ -19,7 +19,14 @@ pub(crate) fn repeat(input: &str) -> crate::Result<u32> {
 /**
  * See [3.8.6.3. Trigger](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.6.3)
  */
-pub(crate) fn trigger(input: &str) -> crate::Result<String> {
-    // @TODO
-    Ok(input.to_string())
+pub(crate) fn trigger(input: &str) -> crate::Result<crate::Trigger> {
+    use nom::branch::alt;
+    use nom::combinator::map;
+
+    alt((
+        map(super::datatype::duration, crate::Trigger::Duration),
+        map(super::datatype::date, crate::Trigger::DateTime),
+    ))(input)
+    .map_err(crate::Error::from)
+    .map(|(_, x)| x)
 }

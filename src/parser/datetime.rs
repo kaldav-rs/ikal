@@ -7,6 +7,8 @@
  */
 pub(crate) fn completed(input: &str) -> crate::Result<crate::DateTime> {
     super::datatype::date(input)
+        .map_err(crate::Error::from)
+        .map(|(_, x)| x)
 }
 
 /**
@@ -14,6 +16,8 @@ pub(crate) fn completed(input: &str) -> crate::Result<crate::DateTime> {
  */
 pub(crate) fn dtend(input: &str) -> crate::Result<crate::DateTime> {
     super::datatype::date(input)
+        .map_err(crate::Error::from)
+        .map(|(_, x)| x)
 }
 
 /**
@@ -21,6 +25,8 @@ pub(crate) fn dtend(input: &str) -> crate::Result<crate::DateTime> {
  */
 pub(crate) fn due(input: &str) -> crate::Result<crate::DateTime> {
     super::datatype::date(input)
+        .map_err(crate::Error::from)
+        .map(|(_, x)| x)
 }
 
 /**
@@ -28,6 +34,8 @@ pub(crate) fn due(input: &str) -> crate::Result<crate::DateTime> {
  */
 pub(crate) fn dtstart(input: &str) -> crate::Result<crate::DateTime> {
     super::datatype::date(input)
+        .map_err(crate::Error::from)
+        .map(|(_, x)| x)
 }
 
 /**
@@ -35,6 +43,8 @@ pub(crate) fn dtstart(input: &str) -> crate::Result<crate::DateTime> {
  */
 pub(crate) fn duration(input: &str) -> crate::Result<chrono::Duration> {
     super::datatype::duration(input)
+        .map_err(crate::Error::from)
+        .map(|(_, x)| x)
 }
 
 /**

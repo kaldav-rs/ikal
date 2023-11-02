@@ -7,6 +7,8 @@
  */
 pub(crate) fn created(input: &str) -> crate::Result<crate::DateTime> {
     super::datatype::date(input)
+        .map_err(crate::Error::from)
+        .map(|(_, x)| x)
 }
 
 /**
@@ -14,6 +16,8 @@ pub(crate) fn created(input: &str) -> crate::Result<crate::DateTime> {
  */
 pub(crate) fn dtstamp(input: &str) -> crate::Result<crate::DateTime> {
     super::datatype::date(input)
+        .map_err(crate::Error::from)
+        .map(|(_, x)| x)
 }
 
 /**
@@ -21,6 +25,8 @@ pub(crate) fn dtstamp(input: &str) -> crate::Result<crate::DateTime> {
  */
 pub(crate) fn last_modified(input: &str) -> crate::Result<crate::DateTime> {
     super::datatype::date(input)
+        .map_err(crate::Error::from)
+        .map(|(_, x)| x)
 }
 
 /**
