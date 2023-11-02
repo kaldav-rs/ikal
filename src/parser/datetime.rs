@@ -6,28 +6,35 @@
  * See [3.8.2.1. Date-Time Completed](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.1)
  */
 pub(crate) fn completed(input: &str) -> crate::Result<crate::DateTime> {
-    super::date(input)
+    super::datatype::date(input)
 }
 
 /**
  * See [3.8.2.2. Date-Time End](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.2)
  */
 pub(crate) fn dtend(input: &str) -> crate::Result<crate::DateTime> {
-    super::date(input)
+    super::datatype::date(input)
 }
 
 /**
  * See [3.8.2.3. Date-Time Due](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.3)
  */
 pub(crate) fn due(input: &str) -> crate::Result<crate::DateTime> {
-    super::date(input)
+    super::datatype::date(input)
 }
 
 /**
  * See [3.8.2.4. Date-Time Start](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.4)
  */
 pub(crate) fn dtstart(input: &str) -> crate::Result<crate::DateTime> {
-    super::date(input)
+    super::datatype::date(input)
+}
+
+/**
+ * See [3.8.2.5. Duration](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.5)
+ */
+pub(crate) fn duration(input: &str) -> crate::Result<chrono::Duration> {
+    super::datatype::duration(input)
 }
 
 /**

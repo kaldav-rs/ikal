@@ -6,7 +6,7 @@
  * See [3.8.5.1. Exception Date-Times](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.1)
  */
 pub(crate) fn exdate(input: &str) -> crate::Result<Vec<crate::DateTime>> {
-    input.split(',').map(super::date).collect()
+    input.split(',').map(super::datatype::date).collect()
 }
 
 /**
@@ -57,7 +57,7 @@ pub(crate) fn rrule(input: &str) -> crate::Result<crate::Recur> {
             freq: map["FREQ"].parse()?,
             until: map
                 .get("UNTIL")
-                .map(|x| super::date(x.to_string()))
+                .map(|x| super::datatype::date(x.to_string()))
                 .transpose()?,
             count: map.get("COUNT").map(|x| x.parse()).transpose()?,
             interval: map.get("INTERVAL").map(|x| x.parse()).transpose()?,

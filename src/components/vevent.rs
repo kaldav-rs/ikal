@@ -49,6 +49,7 @@ impl VEvent {
         Self::default()
     }
 }
+
 #[cfg(test)]
 mod test {
     #[test]
