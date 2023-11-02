@@ -13,3 +13,10 @@ impl Default for Trigger {
         Self::Duration(chrono::Duration::zero())
     }
 }
+
+impl Trigger {
+    #[must_use]
+    pub fn new() -> Self {
+        Self::default()
+    }
+}
