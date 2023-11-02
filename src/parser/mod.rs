@@ -5,6 +5,7 @@ mod datetime;
 mod datatype;
 mod descriptive;
 mod misc;
+mod properties;
 mod recurrence;
 mod relationship;
 mod timezone;
@@ -15,16 +16,16 @@ pub(crate) use components::*;
 pub(crate) use datetime::*;
 pub(crate) use descriptive::*;
 pub(crate) use misc::*;
+pub(crate) use properties::*;
 pub(crate) use recurrence::*;
 pub(crate) use relationship::*;
 pub(crate) use timezone::*;
 
-use nom::branch::alt;
 use nom::bytes::complete::{tag, take_till, take_while};
 use nom::character::complete::{anychar, char, line_ending};
 use nom::combinator::{map, map_res, not, opt};
 use nom::multi::{count, fold_many0, many0};
-use nom::sequence::{delimited, preceded, separated_pair, tuple};
+use nom::sequence::{preceded, separated_pair, tuple};
 
 fn is_alphabetic(chr: char) -> bool {
     nom::character::is_alphabetic(chr as u8)
@@ -143,32 +144,4 @@ pub(crate) fn weekdaynum(input: &str) -> nom::IResult<&str, crate::WeekdayNum> {
         tuple((nom::character::complete::i8, weekday)),
         |(ord, weekday)| crate::WeekdayNum { weekday, ord },
     )(input)
-}
-
-/**
- * See [3.7.1. Calendar Scale](https://datatracker.ietf.org/doc/html/rfc5545#section-3.7.1)
- */
-pub(crate) fn calscale(input: &str) -> crate::Result<String> {
-    Ok(input.to_string())
-}
-
-/**
- * See [3.7.2. Method](https://datatracker.ietf.org/doc/html/rfc5545#section-3.7.2)
- */
-pub(crate) fn method(input: &str) -> crate::Result<String> {
-    Ok(input.to_string())
-}
-
-/**
- * See [3.7.3. Product Identifier](https://datatracker.ietf.org/doc/html/rfc5545#section-3.7.3)
- */
-pub(crate) fn prodid(input: &str) -> crate::Result<String> {
-    Ok(input.to_string())
-}
-
-/**
- * See [3.7.4. Version](https://datatracker.ietf.org/doc/html/rfc5545#section-3.7.4)
- */
-pub(crate) fn version(input: &str) -> crate::Result<String> {
-    Ok(input.to_string())
 }
