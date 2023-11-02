@@ -53,6 +53,14 @@ pub enum Freq {
     Yearly,
 }
 
+impl TryFrom<String> for Freq {
+    type Error = crate::Error;
+
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
 impl TryFrom<&str> for Freq {
     type Error = crate::Error;
 
@@ -87,6 +95,14 @@ pub struct WeekdayNum {
     pub ord: i8,
 }
 
+impl TryFrom<String> for WeekdayNum {
+    type Error = crate::Error;
+
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
 impl TryFrom<&str> for WeekdayNum {
     type Error = crate::Error;
 
@@ -114,6 +130,14 @@ pub enum Weekday {
     Thurday,
     Friday,
     Saturday,
+}
+
+impl TryFrom<String> for Weekday {
+    type Error = crate::Error;
+
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        value.parse()
+    }
 }
 
 impl TryFrom<&str> for Weekday {

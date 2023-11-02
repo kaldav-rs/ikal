@@ -9,6 +9,14 @@ pub enum Class {
     Custom(String),
 }
 
+impl TryFrom<String> for Class {
+    type Error = crate::Error;
+
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
 impl TryFrom<&str> for Class {
     type Error = crate::Error;
 
