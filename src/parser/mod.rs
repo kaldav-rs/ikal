@@ -113,49 +113,28 @@ pub(crate) fn content_lines(
     )(input)
 }
 
-pub(crate) fn vevent(input: &str) -> nom::IResult<&str, crate::VEvent> {
-    map_res(
-        delimited(
-            tag("BEGIN:VEVENT\r\n"),
-            content_lines,
-            tag("END:VEVENT\r\n"),
-        ),
-        |values| values.try_into(),
-    )(input)
+macro_rules! component {
+    ($name:ident, $ty:ty) => {
+        pub(crate) fn $name(input: &str) -> nom::IResult<&str, $ty> {
+            let c = stringify!($name).to_uppercase();
+
+            map_res(
+                delimited(
+                    tag(format!("BEGIN:{c}\r\n").as_str()),
+                    content_lines,
+                    tag(format!("END:{c}\r\n").as_str()),
+                ),
+                |values| values.try_into(),
+            )(input)
+        }
+    }
 }
 
-pub(crate) fn vjournal(input: &str) -> nom::IResult<&str, crate::VJournal> {
-    map_res(
-        delimited(
-            tag("BEGIN:VJOURNAL\r\n"),
-            content_lines,
-            tag("END:VJOURNAL\r\n"),
-        ),
-        |values| values.try_into(),
-    )(input)
-}
-
-pub(crate) fn standard(input: &str) -> nom::IResult<&str, crate::vtimezone::Prop> {
-    map_res(
-        delimited(
-            tag("BEGIN:STANDARD\r\n"),
-            content_lines,
-            tag("END:STANDARD\r\n"),
-        ),
-        |values| values.try_into(),
-    )(input)
-}
-
-pub(crate) fn daylight(input: &str) -> nom::IResult<&str, crate::vtimezone::Prop> {
-    map_res(
-        delimited(
-            tag("BEGIN:DAYLIGHT\r\n"),
-            content_lines,
-            tag("END:DAYLIGHT\r\n"),
-        ),
-        |values| values.try_into(),
-    )(input)
-}
+component!(vevent, crate::VEvent);
+component!(vtodo, crate::VTodo);
+component!(vjournal, crate::VJournal);
+component!(standard, crate::vtimezone::Prop);
+component!(daylight, crate::vtimezone::Prop);
 
 pub(crate) fn prop(_: &str) -> nom::IResult<&str, crate::vtimezone::Prop> {
     unreachable!()
@@ -190,13 +169,6 @@ pub(crate) fn vtimezone(input: &str) -> nom::IResult<&str, crate::VTimezone> {
 
             Ok::<_, crate::Error>(vtimezone)
         },
-    )(input)
-}
-
-pub(crate) fn vtodo(input: &str) -> nom::IResult<&str, crate::VTodo> {
-    map_res(
-        delimited(tag("BEGIN:VTODO\r\n"), content_lines, tag("END:VTODO\r\n")),
-        |values| values.try_into(),
     )(input)
 }
 
