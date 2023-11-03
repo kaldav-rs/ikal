@@ -9,16 +9,12 @@ impl Field {
         let mut param = Self::default();
 
         for item in flat_map(&field.attrs)? {
-            match &item {
-                // Parse #[component(append)]
-                syn::NestedMeta::Meta(syn::Meta::Path(w)) if w == crate::symbol::APPEND => {
-                    param.append = true;
-                }
-                // Parse #[component(ignore)]
-                syn::NestedMeta::Meta(syn::Meta::Path(w)) if w == crate::symbol::IGNORE => {
-                    param.ignore = true;
-                }
-                _ => continue,
+            if item == crate::symbol::APPEND {
+                param.append = true;
+            } else if item == crate::symbol::IGNORE {
+                param.ignore = true;
+            } else {
+                continue;
             }
         }
 
@@ -26,7 +22,7 @@ impl Field {
     }
 }
 
-fn flat_map(attrs: &[syn::Attribute]) -> syn::Result<Vec<syn::NestedMeta>> {
+fn flat_map(attrs: &[syn::Attribute]) -> syn::Result<Vec<syn::Path>> {
     let mut items = Vec::new();
 
     for attr in attrs {
@@ -36,13 +32,17 @@ fn flat_map(attrs: &[syn::Attribute]) -> syn::Result<Vec<syn::NestedMeta>> {
     Ok(items)
 }
 
-fn meta_items(attr: &syn::Attribute) -> syn::Result<Vec<syn::NestedMeta>> {
-    if attr.path != crate::symbol::COMPONENT {
-        return Ok(Vec::new());
+fn meta_items(attr: &syn::Attribute) -> syn::Result<Vec<syn::Path>> {
+    let mut items = Vec::new();
+
+    if attr.path() != crate::symbol::COMPONENT {
+        return Ok(items);
     }
 
-    match attr.parse_meta()? {
-        syn::Meta::List(meta) => Ok(meta.nested.into_iter().collect()),
-        _ => Err(syn::Error::new_spanned(attr, "expected #[component(...)]")),
-    }
+    attr.parse_nested_meta(|meta| {
+        items.push(meta.path);
+        Ok(())
+    })?;
+
+    Ok(items)
 }
