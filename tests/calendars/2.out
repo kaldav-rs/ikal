@@ -9,19 +9,27 @@ Ok(
         alarms: [],
         events: [
             VEvent {
-                dtstamp: 2015-07-17T12:19:59+02:00,
+                dtstamp: Local(
+                    2015-07-17T12:19:59+02:00,
+                ),
                 uid: "7e27d9fc69",
-                dtstart: 2015-07-22T00:00:00+02:00,
+                dtstart: Date(
+                    2015-07-22,
+                ),
                 class: None,
                 created: Some(
-                    2015-07-17T12:19:59+02:00,
+                    Local(
+                        2015-07-17T12:19:59+02:00,
+                    ),
                 ),
                 description: Some(
                     "",
                 ),
                 geo: None,
                 last_modified: Some(
-                    2015-07-17T12:19:59+02:00,
+                    Local(
+                        2015-07-17T12:19:59+02:00,
+                    ),
                 ),
                 location: Some(
                     "",
@@ -38,7 +46,9 @@ Ok(
                 recurid: None,
                 rrule: None,
                 dtend: Some(
-                    2015-07-23T00:00:00+02:00,
+                    Date(
+                        2015-07-23,
+                    ),
                 ),
                 duration: None,
                 attach: [],

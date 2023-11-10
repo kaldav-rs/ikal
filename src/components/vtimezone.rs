@@ -33,13 +33,13 @@ pub(crate) enum Component {
 
 #[derive(Debug, PartialEq, crate::Component)]
 pub struct Prop {
-    pub dtstart: crate::DateTime,
+    pub dtstart: crate::Date,
     pub tzoffsetto: chrono::offset::FixedOffset,
     pub tzoffsetfrom: chrono::offset::FixedOffset,
     pub rrule: Option<crate::Recur>,
     pub comment: Vec<String>,
     #[component(append)]
-    pub rdate: Vec<crate::DateTime>,
+    pub rdate: Vec<crate::Date>,
     pub tzname: Vec<String>,
     #[component(ignore)]
     pub x_prop: BTreeMap<String, String>,
@@ -57,7 +57,7 @@ impl Prop {
     #[must_use]
     fn new() -> Self {
         Self {
-            dtstart: crate::DateTime::default(),
+            dtstart: crate::Date::default(),
             tzoffsetto: chrono::offset::FixedOffset::east_opt(0).unwrap(),
             tzoffsetfrom: chrono::offset::FixedOffset::east_opt(0).unwrap(),
             rrule: None,

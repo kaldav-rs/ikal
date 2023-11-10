@@ -3,7 +3,9 @@ Ok(
         Audio {
             action: "AUDIO",
             trigger: DateTime(
-                1997-03-17T14:30:00+01:00,
+                Local(
+                    1997-03-17T14:30:00+01:00,
+                ),
             ),
             duration: Some(
                 Duration {

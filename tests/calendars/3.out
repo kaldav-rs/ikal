@@ -10,19 +10,27 @@ Ok(
         journals: [],
         todo: [
             VTodo {
-                dtstamp: 2016-05-15T18:43:10+02:00,
+                dtstamp: Local(
+                    2016-05-15T18:43:10+02:00,
+                ),
                 uid: "10442264-14b1-47cf-9263-69447c0e0d7f",
                 class: None,
                 completed: Some(
-                    2016-05-15T19:23:54+02:00,
+                    Naive(
+                        2016-05-15T19:23:54,
+                    ),
                 ),
                 created: Some(
-                    2016-05-15T11:48:01+02:00,
+                    Local(
+                        2016-05-15T11:48:01+02:00,
+                    ),
                 ),
                 dtstart: None,
                 geo: None,
                 last_modified: Some(
-                    2016-05-15T11:48:01+02:00,
+                    Local(
+                        2016-05-15T11:48:01+02:00,
+                    ),
                 ),
                 location: Some(
                     "",

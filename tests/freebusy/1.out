@@ -1,11 +1,21 @@
 Ok(
     VFreebusy {
-        dtstamp: 1997-09-01T10:30:00+02:00,
+        dtstamp: Local(
+            1997-09-01T10:30:00+02:00,
+        ),
         uid: "19970901T082949Z-FA43EF@example.com",
         contact: None,
-        dtstart: 1997-10-15T07:00:00+02:00,
+        dtstart: DateTime(
+            Local(
+                1997-10-15T07:00:00+02:00,
+            ),
+        ),
         dtend: Some(
-            1997-10-16T07:00:00+02:00,
+            DateTime(
+                Local(
+                    1997-10-16T07:00:00+02:00,
+                ),
+            ),
         ),
         organizer: Some(
             "mailto:jane_doe@example.com",

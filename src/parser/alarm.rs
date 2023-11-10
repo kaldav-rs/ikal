@@ -25,7 +25,7 @@ pub(crate) fn trigger(input: &str) -> crate::Result<crate::Trigger> {
 
     alt((
         map(super::datatype::duration, crate::Trigger::Duration),
-        map(super::datatype::date, crate::Trigger::DateTime),
+        map(super::datatype::date_time, crate::Trigger::DateTime),
     ))(input)
     .map_err(crate::Error::from)
     .map(|(_, x)| x)

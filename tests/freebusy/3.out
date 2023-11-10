@@ -1,11 +1,21 @@
 Ok(
     VFreebusy {
-        dtstamp: 1997-09-01T14:00:00+02:00,
+        dtstamp: Local(
+            1997-09-01T14:00:00+02:00,
+        ),
         uid: "19970901T115957Z-76A912@example.com",
         contact: None,
-        dtstart: 1998-03-13T15:17:11+01:00,
+        dtstart: DateTime(
+            Local(
+                1998-03-13T15:17:11+01:00,
+            ),
+        ),
         dtend: Some(
-            1998-04-10T16:17:11+02:00,
+            DateTime(
+                Local(
+                    1998-04-10T16:17:11+02:00,
+                ),
+            ),
         ),
         organizer: Some(
             "jsmith@example.com",
@@ -18,8 +28,12 @@ Ok(
         freebusy: [
             StartEnd(
                 StartEnd {
-                    start: 1998-03-18T04:00:00+01:00,
-                    end: 1998-03-18T05:00:00+01:00,
+                    start: Local(
+                        1998-03-18T04:00:00+01:00,
+                    ),
+                    end: Local(
+                        1998-03-18T05:00:00+01:00,
+                    ),
                 },
             ),
         ],

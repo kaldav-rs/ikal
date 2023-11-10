@@ -1,9 +1,15 @@
 Ok(
     VFreebusy {
-        dtstamp: 1997-09-01T12:00:00+02:00,
+        dtstamp: Local(
+            1997-09-01T12:00:00+02:00,
+        ),
         uid: "19970901T095957Z-76A912@example.com",
         contact: None,
-        dtstart: 1970-01-01T01:00:00+01:00,
+        dtstart: DateTime(
+            Naive(
+                1970-01-01T00:00:00,
+            ),
+        ),
         dtend: None,
         organizer: Some(
             "mailto:jane_doe@example.com",
@@ -20,7 +26,9 @@ Ok(
         freebusy: [
             StartDur(
                 StartDur {
-                    start: 1997-10-15T07:00:00+02:00,
+                    start: Local(
+                        1997-10-15T07:00:00+02:00,
+                    ),
                     duration: Duration {
                         secs: 30600,
                         nanos: 0,
@@ -29,7 +37,9 @@ Ok(
             ),
             StartDur(
                 StartDur {
-                    start: 1997-10-15T18:00:00+02:00,
+                    start: Local(
+                        1997-10-15T18:00:00+02:00,
+                    ),
                     duration: Duration {
                         secs: 19800,
                         nanos: 0,
@@ -38,7 +48,9 @@ Ok(
             ),
             StartDur(
                 StartDur {
-                    start: 1997-10-16T00:30:00+02:00,
+                    start: Local(
+                        1997-10-16T00:30:00+02:00,
+                    ),
                     duration: Duration {
                         secs: 23400,
                         nanos: 0,

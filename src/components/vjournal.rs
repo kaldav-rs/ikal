@@ -7,10 +7,10 @@ pub struct VJournal {
     pub uid: String,
     pub class: Option<crate::Class>,
     pub created: Option<crate::DateTime>,
-    pub dtstart: crate::DateTime,
+    pub dtstart: crate::Date,
     pub last_modified: Option<crate::DateTime>,
     pub organizer: Option<String>,
-    pub recurid: Option<crate::DateTime>,
+    pub recurid: Option<crate::Date>,
     pub sequence: Option<u32>,
     pub status: Option<crate::Status>,
     pub summary: Option<String>,
@@ -24,10 +24,10 @@ pub struct VJournal {
     pub contact: Vec<String>,
     pub description: Vec<String>,
     #[component(append)]
-    pub exdate: Vec<crate::DateTime>,
+    pub exdate: Vec<crate::Date>,
     pub related_to: Vec<String>,
     #[component(append)]
-    pub rdate: Vec<crate::DateTime>,
+    pub rdate: Vec<crate::Date>,
     pub rstatus: Vec<crate::RequestStatus>,
     #[component(ignore)]
     pub x_prop: std::collections::BTreeMap<String, String>,

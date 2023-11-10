@@ -6,7 +6,7 @@
  * See [3.8.2.1. Date-Time Completed](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.1)
  */
 pub(crate) fn completed(input: &str) -> crate::Result<crate::DateTime> {
-    super::datatype::date(input)
+    super::datatype::date_time(input)
         .map_err(crate::Error::from)
         .map(|(_, x)| x)
 }
@@ -14,8 +14,8 @@ pub(crate) fn completed(input: &str) -> crate::Result<crate::DateTime> {
 /**
  * See [3.8.2.2. Date-Time End](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.2)
  */
-pub(crate) fn dtend(input: &str) -> crate::Result<crate::DateTime> {
-    super::datatype::date(input)
+pub(crate) fn dtend(input: &str) -> crate::Result<crate::Date> {
+    super::datatype::date_or_dt(input)
         .map_err(crate::Error::from)
         .map(|(_, x)| x)
 }
@@ -23,8 +23,8 @@ pub(crate) fn dtend(input: &str) -> crate::Result<crate::DateTime> {
 /**
  * See [3.8.2.3. Date-Time Due](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.3)
  */
-pub(crate) fn due(input: &str) -> crate::Result<crate::DateTime> {
-    super::datatype::date(input)
+pub(crate) fn due(input: &str) -> crate::Result<crate::Date> {
+    super::datatype::date_or_dt(input)
         .map_err(crate::Error::from)
         .map(|(_, x)| x)
 }
@@ -32,8 +32,8 @@ pub(crate) fn due(input: &str) -> crate::Result<crate::DateTime> {
 /**
  * See [3.8.2.4. Date-Time Start](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.4)
  */
-pub(crate) fn dtstart(input: &str) -> crate::Result<crate::DateTime> {
-    super::datatype::date(input)
+pub(crate) fn dtstart(input: &str) -> crate::Result<crate::Date> {
+    super::datatype::date_or_dt(input)
         .map_err(crate::Error::from)
         .map(|(_, x)| x)
 }

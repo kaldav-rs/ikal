@@ -2,6 +2,7 @@
  * See [3.8. Component Properties](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8)
  */
 mod class;
+mod date;
 mod geo;
 mod recur;
 mod request_status;
@@ -12,6 +13,7 @@ mod trigger;
 pub mod period;
 
 pub use class::*;
+pub use date::*;
 pub use geo::*;
 pub use period::Period;
 pub use recur::*;

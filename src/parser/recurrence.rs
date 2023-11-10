@@ -5,11 +5,11 @@
 /**
  * See [3.8.5.1. Exception Date-Times](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.1)
  */
-pub(crate) fn exdate(input: &str) -> crate::Result<Vec<crate::DateTime>> {
+pub(crate) fn exdate(input: &str) -> crate::Result<Vec<crate::Date>> {
     input
         .split(',')
         .map(|x| {
-            super::datatype::date(x)
+            super::datatype::date_or_dt(x)
                 .map(|x| x.1)
                 .map_err(crate::Error::from)
         })
@@ -19,11 +19,11 @@ pub(crate) fn exdate(input: &str) -> crate::Result<Vec<crate::DateTime>> {
 /**
  * See [3.8.5.2. Recurrence Date-Times](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.2)
  */
-pub(crate) fn rdate(input: &str) -> crate::Result<Vec<crate::DateTime>> {
+pub(crate) fn rdate(input: &str) -> crate::Result<Vec<crate::Date>> {
     input
         .split(',')
         .map(|x| {
-            super::datatype::date(x)
+            super::datatype::date_or_dt(x)
                 .map(|x| x.1)
                 .map_err(crate::Error::from)
         })
@@ -73,7 +73,7 @@ pub(crate) fn rrule(input: &str) -> crate::Result<crate::Recur> {
             until: map
                 .get("UNTIL")
                 .map(|x| {
-                    super::datatype::date(x)
+                    super::datatype::date_time(x)
                         .map(|x| x.1)
                         .map_err(crate::Error::from)
                 })

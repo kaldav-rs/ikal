@@ -9,8 +9,6 @@ pub use properties::*;
 
 use ikal_derive::Component;
 
-type DateTime = chrono::DateTime<chrono::Local>;
-
 #[cfg(test)]
 mod test {
     #[test]

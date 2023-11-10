@@ -26,8 +26,8 @@ pub(crate) fn organizer(input: &str) -> crate::Result<String> {
 /**
  * See [3.8.4.4. Recurrence ID](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.4)
  */
-pub(crate) fn recurid(input: &str) -> crate::Result<crate::DateTime> {
-    super::datatype::date(input)
+pub(crate) fn recurid(input: &str) -> crate::Result<crate::Date> {
+    super::datatype::date_or_dt(input)
         .map_err(crate::Error::from)
         .map(|(_, x)| x)
 }

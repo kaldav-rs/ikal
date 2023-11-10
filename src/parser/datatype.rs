@@ -14,23 +14,36 @@ pub(crate) fn cal_address(input: &str) -> crate::Result<String> {
 }
 
 /**
+ * See [3.3.4. Date](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.4)
+ */
+pub(crate) fn date(input: &str) -> nom::IResult<&str, chrono::NaiveDate> {
+    let date = chrono::NaiveDate::parse_from_str(input, "%Y%m%d")
+        .map_err(|_| nom::Err::Error(nom::error::Error::new(input, nom::error::ErrorKind::Fail)))?;
+
+    Ok(("", date))
+}
+
+/**
  * See [3.3.5. Date-Time](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.5)
  */
-pub(crate) fn date(input: &str) -> nom::IResult<&str, crate::DateTime> {
-    let mut date = input.to_string();
-
-    if date.len() == 8 {
-        date.push_str("T000000");
-    }
+pub(crate) fn date_time(input: &str) -> nom::IResult<&str, crate::DateTime> {
+    let date = input.to_string();
 
     let dt = chrono::NaiveDateTime::parse_from_str(date.trim_end_matches('Z'), "%Y%m%dT%H%M%S")
         .map_err(|_| nom::Err::Error(nom::error::Error::new(input, nom::error::ErrorKind::Fail)))?;
 
     if date.ends_with('Z') {
-        Ok(("", dt.and_utc().with_timezone(&chrono::Local)))
+        Ok(("", crate::DateTime::Local(dt.and_utc().with_timezone(&chrono::Local))))
     } else {
-        Ok(("", dt.and_local_timezone(chrono::Local).unwrap()))
+        Ok(("", crate::DateTime::Naive(dt)))
     }
+}
+
+pub(crate) fn date_or_dt(input: &str) -> nom::IResult<&str, crate::Date> {
+    nom::branch::alt((
+        map(date, crate::Date::Date),
+        map(date_time, crate::Date::DateTime),
+    ))(input)
 }
 
 /**
@@ -102,7 +115,7 @@ pub(crate) fn duration(input: &str) -> nom::IResult<&str, chrono::Duration> {
 pub(crate) fn period(input: &str) -> crate::Result<crate::Period> {
     let tokens = input.splitn(2, '/').collect::<Vec<_>>();
 
-    let start = date(tokens[0])?.1;
+    let start = date_time(tokens[0])?.1;
 
     let period = if tokens[1].starts_with('P') {
         crate::Period::StartDur(crate::period::StartDur {
@@ -112,7 +125,7 @@ pub(crate) fn period(input: &str) -> crate::Result<crate::Period> {
     } else {
         crate::Period::StartEnd(crate::period::StartEnd {
             start,
-            end: date(tokens[1])?.1,
+            end: date_time(tokens[1])?.1,
         })
     };
 

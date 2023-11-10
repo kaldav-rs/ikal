@@ -5,7 +5,7 @@
 pub struct VEvent {
     pub dtstamp: crate::DateTime,
     pub uid: String,
-    pub dtstart: crate::DateTime,
+    pub dtstart: crate::Date,
     pub class: Option<crate::Class>,
     pub created: Option<crate::DateTime>,
     pub description: Option<String>,
@@ -19,9 +19,9 @@ pub struct VEvent {
     pub summary: Option<String>,
     pub transp: Option<crate::TimeTransparency>,
     pub url: Option<String>,
-    pub recurid: Option<crate::DateTime>,
+    pub recurid: Option<crate::Date>,
     pub rrule: Option<crate::Recur>,
-    pub dtend: Option<crate::DateTime>,
+    pub dtend: Option<crate::Date>,
     pub duration: Option<chrono::Duration>,
     pub attach: Vec<String>,
     pub attendee: Vec<String>,
@@ -30,13 +30,13 @@ pub struct VEvent {
     pub comment: Vec<String>,
     pub contact: Vec<String>,
     #[component(append)]
-    pub exdate: Vec<crate::DateTime>,
+    pub exdate: Vec<crate::Date>,
     pub rstatus: Vec<crate::RequestStatus>,
     pub related_to: Vec<String>,
     #[component(append)]
     pub resources: Vec<String>,
     #[component(append)]
-    pub rdate: Vec<crate::DateTime>,
+    pub rdate: Vec<crate::Date>,
     #[component(ignore)]
     pub x_prop: std::collections::BTreeMap<String, String>,
     #[component(ignore)]
