@@ -3,7 +3,10 @@ Ok(
         dtstamp: Local(
             1997-09-01T14:00:00+02:00,
         ),
-        uid: "19970901T115957Z-76A912@example.com",
+        uid: Text {
+            params: {},
+            text: "19970901T115957Z-76A912@example.com",
+        },
         contact: None,
         dtstart: DateTime(
             Local(
@@ -18,10 +21,16 @@ Ok(
             ),
         ),
         organizer: Some(
-            "jsmith@example.com",
+            Text {
+                params: {},
+                text: "jsmith@example.com",
+            },
         ),
         url: Some(
-            "http://www.example.com/calendar/busytime/jsmith.ifb",
+            Text {
+                params: {},
+                text: "http://www.example.com/calendar/busytime/jsmith.ifb",
+            },
         ),
         attendee: [],
         comment: [],

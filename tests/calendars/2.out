@@ -1,9 +1,18 @@
 Ok(
     VCalendar {
-        prodid: "ownCloud Calendar",
-        version: "2.0",
+        prodid: Text {
+            params: {},
+            text: "ownCloud Calendar",
+        },
+        version: Text {
+            params: {},
+            text: "2.0",
+        },
         calscale: Some(
-            "GREGORIAN",
+            Text {
+                params: {},
+                text: "GREGORIAN",
+            },
         ),
         method: None,
         alarms: [],
@@ -12,7 +21,10 @@ Ok(
                 dtstamp: Local(
                     2015-07-17T12:19:59+02:00,
                 ),
-                uid: "7e27d9fc69",
+                uid: Text {
+                    params: {},
+                    text: "7e27d9fc69",
+                },
                 dtstart: Date(
                     2015-07-22,
                 ),
@@ -23,7 +35,10 @@ Ok(
                     ),
                 ),
                 description: Some(
-                    "",
+                    Text {
+                        params: {},
+                        text: "",
+                    },
                 ),
                 geo: None,
                 last_modified: Some(
@@ -32,14 +47,20 @@ Ok(
                     ),
                 ),
                 location: Some(
-                    "",
+                    Text {
+                        params: {},
+                        text: "",
+                    },
                 ),
                 organizer: None,
                 priority: None,
                 sequence: None,
                 status: None,
                 summary: Some(
-                    "Garage",
+                    Text {
+                        params: {},
+                        text: "Garage",
+                    },
                 ),
                 transp: None,
                 url: None,
@@ -54,7 +75,10 @@ Ok(
                 attach: [],
                 attendee: [],
                 categories: [
-                    "",
+                    Text {
+                        params: {},
+                        text: "",
+                    },
                 ],
                 comment: [],
                 contact: [],

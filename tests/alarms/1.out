@@ -1,7 +1,10 @@
 Ok(
     Audio(
         Audio {
-            action: "AUDIO",
+            action: Text {
+                params: {},
+                text: "AUDIO",
+            },
             trigger: DateTime(
                 Local(
                     1997-03-17T14:30:00+01:00,
@@ -17,7 +20,12 @@ Ok(
                 4,
             ),
             attach: [
-                "ftp://example.com/pub/sounds/bell-01.aud",
+                Text {
+                    params: {
+                        "FMTTYPE": "audio/basic",
+                    },
+                    text: "ftp://example.com/pub/sounds/bell-01.aud",
+                },
             ],
             x_prop: {},
             iana_prop: {},

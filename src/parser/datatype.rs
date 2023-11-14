@@ -33,7 +33,10 @@ pub(crate) fn date_time(input: &str) -> nom::IResult<&str, crate::DateTime> {
         .map_err(|_| nom::Err::Error(nom::error::Error::new(input, nom::error::ErrorKind::Fail)))?;
 
     if date.ends_with('Z') {
-        Ok(("", crate::DateTime::Local(dt.and_utc().with_timezone(&chrono::Local))))
+        Ok((
+            "",
+            crate::DateTime::Local(dt.and_utc().with_timezone(&chrono::Local)),
+        ))
     } else {
         Ok(("", crate::DateTime::Naive(dt)))
     }
@@ -120,7 +123,7 @@ pub(crate) fn period(input: &str) -> crate::Result<crate::Period> {
     let period = if tokens[1].starts_with('P') {
         crate::Period::StartDur(crate::period::StartDur {
             start,
-            duration: super::duration(tokens[1])?,
+            duration: super::duration(tokens[1].into())?,
         })
     } else {
         crate::Period::StartEnd(crate::period::StartEnd {
@@ -130,6 +133,13 @@ pub(crate) fn period(input: &str) -> crate::Result<crate::Period> {
     };
 
     Ok(period)
+}
+
+/**
+ * See [3.3.11. Text](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.11)
+ */
+pub(crate) fn text(input: crate::ContentLine) -> crate::Result<crate::Text> {
+    Ok(input.into())
 }
 
 /**

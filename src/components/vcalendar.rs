@@ -3,10 +3,10 @@
  */
 #[derive(Debug, Default, PartialEq, crate::Component)]
 pub struct VCalendar {
-    pub prodid: String,
-    pub version: String,
-    pub calscale: Option<String>,
-    pub method: Option<String>,
+    pub prodid: crate::Text,
+    pub version: crate::Text,
+    pub calscale: Option<crate::Text>,
+    pub method: Option<crate::Text>,
     #[component(ignore)]
     pub alarms: Vec<crate::VAlarm>,
     #[component(ignore)]
@@ -20,9 +20,9 @@ pub struct VCalendar {
     #[component(ignore)]
     pub timezones: Vec<crate::VTimezone>,
     #[component(ignore)]
-    pub x_prop: std::collections::BTreeMap<String, String>,
+    pub x_prop: std::collections::BTreeMap<String, crate::ContentLine>,
     #[component(ignore)]
-    pub iana_prop: std::collections::BTreeMap<String, String>,
+    pub iana_prop: std::collections::BTreeMap<String, crate::ContentLine>,
 }
 
 impl VCalendar {

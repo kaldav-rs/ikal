@@ -5,8 +5,8 @@
 /**
  * See [3.8.2.1. Date-Time Completed](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.1)
  */
-pub(crate) fn completed(input: &str) -> crate::Result<crate::DateTime> {
-    super::datatype::date_time(input)
+pub(crate) fn completed(input: crate::ContentLine) -> crate::Result<crate::DateTime> {
+    super::datatype::date_time(&input.value)
         .map_err(crate::Error::from)
         .map(|(_, x)| x)
 }
@@ -14,8 +14,8 @@ pub(crate) fn completed(input: &str) -> crate::Result<crate::DateTime> {
 /**
  * See [3.8.2.2. Date-Time End](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.2)
  */
-pub(crate) fn dtend(input: &str) -> crate::Result<crate::Date> {
-    super::datatype::date_or_dt(input)
+pub(crate) fn dtend(input: crate::ContentLine) -> crate::Result<crate::Date> {
+    super::datatype::date_or_dt(&input.value)
         .map_err(crate::Error::from)
         .map(|(_, x)| x)
 }
@@ -23,8 +23,8 @@ pub(crate) fn dtend(input: &str) -> crate::Result<crate::Date> {
 /**
  * See [3.8.2.3. Date-Time Due](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.3)
  */
-pub(crate) fn due(input: &str) -> crate::Result<crate::Date> {
-    super::datatype::date_or_dt(input)
+pub(crate) fn due(input: crate::ContentLine) -> crate::Result<crate::Date> {
+    super::datatype::date_or_dt(&input.value)
         .map_err(crate::Error::from)
         .map(|(_, x)| x)
 }
@@ -32,8 +32,8 @@ pub(crate) fn due(input: &str) -> crate::Result<crate::Date> {
 /**
  * See [3.8.2.4. Date-Time Start](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.4)
  */
-pub(crate) fn dtstart(input: &str) -> crate::Result<crate::Date> {
-    super::datatype::date_or_dt(input)
+pub(crate) fn dtstart(input: crate::ContentLine) -> crate::Result<crate::Date> {
+    super::datatype::date_or_dt(&input.value)
         .map_err(crate::Error::from)
         .map(|(_, x)| x)
 }
@@ -41,8 +41,8 @@ pub(crate) fn dtstart(input: &str) -> crate::Result<crate::Date> {
 /**
  * See [3.8.2.5. Duration](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.5)
  */
-pub(crate) fn duration(input: &str) -> crate::Result<chrono::Duration> {
-    super::datatype::duration(input)
+pub(crate) fn duration(input: crate::ContentLine) -> crate::Result<chrono::Duration> {
+    super::datatype::duration(&input.value)
         .map_err(crate::Error::from)
         .map(|(_, x)| x)
 }
@@ -50,13 +50,13 @@ pub(crate) fn duration(input: &str) -> crate::Result<chrono::Duration> {
 /**
  * See [3.8.2.6. Free/Busy Time](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.6)
  */
-pub(crate) fn freebusy(input: &str) -> crate::Result<Vec<crate::Period>> {
-    input.split(',').map(super::datatype::period).collect()
+pub(crate) fn freebusy(input: crate::ContentLine) -> crate::Result<Vec<crate::Period>> {
+    input.value.split(',').map(super::datatype::period).collect()
 }
 
 /**
  * See [3.8.2.7. Time Transparency](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.7)
  */
-pub(crate) fn transp(input: &str) -> crate::Result<crate::TimeTransparency> {
-    input.parse()
+pub(crate) fn transp(input: crate::ContentLine) -> crate::Result<crate::TimeTransparency> {
+    input.value.parse()
 }

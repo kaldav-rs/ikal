@@ -8,11 +8,13 @@ pub enum VAlarm {
     Email(Email),
 }
 
-impl TryFrom<std::collections::BTreeMap<String, String>> for VAlarm {
+impl TryFrom<std::collections::BTreeMap<String, crate::ContentLine>> for VAlarm {
     type Error = crate::Error;
 
-    fn try_from(properties: std::collections::BTreeMap<String, String>) -> crate::Result<Self> {
-        let component = match properties["ACTION"].as_str() {
+    fn try_from(
+        properties: std::collections::BTreeMap<String, crate::ContentLine>,
+    ) -> crate::Result<Self> {
+        let component = match properties["ACTION"].value.as_str() {
             "AUDIO" => Self::Audio(Audio::try_from(properties)?),
             "DISPLAY" => Self::Display(Display::try_from(properties)?),
             "EMAIL" => Self::Email(Email::try_from(properties)?),
@@ -52,15 +54,15 @@ impl std::str::FromStr for VAlarm {
 
 #[derive(Clone, Debug, Default, PartialEq, crate::Component)]
 pub struct Audio {
-    pub action: String,
+    pub action: crate::Text,
     pub trigger: crate::Trigger,
     pub duration: Option<chrono::Duration>,
     pub repeat: Option<u32>,
-    pub attach: Vec<String>,
+    pub attach: Vec<crate::Text>,
     #[component(ignore)]
-    pub x_prop: std::collections::BTreeMap<String, String>,
+    pub x_prop: std::collections::BTreeMap<String, crate::ContentLine>,
     #[component(ignore)]
-    pub iana_prop: std::collections::BTreeMap<String, String>,
+    pub iana_prop: std::collections::BTreeMap<String, crate::ContentLine>,
 }
 
 impl Audio {
@@ -72,15 +74,15 @@ impl Audio {
 
 #[derive(Clone, Debug, Default, PartialEq, crate::Component)]
 pub struct Display {
-    pub action: String,
+    pub action: crate::Text,
     pub trigger: crate::Trigger,
-    pub description: String,
+    pub description: crate::Text,
     pub duration: Option<chrono::Duration>,
     pub repeat: Option<u32>,
     #[component(ignore)]
-    pub x_prop: std::collections::BTreeMap<String, String>,
+    pub x_prop: std::collections::BTreeMap<String, crate::ContentLine>,
     #[component(ignore)]
-    pub iana_prop: std::collections::BTreeMap<String, String>,
+    pub iana_prop: std::collections::BTreeMap<String, crate::ContentLine>,
 }
 
 impl Display {
@@ -92,18 +94,18 @@ impl Display {
 
 #[derive(Clone, Debug, Default, PartialEq, crate::Component)]
 pub struct Email {
-    pub action: String,
+    pub action: crate::Text,
     pub trigger: crate::Trigger,
-    pub description: String,
-    pub summary: String,
-    pub attendee: Vec<String>,
+    pub description: crate::Text,
+    pub summary: crate::Text,
+    pub attendee: Vec<crate::Text>,
     pub duration: Option<chrono::Duration>,
     pub repeat: Option<u32>,
-    pub attach: Vec<String>,
+    pub attach: Vec<crate::Text>,
     #[component(ignore)]
-    pub x_prop: std::collections::BTreeMap<String, String>,
+    pub x_prop: std::collections::BTreeMap<String, crate::ContentLine>,
     #[component(ignore)]
-    pub iana_prop: std::collections::BTreeMap<String, String>,
+    pub iana_prop: std::collections::BTreeMap<String, crate::ContentLine>,
 }
 
 impl Email {

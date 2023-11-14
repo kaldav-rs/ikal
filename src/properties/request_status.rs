@@ -28,6 +28,6 @@ impl std::str::FromStr for RequestStatus {
     type Err = crate::Error;
 
     fn from_str(s: &str) -> crate::Result<Self> {
-        crate::parser::rstatus(s)
+        crate::parser::rstatus(s.into())
     }
 }

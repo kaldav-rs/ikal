@@ -36,7 +36,7 @@ fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             continue;
         }
 
-        let parser_fn = quote::quote! { crate::parser::#name(&value)? };
+        let parser_fn = quote::quote! { crate::parser::#name(content_line)? };
         let parser = if is_option(ty) {
             quote::quote! { component.#name = Some(#parser_fn) }
         } else if is_vec(ty) {
@@ -65,20 +65,20 @@ fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
     let traits = quote::quote! {
         #[automatically_derived]
         #[doc(hidden)]
-        impl #impl_generics TryFrom<std::collections::BTreeMap<String, String>> for #name #ty_generics #where_clause {
+        impl #impl_generics TryFrom<std::collections::BTreeMap<String, crate::ContentLine>> for #name #ty_generics #where_clause {
             type Error = crate::Error;
 
-            fn try_from(properties: std::collections::BTreeMap<String, String>) -> crate::Result<Self> {
+            fn try_from(properties: std::collections::BTreeMap<String, crate::ContentLine>) -> crate::Result<Self> {
                 let mut component = Self::new();
 
-                for (key, value) in properties {
+                for (key, content_line) in properties {
                     match key.as_str() {
                         #(#from_body, )*
                         _ => {
                             if key.starts_with("X-") {
-                                component.x_prop.insert(key, value);
+                                component.x_prop.insert(key, content_line);
                             } else {
-                                component.iana_prop.insert(key, value);
+                                component.iana_prop.insert(key, content_line);
                             }
                         }
                     }

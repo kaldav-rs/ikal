@@ -7,6 +7,7 @@ mod geo;
 mod recur;
 mod request_status;
 mod status;
+mod text;
 mod time_transparency;
 mod trigger;
 
@@ -19,5 +20,6 @@ pub use period::Period;
 pub use recur::*;
 pub use request_status::*;
 pub use status::*;
+pub use text::*;
 pub use time_transparency::*;
 pub use trigger::Trigger;

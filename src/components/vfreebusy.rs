@@ -4,21 +4,21 @@
 #[derive(Clone, Debug, Default, PartialEq, crate::Component)]
 pub struct VFreebusy {
     pub dtstamp: crate::DateTime,
-    pub uid: String,
-    pub contact: Option<String>,
+    pub uid: crate::Text,
+    pub contact: Option<crate::Text>,
     pub dtstart: crate::Date,
     pub dtend: Option<crate::Date>,
-    pub organizer: Option<String>,
-    pub url: Option<String>,
-    pub attendee: Vec<String>,
-    pub comment: Vec<String>,
+    pub organizer: Option<crate::Text>,
+    pub url: Option<crate::Text>,
+    pub attendee: Vec<crate::Text>,
+    pub comment: Vec<crate::Text>,
     #[component(append)]
     pub freebusy: Vec<crate::Period>,
     pub rstatus: Vec<crate::RequestStatus>,
     #[component(ignore)]
-    pub x_prop: std::collections::BTreeMap<String, String>,
+    pub x_prop: std::collections::BTreeMap<String, crate::ContentLine>,
     #[component(ignore)]
-    pub iana_prop: std::collections::BTreeMap<String, String>,
+    pub iana_prop: std::collections::BTreeMap<String, crate::ContentLine>,
 }
 impl VFreebusy {
     #[must_use]

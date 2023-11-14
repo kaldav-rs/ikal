@@ -1,7 +1,13 @@
 Ok(
     VCalendar {
-        prodid: "+//IDN bitfire.at//DAVdroid/1.0.8 ical4android ical4j/2.x",
-        version: "2.0",
+        prodid: Text {
+            params: {},
+            text: "+//IDN bitfire.at//DAVdroid/1.0.8 ical4android ical4j/2.x",
+        },
+        version: Text {
+            params: {},
+            text: "2.0",
+        },
         calscale: None,
         method: None,
         alarms: [],
@@ -13,7 +19,10 @@ Ok(
                 dtstamp: Local(
                     2016-05-15T18:43:10+02:00,
                 ),
-                uid: "10442264-14b1-47cf-9263-69447c0e0d7f",
+                uid: Text {
+                    params: {},
+                    text: "10442264-14b1-47cf-9263-69447c0e0d7f",
+                },
                 class: None,
                 completed: Some(
                     Naive(
@@ -33,7 +42,10 @@ Ok(
                     ),
                 ),
                 location: Some(
-                    "",
+                    Text {
+                        params: {},
+                        text: "",
+                    },
                 ),
                 organizer: None,
                 percent_complete: Some(
@@ -46,7 +58,10 @@ Ok(
                     Completed,
                 ),
                 summary: Some(
-                    "the science of good cooking +book",
+                    Text {
+                        params: {},
+                        text: "the science of good cooking +book",
+                    },
                 ),
                 url: None,
                 rrule: None,

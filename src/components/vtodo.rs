@@ -4,43 +4,43 @@
 #[derive(Clone, Default, Debug, PartialEq, crate::Component)]
 pub struct VTodo {
     pub dtstamp: crate::DateTime,
-    pub uid: String,
+    pub uid: crate::Text,
     pub class: Option<crate::Class>,
     pub completed: Option<crate::DateTime>,
     pub created: Option<crate::DateTime>,
     pub dtstart: Option<crate::Date>,
     pub geo: Option<crate::Geo>,
     pub last_modified: Option<crate::DateTime>,
-    pub location: Option<String>,
-    pub organizer: Option<String>,
+    pub location: Option<crate::Text>,
+    pub organizer: Option<crate::Text>,
     pub percent_complete: Option<u8>,
     pub priority: Option<u8>,
     pub recurid: Option<crate::Date>,
     pub sequence: Option<u32>,
     pub status: Option<crate::Status>,
-    pub summary: Option<String>,
-    pub url: Option<String>,
+    pub summary: Option<crate::Text>,
+    pub url: Option<crate::Text>,
     pub rrule: Option<crate::Recur>,
     pub due: Option<crate::Date>,
     pub duration: Option<chrono::Duration>,
-    pub attach: Vec<String>,
-    pub attendee: Vec<String>,
+    pub attach: Vec<crate::Text>,
+    pub attendee: Vec<crate::Text>,
     #[component(append)]
-    pub categories: Vec<String>,
-    pub comment: Vec<String>,
-    pub contact: Vec<String>,
+    pub categories: Vec<crate::Text>,
+    pub comment: Vec<crate::Text>,
+    pub contact: Vec<crate::Text>,
     #[component(append)]
     pub exdate: Vec<crate::Date>,
     pub rstatus: Vec<crate::RequestStatus>,
-    pub related_to: Vec<String>,
+    pub related_to: Vec<crate::Text>,
     #[component(append)]
-    pub resources: Vec<String>,
+    pub resources: Vec<crate::Text>,
     #[component(append)]
     pub rdate: Vec<crate::Date>,
     #[component(ignore)]
-    pub x_prop: std::collections::BTreeMap<String, String>,
+    pub x_prop: std::collections::BTreeMap<String, crate::ContentLine>,
     #[component(ignore)]
-    pub iana_prop: std::collections::BTreeMap<String, String>,
+    pub iana_prop: std::collections::BTreeMap<String, crate::ContentLine>,
 }
 
 impl VTodo {

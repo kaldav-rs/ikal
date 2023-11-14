@@ -27,6 +27,7 @@ use nom::character::complete::{anychar, char, line_ending};
 use nom::combinator::{map, map_res, not, opt};
 use nom::multi::{count, fold_many0, many0};
 use nom::sequence::{preceded, separated_pair, tuple};
+use std::collections::BTreeMap;
 
 fn is_alphabetic(chr: char) -> bool {
     nom::character::is_alphabetic(chr as u8)
@@ -57,7 +58,7 @@ fn key(input: &str) -> nom::IResult<&str, &str> {
 }
 
 fn attr(input: &str) -> nom::IResult<&str, &str> {
-    take_while(is_alphanumeric)(input)
+    take_till(|c| c == ';' || c == ':')(input)
 }
 
 fn value_line(input: &str) -> nom::IResult<&str, &str> {
@@ -89,35 +90,46 @@ fn param(input: &str) -> nom::IResult<&str, (&str, &str)> {
     preceded(char(';'), separated_pair(key, char('='), attr))(input)
 }
 
+fn params(input: &str) -> nom::IResult<&str, BTreeMap<String, String>> {
+    fold_many0(param, BTreeMap::new, |mut acc, (key, value)| {
+        acc.insert(key.to_string(), value.to_string());
+        acc
+    })(input)
+}
+
 /**
  * See [3.1. Content Lines](https://datatracker.ietf.org/doc/html/rfc5545#section-3.1)
  */
-pub(crate) fn content_line(input: &str) -> nom::IResult<&str, (&str, String)> {
+pub(crate) fn content_line(input: &str) -> nom::IResult<&str, (&str, crate::ContentLine)> {
     map(
         tuple((
             not(tag("BEGIN:")),
             not(tag("END:")),
             key,
-            many0(param),
+            params,
             char(':'),
             opt(value),
             line_ending,
         )),
-        |(_, _, key, _, _, value, _)| (key, value.unwrap_or_default()),
+        |(_, _, key, params, _, value, _)| {
+            (
+                key,
+                crate::ContentLine {
+                    params,
+                    value: value.unwrap_or_default(),
+                },
+            )
+        },
     )(input)
 }
 
 pub(crate) fn content_lines(
     input: &str,
-) -> nom::IResult<&str, std::collections::BTreeMap<String, String>> {
-    fold_many0(
-        content_line,
-        std::collections::BTreeMap::new,
-        |mut acc, (key, value)| {
-            acc.insert(key.to_string(), value);
-            acc
-        },
-    )(input)
+) -> nom::IResult<&str, BTreeMap<String, crate::ContentLine>> {
+    fold_many0(content_line, BTreeMap::new, |mut acc, (key, value)| {
+        acc.insert(key.to_string(), value);
+        acc
+    })(input)
 }
 
 pub(crate) fn weekday(input: &str) -> nom::IResult<&str, crate::Weekday> {

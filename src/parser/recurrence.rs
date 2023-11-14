@@ -5,8 +5,9 @@
 /**
  * See [3.8.5.1. Exception Date-Times](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.1)
  */
-pub(crate) fn exdate(input: &str) -> crate::Result<Vec<crate::Date>> {
+pub(crate) fn exdate(input: crate::ContentLine) -> crate::Result<Vec<crate::Date>> {
     input
+        .value
         .split(',')
         .map(|x| {
             super::datatype::date_or_dt(x)
@@ -19,8 +20,9 @@ pub(crate) fn exdate(input: &str) -> crate::Result<Vec<crate::Date>> {
 /**
  * See [3.8.5.2. Recurrence Date-Times](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.2)
  */
-pub(crate) fn rdate(input: &str) -> crate::Result<Vec<crate::Date>> {
+pub(crate) fn rdate(input: crate::ContentLine) -> crate::Result<Vec<crate::Date>> {
     input
+        .value
         .split(',')
         .map(|x| {
             super::datatype::date_or_dt(x)
@@ -33,7 +35,7 @@ pub(crate) fn rdate(input: &str) -> crate::Result<Vec<crate::Date>> {
 /**
  * See [3.8.5.3. Recurrence Rule](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3)
  */
-pub(crate) fn rrule(input: &str) -> crate::Result<crate::Recur> {
+pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
     use nom::character::complete::char;
     use nom::combinator::{map_res, opt};
     use nom::multi::many1;
@@ -105,7 +107,7 @@ pub(crate) fn rrule(input: &str) -> crate::Result<crate::Recur> {
         };
 
         Ok::<_, crate::Error>(recur)
-    })(input)
+    })(input.value.as_str())
     .map(|(_, x)| x)
     .map_err(crate::Error::from)
 }

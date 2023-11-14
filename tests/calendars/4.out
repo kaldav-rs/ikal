@@ -1,7 +1,13 @@
 Ok(
     VCalendar {
-        prodid: "",
-        version: "",
+        prodid: Text {
+            params: {},
+            text: "",
+        },
+        version: Text {
+            params: {},
+            text: "",
+        },
         calscale: None,
         method: None,
         alarms: [],
@@ -10,7 +16,10 @@ Ok(
                 dtstamp: Local(
                     2014-07-09T20:20:46+02:00,
                 ),
-                uid: "1686cebb-a816-4657-8d5e-3b2ce0c0589c",
+                uid: Text {
+                    params: {},
+                    text: "1686cebb-a816-4657-8d5e-3b2ce0c0589c",
+                },
                 dtstart: DateTime(
                     Naive(
                         2013-05-16T19:30:00,
@@ -25,7 +34,10 @@ Ok(
                     ),
                 ),
                 description: Some(
-                    "Bonjour\\,\\n\\nAprès un peu de retard\\, nous sommes prêts pour organiser l\\'Assemblée\\nGénérale Ordinaire.\\n\\nEn tant que membre de l\\'association Faimaison\\, vous êtes convoqué à\\nl\\'assemblée Générale Ordinaire.\\n\\nCelle-ci aura lieu le 16 Mai à B17 (17\\, rue Paul Bellamy)à 19h30.\\n\\nComme expliqué dans les derniers échanges\\, il y aura un renouvellement\\nde bureau avec changement de président.\\n\\nL\\'ordre du joursera donc le suivant :\\n\\n- Bilan Moral\\n- Bilan Financier\\n- Renouvellement du bureau.\\n- Projets en cours\\n\\nSi vous ne pouvez pas participer vous pouvez donner procuration à un\\nmembre de votre choix.\\nPour cela\\, envoyez un mail à bureau@faimaison.net en indiquant la personne\\nmandatée.\\n\\nÀ très bientot ! \\n\\n-- \\nGuillaume Douté",
+                    Text {
+                        params: {},
+                        text: "Bonjour\\,\\n\\nAprès un peu de retard\\, nous sommes prêts pour organiser l\\'Assemblée\\nGénérale Ordinaire.\\n\\nEn tant que membre de l\\'association Faimaison\\, vous êtes convoqué à\\nl\\'assemblée Générale Ordinaire.\\n\\nCelle-ci aura lieu le 16 Mai à B17 (17\\, rue Paul Bellamy)à 19h30.\\n\\nComme expliqué dans les derniers échanges\\, il y aura un renouvellement\\nde bureau avec changement de président.\\n\\nL\\'ordre du joursera donc le suivant :\\n\\n- Bilan Moral\\n- Bilan Financier\\n- Renouvellement du bureau.\\n- Projets en cours\\n\\nSi vous ne pouvez pas participer vous pouvez donner procuration à un\\nmembre de votre choix.\\nPour cela\\, envoyez un mail à bureau@faimaison.net en indiquant la personne\\nmandatée.\\n\\nÀ très bientot ! \\n\\n-- \\nGuillaume Douté",
+                    },
                 ),
                 geo: None,
                 last_modified: Some(
@@ -39,7 +51,10 @@ Ok(
                 sequence: None,
                 status: None,
                 summary: Some(
-                    "Assemblée Générale Ordinaire 2013",
+                    Text {
+                        params: {},
+                        text: "Assemblée Générale Ordinaire 2013",
+                    },
                 ),
                 transp: Some(
                     Opaque,
@@ -74,7 +89,10 @@ Ok(
         todo: [],
         timezones: [
             VTimezone {
-                tzid: "Europe/Paris",
+                tzid: Text {
+                    params: {},
+                    text: "Europe/Paris",
+                },
                 last_modified: None,
                 tzurl: None,
                 standard: [
@@ -109,7 +127,10 @@ Ok(
                         comment: [],
                         rdate: [],
                         tzname: [
-                            "CET",
+                            Text {
+                                params: {},
+                                text: "CET",
+                            },
                         ],
                         x_prop: {},
                         iana_prop: {},
@@ -147,14 +168,20 @@ Ok(
                         comment: [],
                         rdate: [],
                         tzname: [
-                            "CEST",
+                            Text {
+                                params: {},
+                                text: "CEST",
+                            },
                         ],
                         x_prop: {},
                         iana_prop: {},
                     },
                 ],
                 x_prop: {
-                    "X-LIC-LOCATION": "Europe/Paris",
+                    "X-LIC-LOCATION": ContentLine {
+                        params: {},
+                        value: "Europe/Paris",
+                    },
                 },
                 iana_prop: {},
             },

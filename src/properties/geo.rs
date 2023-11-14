@@ -27,6 +27,6 @@ impl std::str::FromStr for Geo {
     type Err = crate::Error;
 
     fn from_str(s: &str) -> crate::Result<Self> {
-        crate::parser::geo(s)
+        crate::parser::geo(s.into())
     }
 }

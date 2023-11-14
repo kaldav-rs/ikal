@@ -1,9 +1,18 @@
 Ok(
     VCalendar {
-        prodid: "-//Nextcloud calendar v1.5.0",
-        version: "2.0",
+        prodid: Text {
+            params: {},
+            text: "-//Nextcloud calendar v1.5.0",
+        },
+        version: Text {
+            params: {},
+            text: "2.0",
+        },
         calscale: Some(
-            "GREGORIAN",
+            Text {
+                params: {},
+                text: "GREGORIAN",
+            },
         ),
         method: None,
         alarms: [],
@@ -12,7 +21,10 @@ Ok(
                 dtstamp: Naive(
                     2017-02-09T19:23:58,
                 ),
-                uid: "5UILHLI7RI6K2IDRAQX7O",
+                uid: Text {
+                    params: {},
+                    text: "5UILHLI7RI6K2IDRAQX7O",
+                },
                 dtstart: DateTime(
                     Naive(
                         2015-02-19T19:00:00,
@@ -41,7 +53,10 @@ Ok(
                     Confirmed,
                 ),
                 summary: Some(
-                    "Vers",
+                    Text {
+                        params: {},
+                        text: "Vers",
+                    },
                 ),
                 transp: None,
                 url: None,
@@ -72,7 +87,10 @@ Ok(
         todo: [],
         timezones: [
             VTimezone {
-                tzid: "Europe/Berlin",
+                tzid: Text {
+                    params: {},
+                    text: "Europe/Berlin",
+                },
                 last_modified: None,
                 tzurl: None,
                 standard: [
@@ -107,7 +125,10 @@ Ok(
                         comment: [],
                         rdate: [],
                         tzname: [
-                            "CET",
+                            Text {
+                                params: {},
+                                text: "CET",
+                            },
                         ],
                         x_prop: {},
                         iana_prop: {},
@@ -145,14 +166,20 @@ Ok(
                         comment: [],
                         rdate: [],
                         tzname: [
-                            "CEST",
+                            Text {
+                                params: {},
+                                text: "CEST",
+                            },
                         ],
                         x_prop: {},
                         iana_prop: {},
                     },
                 ],
                 x_prop: {
-                    "X-LIC-LOCATION": "Europe/Berlin",
+                    "X-LIC-LOCATION": ContentLine {
+                        params: {},
+                        value: "Europe/Berlin",
+                    },
                 },
                 iana_prop: {},
             },

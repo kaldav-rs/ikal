@@ -1,4 +1,5 @@
 mod components;
+mod content_line;
 mod errors;
 mod parser;
 mod properties;
@@ -7,16 +8,19 @@ pub use components::*;
 pub use errors::*;
 pub use properties::*;
 
+use content_line::*;
 use ikal_derive::Component;
 
 #[cfg(test)]
 mod test {
+    use std::collections::BTreeMap;
+
     #[test]
     fn test_content_line() {
         let line = "VERSION:2.0
 PRODID:-//Nextcloud calendar v1.5.0";
 
-        let expected = ("VERSION", "2.0".to_string());
+        let expected = ("VERSION", crate::ContentLine::from("2.0"));
         assert_eq!(
             crate::parser::content_line(line),
             Ok(("PRODID:-//Nextcloud calendar v1.5.0", expected))
@@ -32,7 +36,7 @@ PRODID:-//Nextcloud calendar v1.5.0";
 
         let expected = (
             "DESCRIPTION",
-            "This is a long description that exists on a long line.".to_string(),
+            crate::ContentLine::from("This is a long description that exists on a long line."),
         );
 
         assert_eq!(
@@ -48,15 +52,20 @@ PRODID:-//Nextcloud calendar v1.5.0";
 
     #[test]
     fn test_param() {
-        // @TODO https://tools.ietf.org/html/rfc2445#section-4.2
-        let line = "CREATED;VALUE=DATE-TIME:20141009T141617Z
+        let line = "CREATED;VALUE=DATE-TIME:20141009T141617Z\r\n";
 
-";
+        let mut params = BTreeMap::new();
+        params.insert("VALUE".to_string(), "DATE-TIME".to_string());
+        let mut expected = BTreeMap::new();
+        expected.insert(
+            "CREATED".to_string(),
+            crate::ContentLine {
+                value: "20141009T141617Z".to_string(),
+                params,
+            },
+        );
 
-        let mut expected = std::collections::BTreeMap::new();
-        expected.insert("CREATED".to_string(), "20141009T141617Z".to_string());
-
-        assert_eq!(crate::parser::content_lines(line), Ok(("\n", expected)));
+        assert_eq!(crate::parser::content_lines(line), Ok(("", expected)));
     }
 
     #[test]
@@ -66,9 +75,12 @@ CALSCALE:GREGORIAN
 
 ";
 
-        let mut expected = std::collections::BTreeMap::new();
-        expected.insert("VERSION".to_string(), "2.0".to_string());
-        expected.insert("CALSCALE".to_string(), "GREGORIAN".to_string());
+        let mut expected = BTreeMap::new();
+        expected.insert("VERSION".to_string(), crate::ContentLine::from("2.0"));
+        expected.insert(
+            "CALSCALE".to_string(),
+            crate::ContentLine::from("GREGORIAN"),
+        );
 
         assert_eq!(crate::parser::content_lines(line), Ok(("\n", expected)));
     }

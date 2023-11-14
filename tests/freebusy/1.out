@@ -3,7 +3,10 @@ Ok(
         dtstamp: Local(
             1997-09-01T10:30:00+02:00,
         ),
-        uid: "19970901T082949Z-FA43EF@example.com",
+        uid: Text {
+            params: {},
+            text: "19970901T082949Z-FA43EF@example.com",
+        },
         contact: None,
         dtstart: DateTime(
             Local(
@@ -18,11 +21,17 @@ Ok(
             ),
         ),
         organizer: Some(
-            "mailto:jane_doe@example.com",
+            Text {
+                params: {},
+                text: "mailto:jane_doe@example.com",
+            },
         ),
         url: None,
         attendee: [
-            "mailto:john_public@example.com",
+            Text {
+                params: {},
+                text: "mailto:john_public@example.com",
+            },
         ],
         comment: [],
         freebusy: [],

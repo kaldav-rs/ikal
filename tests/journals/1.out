@@ -3,7 +3,10 @@ Ok(
         dtstamp: Local(
             1997-09-01T15:00:00+02:00,
         ),
-        uid: "19970901T130000Z-123405@example.com",
+        uid: Text {
+            params: {},
+            text: "19970901T130000Z-123405@example.com",
+        },
         class: None,
         created: None,
         dtstart: Date(
@@ -15,7 +18,10 @@ Ok(
         sequence: None,
         status: None,
         summary: Some(
-            "Staff meeting minutes",
+            Text {
+                params: {},
+                text: "Staff meeting minutes",
+            },
         ),
         url: None,
         rrule: None,
@@ -25,7 +31,10 @@ Ok(
         comment: [],
         contact: [],
         description: [
-            "1. Staff meeting: Participants include Joe\\,Lisa\\, and Bob. Aurora project plans were reviewed.There is currently no budget reserves for this project.Lisa will escalate to management. Next meeting on Tuesday.\\n2. Telephone Conference: ABC Corp. sales representativecalled to discuss new printer. Promised to get us a demo byFriday.\\n3. Henry Miller (Handsoff Insurance): Car wastotaled by tree. Is looking into a loaner car. 555-2323(tel).",
+            Text {
+                params: {},
+                text: "1. Staff meeting: Participants include Joe\\,Lisa\\, and Bob. Aurora project plans were reviewed.There is currently no budget reserves for this project.Lisa will escalate to management. Next meeting on Tuesday.\\n2. Telephone Conference: ABC Corp. sales representativecalled to discuss new printer. Promised to get us a demo byFriday.\\n3. Henry Miller (Handsoff Insurance): Car wastotaled by tree. Is looking into a loaner car. 555-2323(tel).",
+            },
         ],
         exdate: [],
         related_to: [],

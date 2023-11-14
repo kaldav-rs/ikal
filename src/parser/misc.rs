@@ -5,7 +5,7 @@
 /**
  * See [3.8.8.3. Request Status](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.8.3)
  */
-pub(crate) fn rstatus(input: &str) -> crate::Result<crate::RequestStatus> {
+pub(crate) fn rstatus(input: crate::ContentLine) -> crate::Result<crate::RequestStatus> {
     use nom::bytes::complete::{take_till, take_while};
     use nom::character::complete::char;
     use nom::combinator::{map, opt};
@@ -32,7 +32,7 @@ pub(crate) fn rstatus(input: &str) -> crate::Result<crate::RequestStatus> {
             statdesc,
             extdata,
         },
-    )(input)
+    )(input.value.as_str())
     .map_err(crate::Error::from)
     .map(|(_, x)| x)
 }
@@ -42,7 +42,7 @@ mod test {
     #[test]
     fn rstatus() {
         assert_eq!(
-            crate::parser::rstatus("2.0;Success").unwrap(),
+            crate::parser::rstatus("2.0;Success".into()).unwrap(),
             crate::RequestStatus {
                 statcode: 2.0,
                 statdesc: "Success".to_string(),
@@ -51,7 +51,7 @@ mod test {
         );
 
         assert_eq!(
-            crate::parser::rstatus("3.1;Invalid property value;DTSTART:96-Apr-01").unwrap(),
+            crate::parser::rstatus("3.1;Invalid property value;DTSTART:96-Apr-01".into()).unwrap(),
             crate::RequestStatus {
                 statcode: 3.1,
                 statdesc: "Invalid property value".to_string(),
@@ -60,7 +60,7 @@ mod test {
         );
 
         assert_eq!(
-            crate::parser::rstatus("2.8; Success\\, repeating event ignored. Scheduled\r\n as a single event.;RRULE:FREQ=WEEKLY\\;INTERVAL=2").unwrap(),
+            crate::parser::rstatus("2.8; Success\\, repeating event ignored. Scheduled\r\n as a single event.;RRULE:FREQ=WEEKLY\\;INTERVAL=2".into()).unwrap(),
             crate::RequestStatus {
                 statcode: 2.8,
                 statdesc: " Success\\, repeating event ignored. Scheduled\r\n as a single event.".to_string(),
@@ -69,7 +69,7 @@ mod test {
         );
 
         assert_eq!(
-            crate::parser::rstatus("4.1;Event conflict.  Date-time is busy.").unwrap(),
+            crate::parser::rstatus("4.1;Event conflict.  Date-time is busy.".into()).unwrap(),
             crate::RequestStatus {
                 statcode: 4.1,
                 statdesc: "Event conflict.  Date-time is busy.".to_string(),
@@ -79,7 +79,7 @@ mod test {
 
         assert_eq!(
             crate::parser::rstatus(
-                "3.7;Invalid calendar user;ATTENDEE:\r\n mailto:jsmith@example.com"
+                "3.7;Invalid calendar user;ATTENDEE:\r\n mailto:jsmith@example.com".into()
             )
             .unwrap(),
             crate::RequestStatus {

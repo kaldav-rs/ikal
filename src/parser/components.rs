@@ -97,7 +97,7 @@ pub(crate) fn vcalendar(input: &str) -> nom::IResult<&str, crate::VCalendar> {
         delimited(
             tag("BEGIN:VCALENDAR\r\n"),
             tuple((super::content_lines, components)),
-            tag("END:VCALENDAR\r\n"),
+            tag("END:VCALENDAR"),
         ),
         |(content_lines, components)| {
             let mut vcalendar: crate::VCalendar = content_lines.try_into()?;

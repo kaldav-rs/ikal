@@ -3,7 +3,10 @@ Ok(
         dtstamp: Local(
             1997-09-01T12:00:00+02:00,
         ),
-        uid: "19970901T095957Z-76A912@example.com",
+        uid: Text {
+            params: {},
+            text: "19970901T095957Z-76A912@example.com",
+        },
         contact: None,
         dtstart: DateTime(
             Naive(
@@ -12,16 +15,28 @@ Ok(
         ),
         dtend: None,
         organizer: Some(
-            "mailto:jane_doe@example.com",
+            Text {
+                params: {},
+                text: "mailto:jane_doe@example.com",
+            },
         ),
         url: Some(
-            "http://example.com/pub/busy/jpublic-01.ifb",
+            Text {
+                params: {},
+                text: "http://example.com/pub/busy/jpublic-01.ifb",
+            },
         ),
         attendee: [
-            "mailto:john_public@example.com",
+            Text {
+                params: {},
+                text: "mailto:john_public@example.com",
+            },
         ],
         comment: [
-            "This iCalendar file contains busy time information for the next three months.",
+            Text {
+                params: {},
+                text: "This iCalendar file contains busy time information for the next three months.",
+            },
         ],
         freebusy: [
             StartDur(

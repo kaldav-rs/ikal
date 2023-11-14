@@ -39,7 +39,7 @@ impl std::str::FromStr for Recur {
     type Err = crate::Error;
 
     fn from_str(s: &str) -> crate::Result<Self> {
-        crate::parser::rrule(s)
+        crate::parser::rrule(s.into())
     }
 }
 #[derive(Clone, Debug, PartialEq)]

@@ -1,7 +1,7 @@
 #[derive(Clone, Debug, PartialEq)]
 pub enum DateTime {
-  Naive(chrono::NaiveDateTime),
-  Local(chrono::DateTime<chrono::Local>),
+    Naive(chrono::NaiveDateTime),
+    Local(chrono::DateTime<chrono::Local>),
 }
 
 impl DateTime {
@@ -12,7 +12,10 @@ impl DateTime {
         }
     }
 
-    pub fn format<'a>(&self, fmt: &'a str) -> chrono::format::DelayedFormat<chrono::format::StrftimeItems<'a>> {
+    pub fn format<'a>(
+        &self,
+        fmt: &'a str,
+    ) -> chrono::format::DelayedFormat<chrono::format::StrftimeItems<'a>> {
         match self {
             Self::Naive(date) => date.format(fmt),
             Self::Local(date) => date.format(fmt),
@@ -37,11 +40,12 @@ impl std::fmt::Display for DateTime {
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum Date {
-  Date(chrono::NaiveDate),
-  DateTime(DateTime),
+    Date(chrono::NaiveDate),
+    DateTime(DateTime),
 }
 
 impl Date {
+    #[must_use]
     pub fn date_naive(&self) -> chrono::NaiveDate {
         match self {
             Self::Date(date) => *date,
@@ -49,7 +53,11 @@ impl Date {
         }
     }
 
-    pub fn format<'a>(&self, fmt: &'a str) -> chrono::format::DelayedFormat<chrono::format::StrftimeItems<'a>> {
+    #[must_use]
+    pub fn format<'a>(
+        &self,
+        fmt: &'a str,
+    ) -> chrono::format::DelayedFormat<chrono::format::StrftimeItems<'a>> {
         match self {
             Self::Date(date) => date.format(fmt),
             Self::DateTime(date_time) => date_time.format(fmt),

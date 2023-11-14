@@ -1,14 +1,20 @@
 Ok(
     Display(
         Display {
-            action: "DISPLAY",
+            action: Text {
+                params: {},
+                text: "DISPLAY",
+            },
             trigger: Duration(
                 Duration {
                     secs: -1800,
                     nanos: 0,
                 },
             ),
-            description: "Breakfast meeting with executive\\nteam at 8:30 AM EST.",
+            description: Text {
+                params: {},
+                text: "Breakfast meeting with executive\\nteam at 8:30 AM EST.",
+            },
             duration: Some(
                 Duration {
                     secs: 900,

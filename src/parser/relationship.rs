@@ -5,29 +5,35 @@
 /**
  * See [3.8.4.1. Attendee](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.1)
  */
-pub(crate) fn attendee(input: &str) -> crate::Result<String> {
-    super::datatype::cal_address(input)
+pub(crate) fn attendee(input: crate::ContentLine) -> crate::Result<crate::Text> {
+    Ok(crate::Text {
+        params: input.params,
+        text: super::datatype::cal_address(&input.value)?,
+    })
 }
 
 /**
  * See [3.8.4.2. Contact](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.2)
  */
-pub(crate) fn contact(input: &str) -> crate::Result<String> {
-    Ok(input.to_string())
+pub(crate) fn contact(input: crate::ContentLine) -> crate::Result<crate::Text> {
+    Ok(input.into())
 }
 
 /**
  * See [3.8.4.3. Organizer](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.3)
  */
-pub(crate) fn organizer(input: &str) -> crate::Result<String> {
-    super::datatype::cal_address(input)
+pub(crate) fn organizer(input: crate::ContentLine) -> crate::Result<crate::Text> {
+    Ok(crate::Text {
+        params: input.params,
+        text: super::datatype::cal_address(&input.value)?,
+    })
 }
 
 /**
  * See [3.8.4.4. Recurrence ID](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.4)
  */
-pub(crate) fn recurid(input: &str) -> crate::Result<crate::Date> {
-    super::datatype::date_or_dt(input)
+pub(crate) fn recurid(input: crate::ContentLine) -> crate::Result<crate::Date> {
+    super::datatype::date_or_dt(&input.value)
         .map_err(crate::Error::from)
         .map(|(_, x)| x)
 }
@@ -35,20 +41,20 @@ pub(crate) fn recurid(input: &str) -> crate::Result<crate::Date> {
 /**
  * See [3.8.4.5. Related To](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.5)
  */
-pub(crate) fn related_to(input: &str) -> crate::Result<String> {
-    Ok(input.to_string())
+pub(crate) fn related_to(input: crate::ContentLine) -> crate::Result<crate::Text> {
+    Ok(input.into())
 }
 
 /**
  * See [3.8.4.6. Uniform Resource Locator](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.6)
  */
-pub(crate) fn url(input: &str) -> crate::Result<String> {
-    Ok(input.to_string())
+pub(crate) fn url(input: crate::ContentLine) -> crate::Result<crate::Text> {
+    Ok(input.into())
 }
 
 /**
  * See [3.8.4.7. Unique Identifier](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.7)
  */
-pub(crate) fn uid(input: &str) -> crate::Result<String> {
-    Ok(input.to_string())
+pub(crate) fn uid(input: crate::ContentLine) -> crate::Result<crate::Text> {
+    Ok(input.into())
 }

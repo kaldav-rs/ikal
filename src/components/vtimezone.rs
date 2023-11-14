@@ -5,17 +5,17 @@ use std::collections::BTreeMap;
  */
 #[derive(Debug, Default, PartialEq, crate::Component)]
 pub struct VTimezone {
-    pub tzid: String,
+    pub tzid: crate::Text,
     pub last_modified: Option<crate::DateTime>,
-    pub tzurl: Option<String>,
+    pub tzurl: Option<crate::Text>,
     #[component(ignore)]
     pub standard: Vec<Prop>,
     #[component(ignore)]
     pub daylight: Vec<Prop>,
     #[component(ignore)]
-    pub x_prop: std::collections::BTreeMap<String, String>,
+    pub x_prop: std::collections::BTreeMap<String, crate::ContentLine>,
     #[component(ignore)]
-    pub iana_prop: std::collections::BTreeMap<String, String>,
+    pub iana_prop: std::collections::BTreeMap<String, crate::ContentLine>,
 }
 
 impl VTimezone {
@@ -37,14 +37,14 @@ pub struct Prop {
     pub tzoffsetto: chrono::offset::FixedOffset,
     pub tzoffsetfrom: chrono::offset::FixedOffset,
     pub rrule: Option<crate::Recur>,
-    pub comment: Vec<String>,
+    pub comment: Vec<crate::Text>,
     #[component(append)]
     pub rdate: Vec<crate::Date>,
-    pub tzname: Vec<String>,
+    pub tzname: Vec<crate::Text>,
     #[component(ignore)]
-    pub x_prop: BTreeMap<String, String>,
+    pub x_prop: BTreeMap<String, crate::ContentLine>,
     #[component(ignore)]
-    pub iana_prop: BTreeMap<String, String>,
+    pub iana_prop: BTreeMap<String, crate::ContentLine>,
 }
 
 impl Default for Prop {
