@@ -10,6 +10,7 @@ mod status;
 mod text;
 mod time_transparency;
 mod trigger;
+mod uri;
 
 pub mod period;
 
@@ -23,3 +24,4 @@ pub use status::*;
 pub use text::*;
 pub use time_transparency::*;
 pub use trigger::Trigger;
+pub use uri::*;

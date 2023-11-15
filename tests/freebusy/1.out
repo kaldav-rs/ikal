@@ -21,16 +21,16 @@ Ok(
             ),
         ),
         organizer: Some(
-            Text {
+            Uri {
                 params: {},
-                text: "mailto:jane_doe@example.com",
+                uri: "mailto:jane_doe@example.com",
             },
         ),
         url: None,
         attendee: [
-            Text {
+            Uri {
                 params: {},
-                text: "mailto:john_public@example.com",
+                uri: "mailto:john_public@example.com",
             },
         ],
         comment: [],

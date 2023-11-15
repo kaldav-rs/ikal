@@ -33,6 +33,6 @@ pub(crate) fn tzoffsetto(input: crate::ContentLine) -> crate::Result<chrono::off
 /**
  * See [3.8.3.5. Time Zone URL](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.3.5)
  */
-pub(crate) fn tzurl(input: crate::ContentLine) -> crate::Result<crate::Text> {
+pub(crate) fn tzurl(input: crate::ContentLine) -> crate::Result<crate::Uri> {
     Ok(input.into())
 }

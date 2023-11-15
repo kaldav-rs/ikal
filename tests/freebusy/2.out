@@ -15,21 +15,21 @@ Ok(
         ),
         dtend: None,
         organizer: Some(
-            Text {
+            Uri {
                 params: {},
-                text: "mailto:jane_doe@example.com",
+                uri: "mailto:jane_doe@example.com",
             },
         ),
         url: Some(
-            Text {
+            Uri {
                 params: {},
-                text: "http://example.com/pub/busy/jpublic-01.ifb",
+                uri: "http://example.com/pub/busy/jpublic-01.ifb",
             },
         ),
         attendee: [
-            Text {
+            Uri {
                 params: {},
-                text: "mailto:john_public@example.com",
+                uri: "mailto:john_public@example.com",
             },
         ],
         comment: [

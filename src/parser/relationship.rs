@@ -5,10 +5,10 @@
 /**
  * See [3.8.4.1. Attendee](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.1)
  */
-pub(crate) fn attendee(input: crate::ContentLine) -> crate::Result<crate::Text> {
-    Ok(crate::Text {
+pub(crate) fn attendee(input: crate::ContentLine) -> crate::Result<crate::Uri> {
+    Ok(crate::Uri {
         params: input.params,
-        text: super::datatype::cal_address(&input.value)?,
+        uri: super::datatype::cal_address(&input.value)?,
     })
 }
 
@@ -22,10 +22,10 @@ pub(crate) fn contact(input: crate::ContentLine) -> crate::Result<crate::Text> {
 /**
  * See [3.8.4.3. Organizer](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.3)
  */
-pub(crate) fn organizer(input: crate::ContentLine) -> crate::Result<crate::Text> {
-    Ok(crate::Text {
+pub(crate) fn organizer(input: crate::ContentLine) -> crate::Result<crate::Uri> {
+    Ok(crate::Uri {
         params: input.params,
-        text: super::datatype::cal_address(&input.value)?,
+        uri: super::datatype::cal_address(&input.value)?,
     })
 }
 
@@ -48,7 +48,7 @@ pub(crate) fn related_to(input: crate::ContentLine) -> crate::Result<crate::Text
 /**
  * See [3.8.4.6. Uniform Resource Locator](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.6)
  */
-pub(crate) fn url(input: crate::ContentLine) -> crate::Result<crate::Text> {
+pub(crate) fn url(input: crate::ContentLine) -> crate::Result<crate::Uri> {
     Ok(input.into())
 }
 

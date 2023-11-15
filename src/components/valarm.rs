@@ -98,7 +98,7 @@ pub struct Email {
     pub trigger: crate::Trigger,
     pub description: crate::Text,
     pub summary: crate::Text,
-    pub attendee: Vec<crate::Text>,
+    pub attendee: Vec<crate::Uri>,
     pub duration: Option<chrono::Duration>,
     pub repeat: Option<u32>,
     pub attach: Vec<crate::Text>,

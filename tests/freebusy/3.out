@@ -21,15 +21,15 @@ Ok(
             ),
         ),
         organizer: Some(
-            Text {
+            Uri {
                 params: {},
-                text: "jsmith@example.com",
+                uri: "jsmith@example.com",
             },
         ),
         url: Some(
-            Text {
+            Uri {
                 params: {},
-                text: "http://www.example.com/calendar/busytime/jsmith.ifb",
+                uri: "http://www.example.com/calendar/busytime/jsmith.ifb",
             },
         ),
         attendee: [],

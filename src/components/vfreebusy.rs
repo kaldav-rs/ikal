@@ -8,9 +8,9 @@ pub struct VFreebusy {
     pub contact: Option<crate::Text>,
     pub dtstart: crate::Date,
     pub dtend: Option<crate::Date>,
-    pub organizer: Option<crate::Text>,
-    pub url: Option<crate::Text>,
-    pub attendee: Vec<crate::Text>,
+    pub organizer: Option<crate::Uri>,
+    pub url: Option<crate::Uri>,
+    pub attendee: Vec<crate::Uri>,
     pub comment: Vec<crate::Text>,
     #[component(append)]
     pub freebusy: Vec<crate::Period>,

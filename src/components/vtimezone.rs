@@ -7,7 +7,7 @@ use std::collections::BTreeMap;
 pub struct VTimezone {
     pub tzid: crate::Text,
     pub last_modified: Option<crate::DateTime>,
-    pub tzurl: Option<crate::Text>,
+    pub tzurl: Option<crate::Uri>,
     #[component(ignore)]
     pub standard: Vec<Prop>,
     #[component(ignore)]
