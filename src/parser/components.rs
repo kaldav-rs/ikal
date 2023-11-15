@@ -22,7 +22,6 @@ macro_rules! component {
 }
 
 component!(valarm, crate::VAlarm);
-component!(vevent, crate::VEvent);
 component!(vfreebusy, crate::VFreebusy);
 component!(vtodo, crate::VTodo);
 component!(vjournal, crate::VJournal);
@@ -43,6 +42,22 @@ pub(crate) fn display(_: &str) -> nom::IResult<&str, crate::valarm::Display> {
 
 pub(crate) fn email(_: &str) -> nom::IResult<&str, crate::valarm::Email> {
     unreachable!()
+}
+
+pub(crate) fn vevent(input: &str) -> nom::IResult<&str, crate::VEvent> {
+    map_res(
+        delimited(
+            tag("BEGIN:VEVENT\r\n"),
+            tuple((super::content_lines, many0(valarm))),
+            tag("END:VEVENT\r\n"),
+        ),
+        |(content_lines, alarms)| {
+            let mut vevent: crate::VEvent = content_lines.try_into()?;
+            vevent.alarms = alarms;
+
+            Ok::<_, crate::Error>(vevent)
+        }
+    )(input)
 }
 
 pub(crate) fn vtimezone(input: &str) -> nom::IResult<&str, crate::VTimezone> {

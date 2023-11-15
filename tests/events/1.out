@@ -58,6 +58,7 @@ Ok(
         related_to: [],
         resources: [],
         rdate: [],
+        alarms: [],
         x_prop: {},
         iana_prop: {},
     },

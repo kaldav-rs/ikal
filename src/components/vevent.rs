@@ -38,6 +38,8 @@ pub struct VEvent {
     #[component(append)]
     pub rdate: Vec<crate::Date>,
     #[component(ignore)]
+    pub alarms: Vec<crate::VAlarm>,
+    #[component(ignore)]
     pub x_prop: std::collections::BTreeMap<String, crate::ContentLine>,
     #[component(ignore)]
     pub iana_prop: std::collections::BTreeMap<String, crate::ContentLine>,
