@@ -4,6 +4,7 @@
 mod class;
 mod date;
 mod geo;
+mod rdate;
 mod recur;
 mod request_status;
 mod status;
@@ -18,6 +19,7 @@ pub use class::*;
 pub use date::*;
 pub use geo::*;
 pub use period::Period;
+pub use rdate::*;
 pub use recur::*;
 pub use request_status::*;
 pub use status::*;

@@ -1,3 +1,4 @@
+
 /**
  * See [3.8.5. Recurrence Component Properties](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5)
  */
@@ -20,16 +21,28 @@ pub(crate) fn exdate(input: crate::ContentLine) -> crate::Result<Vec<crate::Date
 /**
  * See [3.8.5.2. Recurrence Date-Times](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.2)
  */
-pub(crate) fn rdate(input: crate::ContentLine) -> crate::Result<Vec<crate::Date>> {
-    input
+pub(crate) fn rdate(input: crate::ContentLine) -> crate::Result<crate::RDate> {
+    let tokens = input
         .value
-        .split(',')
-        .map(|x| {
+        .split(',');
+
+    if input.params.get("VALUE") == Some(&"PERIOD".to_string()) {
+        let periods = tokens.map(|x| {
+            super::datatype::period(x)
+        })
+        .collect::<crate::Result<Vec<_>>>()?;
+
+        Ok(crate::RDate::Period(periods))
+    } else {
+        let dates = tokens.map(|x| {
             super::datatype::date_or_dt(x)
                 .map(|x| x.1)
                 .map_err(crate::Error::from)
         })
-        .collect()
+        .collect::<crate::Result<Vec<_>>>()?;
+
+        Ok(crate::RDate::Date(dates))
+    }
 }
 
 /**

@@ -38,8 +38,7 @@ pub struct Prop {
     pub tzoffsetfrom: chrono::offset::FixedOffset,
     pub rrule: Option<crate::Recur>,
     pub comment: Vec<crate::Text>,
-    #[component(append)]
-    pub rdate: Vec<crate::Date>,
+    pub rdate: Vec<crate::RDate>,
     pub tzname: Vec<crate::Text>,
     #[component(ignore)]
     pub x_prop: BTreeMap<String, crate::ContentLine>,

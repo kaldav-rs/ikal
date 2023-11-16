@@ -35,8 +35,7 @@ pub struct VEvent {
     pub related_to: Vec<crate::Text>,
     #[component(append)]
     pub resources: Vec<crate::Text>,
-    #[component(append)]
-    pub rdate: Vec<crate::Date>,
+    pub rdate: Vec<crate::RDate>,
     #[component(ignore)]
     pub alarms: Vec<crate::VAlarm>,
     #[component(ignore)]
