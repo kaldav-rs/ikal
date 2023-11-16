@@ -112,7 +112,12 @@ Ok(
                                 by_second: [],
                                 by_minute: [],
                                 by_hour: [],
-                                by_day: [],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: -1,
+                                    },
+                                ],
                                 by_monthday: [],
                                 by_yearday: [],
                                 by_weekno: [],
@@ -153,7 +158,12 @@ Ok(
                                 by_second: [],
                                 by_minute: [],
                                 by_hour: [],
-                                by_day: [],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: -1,
+                                    },
+                                ],
                                 by_monthday: [],
                                 by_yearday: [],
                                 by_weekno: [],

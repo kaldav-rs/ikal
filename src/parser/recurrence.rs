@@ -86,7 +86,7 @@ pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
             by_minute: map.get("BYMINUTE").map(by).transpose()?.unwrap_or_default(),
             by_hour: map.get("BYHOUR").map(by).transpose()?.unwrap_or_default(),
             by_day: map
-                .get("BYHOUR")
+                .get("BYDAY")
                 .map(bywdaylist)
                 .transpose()?
                 .unwrap_or_default(),
