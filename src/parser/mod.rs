@@ -58,7 +58,10 @@ fn key(input: &str) -> nom::IResult<&str, &str> {
 }
 
 fn attr(input: &str) -> nom::IResult<&str, &str> {
-    take_till(|c| c == ';' || c == ':')(input)
+    preceded(
+        opt(tag("\r\n ")),
+        take_till(|c| c == ';' || c == ':')
+    )(input)
 }
 
 fn value_line(input: &str) -> nom::IResult<&str, &str> {
