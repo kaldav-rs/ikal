@@ -35,7 +35,7 @@ pub struct VJournal {
 }
 
 impl VJournal {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self::default()
     }
 }

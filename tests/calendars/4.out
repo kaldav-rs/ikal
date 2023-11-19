@@ -2,11 +2,11 @@ Ok(
     VCalendar {
         prodid: Text {
             params: {},
-            text: "",
+            text: "-//Nextcloud calendar v1.5.0",
         },
         version: Text {
             params: {},
-            text: "",
+            text: "2.0",
         },
         calscale: None,
         method: None,

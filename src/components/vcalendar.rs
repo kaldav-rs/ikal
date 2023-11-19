@@ -26,7 +26,7 @@ pub struct VCalendar {
 }
 
 impl VCalendar {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self::default()
     }
 }

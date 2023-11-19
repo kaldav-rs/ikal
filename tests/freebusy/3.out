@@ -8,9 +8,11 @@ Ok(
             text: "19970901T115957Z-76A912@example.com",
         },
         contact: None,
-        dtstart: DateTime(
-            Local(
-                1998-03-13T15:17:11+01:00,
+        dtstart: Some(
+            DateTime(
+                Local(
+                    1998-03-13T15:17:11+01:00,
+                ),
             ),
         ),
         dtend: Some(

@@ -25,6 +25,7 @@ fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
     let parser = quote::format_ident!("{}", name.to_string().to_lowercase());
     let (impl_generics, ty_generics, where_clause) = ast.generics.split_for_impl();
 
+    let mut new_body = Vec::new();
     let mut from_body = Vec::new();
 
     for field in fields {
@@ -36,6 +37,13 @@ fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             continue;
         }
 
+        let field_name = name
+            .as_ref()
+            .unwrap()
+            .to_string()
+            .to_uppercase()
+            .replace('_', "-");
+
         let parser_fn = quote::quote! { crate::parser::#name(content_line)? };
         let parser = if is_option(ty) {
             quote::quote! { component.#name = Some(#parser_fn) }
@@ -46,15 +54,18 @@ fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
                 quote::quote! { component.#name.push(#parser_fn) }
             }
         } else {
-            quote::quote! { component.#name = #parser_fn }
+            let new_part = quote::quote! {
+                #name: crate::parser::#name(
+                    properties.get(#field_name)
+                    .ok_or_else(|| dbg!(crate::Error::Parser(concat!("Missing field ", #field_name).to_string())))?
+                    .clone()
+                )?
+            };
+
+            new_body.push(new_part);
+            quote::quote! { () }
         };
 
-        let field_name = name
-            .as_ref()
-            .unwrap()
-            .to_string()
-            .to_uppercase()
-            .replace('_', "-");
         let from_part = quote::quote! {
             #field_name => #parser
         };
@@ -69,7 +80,10 @@ fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             type Error = crate::Error;
 
             fn try_from(properties: std::collections::BTreeMap<String, crate::ContentLine>) -> crate::Result<Self> {
-                let mut component = Self::new();
+                let mut component = Self {
+                    #(#new_body, )*
+                    .. Default::default()
+                };
 
                 for (key, content_line) in properties {
                     match key.as_str() {

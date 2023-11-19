@@ -8,11 +8,7 @@ Ok(
             text: "19970901T095957Z-76A912@example.com",
         },
         contact: None,
-        dtstart: DateTime(
-            Naive(
-                1970-01-01T00:00:00,
-            ),
-        ),
+        dtstart: None,
         dtend: None,
         organizer: Some(
             Uri {
