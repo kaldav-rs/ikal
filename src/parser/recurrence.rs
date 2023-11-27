@@ -1,4 +1,3 @@
-
 /**
  * See [3.8.5. Recurrence Component Properties](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5)
  */
@@ -49,6 +48,7 @@ pub(crate) fn rdate(input: crate::ContentLine) -> crate::Result<crate::RDate> {
  * See [3.8.5.3. Recurrence Rule](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3)
  */
 pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
+    use nom::bytes::complete::take_till;
     use nom::character::complete::char;
     use nom::error::context;
     use nom::combinator::{map_res, opt};
@@ -59,7 +59,7 @@ pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
         context(
             "item",
             terminated(
-                separated_pair(super::key, char('='), super::key),
+                separated_pair(super::key, char('='), take_till(|c| c == ';')),
                 opt(char(';')),
             )
         )(input)
