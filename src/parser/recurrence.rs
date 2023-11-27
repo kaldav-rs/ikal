@@ -88,7 +88,7 @@ pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
             until: map
                 .get("UNTIL")
                 .map(|x| {
-                    super::datatype::date_time(x)
+                    super::datatype::date_or_dt(x)
                         .map(|x| x.1)
                         .map_err(crate::Error::from)
                 })

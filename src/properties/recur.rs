@@ -4,7 +4,7 @@
 #[derive(Clone, Debug, PartialEq)]
 pub struct Recur {
     pub freq: Freq,
-    pub until: Option<crate::DateTime>,
+    pub until: Option<crate::Date>,
     pub count: Option<u8>,
     pub interval: Option<u8>,
     pub by_second: Vec<i8>,
