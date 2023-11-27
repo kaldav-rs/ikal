@@ -63,6 +63,11 @@ impl Date {
             Self::DateTime(date_time) => date_time.format(fmt),
         }
     }
+
+    #[must_use]
+    pub fn has_time(&self) -> bool {
+        matches!(self, Self::DateTime(_))
+    }
 }
 
 impl Default for Date {
