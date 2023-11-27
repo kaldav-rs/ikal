@@ -9,29 +9,39 @@ pub(crate) fn rstatus(input: crate::ContentLine) -> crate::Result<crate::Request
     use nom::bytes::complete::{take_till, take_while};
     use nom::character::complete::char;
     use nom::combinator::{map, opt};
+    use nom::error::context;
     use nom::number::complete::float;
     use nom::sequence::{preceded, tuple};
 
-    fn text(input: &str) -> nom::IResult<&str, &str> {
-        take_till(|c| c == ';')(input)
+    fn text(input: &str) -> super::NomResult<&str, &str> {
+        context(
+            "text",
+            take_till(|c| c == ';')
+        )(input)
     }
 
-    fn end(input: &str) -> nom::IResult<&str, &str> {
-        take_while(|_| true)(input)
+    fn end(input: &str) -> super::NomResult<&str, &str> {
+        context(
+            "end",
+            take_while(|_| true)
+        )(input)
     }
 
-    map(
-        tuple((
-            float,
-            char(';'),
-            map(text, String::from),
-            opt(preceded(char(';'), map(end, String::from))),
-        )),
-        |(statcode, _, statdesc, extdata)| crate::RequestStatus {
-            statcode,
-            statdesc,
-            extdata,
-        },
+    context(
+        "rstatus",
+        map(
+            tuple((
+                float,
+                char(';'),
+                map(text, String::from),
+                opt(preceded(char(';'), map(end, String::from))),
+            )),
+            |(statcode, _, statdesc, extdata)| crate::RequestStatus {
+                statcode,
+                statdesc,
+                extdata,
+            },
+        )
     )(input.value.as_str())
     .map_err(crate::Error::from)
     .map(|(_, x)| x)

@@ -1,5 +1,6 @@
 use nom::bytes::complete::tag;
 use nom::combinator::{map, map_res, opt};
+use nom::error::{context, FromExternalError};
 use nom::sequence::{pair, preceded, terminated, tuple};
 
 /**
@@ -16,9 +17,9 @@ pub(crate) fn cal_address(input: &str) -> crate::Result<String> {
 /**
  * See [3.3.4. Date](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.4)
  */
-pub(crate) fn date(input: &str) -> nom::IResult<&str, chrono::NaiveDate> {
+pub(crate) fn date(input: &str) -> super::NomResult<&str, chrono::NaiveDate> {
     let date = chrono::NaiveDate::parse_from_str(input, "%Y%m%d")
-        .map_err(|_| nom::Err::Error(nom::error::Error::new(input, nom::error::ErrorKind::Fail)))?;
+        .map_err(|e| nom::Err::Error(nom::error::VerboseError::from_external_error(input, nom::error::ErrorKind::Fail, e)))?;
 
     Ok(("", date))
 }
@@ -26,11 +27,11 @@ pub(crate) fn date(input: &str) -> nom::IResult<&str, chrono::NaiveDate> {
 /**
  * See [3.3.5. Date-Time](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.5)
  */
-pub(crate) fn date_time(input: &str) -> nom::IResult<&str, crate::DateTime> {
+pub(crate) fn date_time(input: &str) -> super::NomResult<&str, crate::DateTime> {
     let date = input.to_string();
 
     let dt = chrono::NaiveDateTime::parse_from_str(date.trim_end_matches('Z'), "%Y%m%dT%H%M%S")
-        .map_err(|_| nom::Err::Error(nom::error::Error::new(input, nom::error::ErrorKind::Fail)))?;
+        .map_err(|e| nom::Err::Error(nom::error::VerboseError::from_external_error(input, nom::error::ErrorKind::Fail, e)))?;
 
     if date.ends_with('Z') {
         Ok((
@@ -42,28 +43,40 @@ pub(crate) fn date_time(input: &str) -> nom::IResult<&str, crate::DateTime> {
     }
 }
 
-pub(crate) fn date_or_dt(input: &str) -> nom::IResult<&str, crate::Date> {
-    nom::branch::alt((
-        map(date, crate::Date::Date),
-        map(date_time, crate::Date::DateTime),
-    ))(input)
+pub(crate) fn date_or_dt(input: &str) -> super::NomResult<&str, crate::Date> {
+    context(
+        "date_or_dt",
+        nom::branch::alt((
+            map(date, crate::Date::Date),
+            map(date_time, crate::Date::DateTime),
+        ))
+    )(input)
 }
 
 /**
  * See [3.3.6. Duration](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.6)
  */
-pub(crate) fn duration(input: &str) -> nom::IResult<&str, chrono::Duration> {
-    fn week(input: &str) -> nom::IResult<&str, i64> {
-        map_res(terminated(super::digits, tag("W")), str::parse)(input)
+pub(crate) fn duration(input: &str) -> super::NomResult<&str, chrono::Duration> {
+    fn week(input: &str) -> super::NomResult<&str, i64> {
+        context(
+            "week",
+            map_res(terminated(super::digits, tag("W")), str::parse)
+        )(input)
     }
 
-    fn day(input: &str) -> nom::IResult<&str, i64> {
-        map_res(terminated(super::digits, tag("D")), str::parse)(input)
+    fn day(input: &str) -> super::NomResult<&str, i64> {
+        context(
+            "day",
+            map_res(terminated(super::digits, tag("D")), str::parse)
+        )(input)
     }
 
-    fn time(input: &str) -> nom::IResult<&str, (i64, i64, i64)> {
+    fn time(input: &str) -> super::NomResult<&str, (i64, i64, i64)> {
         let (input, (h, i, s)) =
-            preceded(tag("T"), tuple((opt(hour), opt(minute), opt(seconde))))(input)?;
+            context(
+                "time",
+                preceded(tag("T"), tuple((opt(hour), opt(minute), opt(seconde))))
+            )(input)?;
 
         Ok((
             input,
@@ -75,40 +88,52 @@ pub(crate) fn duration(input: &str) -> nom::IResult<&str, chrono::Duration> {
         ))
     }
 
-    fn hour(input: &str) -> nom::IResult<&str, i64> {
-        map_res(terminated(super::digits, tag("H")), str::parse)(input)
+    fn hour(input: &str) -> super::NomResult<&str, i64> {
+        context(
+            "hour",
+            map_res(terminated(super::digits, tag("H")), str::parse)
+        )(input)
     }
 
-    fn minute(input: &str) -> nom::IResult<&str, i64> {
-        map_res(terminated(super::digits, tag("M")), str::parse)(input)
+    fn minute(input: &str) -> super::NomResult<&str, i64> {
+        context(
+            "minute",
+            map_res(terminated(super::digits, tag("M")), str::parse)
+        )(input)
     }
 
-    fn seconde(input: &str) -> nom::IResult<&str, i64> {
-        map_res(terminated(super::digits, tag("S")), str::parse)(input)
+    fn seconde(input: &str) -> super::NomResult<&str, i64> {
+        context(
+            "seconde",
+            map_res(terminated(super::digits, tag("S")), str::parse)
+        )(input)
     }
 
-    map(
-        pair(
-            opt(tag("-")),
-            preceded(tag("P"), tuple((opt(week), opt(day), opt(time)))),
-        ),
-        |(neg, (w, d, t))| {
-            let mut duration = chrono::Duration::weeks(w.unwrap_or_default())
-                + chrono::Duration::days(d.unwrap_or_default());
+    context(
+        "duration",
+        map(
+            pair(
+                opt(tag("-")),
+                preceded(tag("P"), tuple((opt(week), opt(day), opt(time)))),
+            ),
+            |(neg, (w, d, t))| {
+                let mut duration = chrono::Duration::weeks(w.unwrap_or_default())
+                    + chrono::Duration::days(d.unwrap_or_default());
 
-            if let Some((h, i, s)) = t {
-                duration = duration
-                    + chrono::Duration::hours(h)
-                    + chrono::Duration::minutes(i)
-                    + chrono::Duration::seconds(s);
-            }
+                if let Some((h, i, s)) = t {
+                    duration = duration
+                        + chrono::Duration::hours(h)
+                        + chrono::Duration::minutes(i)
+                        + chrono::Duration::seconds(s);
+                }
 
-            if neg.is_some() {
-                -duration
-            } else {
-                duration
-            }
-        },
+                if neg.is_some() {
+                    -duration
+                } else {
+                    duration
+                }
+            },
+        )
     )(input)
 }
 

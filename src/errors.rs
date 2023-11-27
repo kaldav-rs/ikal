@@ -24,8 +24,8 @@ pub enum Error {
     Weekday(String),
 }
 
-impl<I: std::fmt::Debug> From<nom::Err<nom::error::Error<I>>> for Error {
-    fn from(value: nom::Err<nom::error::Error<I>>) -> Self {
-        Self::Parser(format!("{value}"))
+impl<I: std::fmt::Debug> From<nom::Err<nom::error::VerboseError<I>>> for Error {
+    fn from(value: nom::Err<nom::error::VerboseError<I>>) -> Self {
+        Self::Parser(format!("{value:#?}"))
     }
 }
