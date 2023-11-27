@@ -117,7 +117,7 @@ fn quote(chr: char) -> bool {
 fn quoted_param(input: &str) -> NomResult<&str, (&str, &str)> {
     context(
         "quoted_param",
-        separated_pair(key, char('='), take_till(quote))
+        separated_pair(key, tag("=\""), take_till(quote))
     )(input)
 }
 
@@ -128,7 +128,7 @@ fn param(input: &str) -> NomResult<&str, (&str, &str)> {
     context(
         "param",
         alt((
-            delimited(tag(";\""), quoted_param, char('"')),
+            delimited(char(';'), quoted_param, char('"')),
             preceded(char(';'), separated_pair(key, char('='), attr)),
         ))
     )(input)
