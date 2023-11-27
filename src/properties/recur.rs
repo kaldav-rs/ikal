@@ -92,7 +92,7 @@ impl std::str::FromStr for Freq {
 #[derive(Clone, Debug, PartialEq)]
 pub struct WeekdayNum {
     pub weekday: Weekday,
-    pub ord: i8,
+    pub ord: Option<i8>,
 }
 
 impl TryFrom<String> for WeekdayNum {

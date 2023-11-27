@@ -117,7 +117,9 @@ Ok(
                                 by_day: [
                                     WeekdayNum {
                                         weekday: Sunday,
-                                        ord: -1,
+                                        ord: Some(
+                                            -1,
+                                        ),
                                     },
                                 ],
                                 by_monthday: [],
@@ -163,7 +165,9 @@ Ok(
                                 by_day: [
                                     WeekdayNum {
                                         weekday: Sunday,
-                                        ord: -1,
+                                        ord: Some(
+                                            -1,
+                                        ),
                                     },
                                 ],
                                 by_monthday: [],

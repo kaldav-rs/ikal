@@ -212,7 +212,7 @@ pub(crate) fn weekdaynum(input: &str) -> NomResult<&str, crate::WeekdayNum> {
     context(
         "weekdaynum",
         map(
-            tuple((nom::character::complete::i8, weekday)),
+            tuple((opt(nom::character::complete::i8), weekday)),
             |(ord, weekday)| crate::WeekdayNum { weekday, ord },
         )
     )(input)
