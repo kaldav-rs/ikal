@@ -1,3 +1,5 @@
+#![warn(warnings)]
+
 mod components;
 mod content_line;
 mod errors;
