@@ -25,3 +25,6 @@ features = ["clock", "std"]
 [dependencies.ikal-derive]
 version = "0.1"
 path = "derive"
+
+[dev-dependencies]
+similar-asserts = "1.5"

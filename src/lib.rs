@@ -112,22 +112,22 @@ CALSCALE:GREGORIAN
                     Err(_) => continue,
                 };
 
-                let expected = match file_get_contents(&file.with_extension("out")) {
-                    Ok(expected) => expected,
-                    Err(_) => continue,
-                };
-
-                let fail = file.with_extension("fail");
-                std::fs::remove_file(&fail).ok();
-
                 let component: crate::Result<T> = input.try_into();
-                let actual = format!("{component:#?}\n");
 
-                if actual != expected {
-                    std::fs::write(&fail, &actual).unwrap();
+                if let Ok(expected) = file_get_contents(&file.with_extension("out")) {
+                    let fail = file.with_extension("fail");
+                    std::fs::remove_file(&fail).ok();
+
+                    let actual = format!("{component:#?}\n");
+
+                    if actual != expected {
+                        std::fs::write(&fail, &actual).unwrap();
+                    }
+
+                    similar_asserts::assert_eq!(actual, expected, "{file:?}");
+                } else {
+                    assert!(component.is_err());
                 }
-
-                assert_eq!(actual, expected, "{file:?}");
             }
         }
     }
