@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 /**
  * See [3.3.11. Text](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.11)
  */
-#[derive(Clone, Debug, Default, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Text {
     pub params: BTreeMap<String, String>,
     pub text: String,

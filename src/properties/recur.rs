@@ -1,7 +1,7 @@
 /**
  * See [3.3.10. Recurrence Rule](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3)
  */
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Recur {
     pub freq: Freq,
     pub until: Option<crate::Date>,
@@ -42,7 +42,7 @@ impl std::str::FromStr for Recur {
         crate::parser::rrule(s.into())
     }
 }
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Freq {
     Secondly,
     Minutely,
@@ -89,7 +89,7 @@ impl std::str::FromStr for Freq {
     }
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct WeekdayNum {
     pub weekday: Weekday,
     pub ord: Option<i8>,
@@ -121,7 +121,7 @@ impl std::str::FromStr for WeekdayNum {
     }
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Weekday {
     Sunday,
     Monday,

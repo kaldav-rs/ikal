@@ -1,7 +1,7 @@
 /**
  * See [3.3.9. Period of Time](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.9)
  */
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Period {
     StartEnd(StartEnd),
     StartDur(StartDur),
@@ -31,13 +31,13 @@ impl std::str::FromStr for Period {
     }
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct StartEnd {
     pub start: crate::DateTime,
     pub end: crate::DateTime,
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct StartDur {
     pub start: crate::DateTime,
     pub duration: chrono::Duration,

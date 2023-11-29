@@ -1,4 +1,4 @@
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DateTime {
     Naive(chrono::NaiveDateTime),
     Local(chrono::DateTime<chrono::Local>),
@@ -38,7 +38,7 @@ impl std::fmt::Display for DateTime {
     }
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Date {
     Date(chrono::NaiveDate),
     DateTime(DateTime),

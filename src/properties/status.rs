@@ -1,7 +1,7 @@
 /**
  * See [3.8.1.11. Status](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.11)
  */
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Status {
     /** Indicates event is tentative */
     Tentative,

@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 /**
  * See [3.6.5. Time Zone Component](https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.5)
  */
-#[derive(Debug, Default, PartialEq, crate::Component)]
+#[derive(Debug, Default, Eq, PartialEq, crate::Component)]
 pub struct VTimezone {
     pub tzid: crate::Text,
     pub last_modified: Option<crate::DateTime>,
@@ -25,13 +25,13 @@ impl VTimezone {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub(crate) enum Component {
     Standard(Prop),
     Daylight(Prop),
 }
 
-#[derive(Debug, PartialEq, crate::Component)]
+#[derive(Debug, Eq, PartialEq, crate::Component)]
 pub struct Prop {
     pub dtstart: crate::Date,
     pub tzoffsetto: chrono::offset::FixedOffset,

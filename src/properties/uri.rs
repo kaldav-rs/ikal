@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 /**
  * See [3.3.13. URI)
  */
-#[derive(Clone, Debug, Default, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Uri {
     pub params: BTreeMap<String, String>,
     pub uri: String,

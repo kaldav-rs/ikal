@@ -4,7 +4,7 @@ use std::collections::BTreeMap;
  * See [3.1. Content Lines](https://datatracker.ietf.org/doc/html/rfc5545#section-3.1)
  */
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ContentLine {
     pub params: BTreeMap<String, String>,
     pub value: String,

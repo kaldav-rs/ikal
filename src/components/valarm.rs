@@ -1,7 +1,7 @@
 /**
  * See [3.6.6. Alarm Component](https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.6)
  */
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum VAlarm {
     Audio(Audio),
     Display(Display),
@@ -52,7 +52,7 @@ impl std::str::FromStr for VAlarm {
     }
 }
 
-#[derive(Clone, Debug, Default, PartialEq, crate::Component)]
+#[derive(Clone, Debug, Default, Eq, PartialEq, crate::Component)]
 pub struct Audio {
     pub action: crate::Text,
     pub trigger: crate::Trigger,
@@ -72,7 +72,7 @@ impl Audio {
     }
 }
 
-#[derive(Clone, Debug, Default, PartialEq, crate::Component)]
+#[derive(Clone, Debug, Default, Eq, PartialEq, crate::Component)]
 pub struct Display {
     pub action: crate::Text,
     pub trigger: crate::Trigger,
@@ -92,7 +92,7 @@ impl Display {
     }
 }
 
-#[derive(Clone, Debug, Default, PartialEq, crate::Component)]
+#[derive(Clone, Debug, Default, Eq, PartialEq, crate::Component)]
 pub struct Email {
     pub action: crate::Text,
     pub trigger: crate::Trigger,
