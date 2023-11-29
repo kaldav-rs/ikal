@@ -1,7 +1,7 @@
 /**
  * See [3.6.3. Journal Component](https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.3)
  */
-#[derive(Debug, Default, PartialEq, crate::Component)]
+#[derive(Clone, Debug, Default, PartialEq, crate::Component)]
 pub struct VJournal {
     pub dtstamp: crate::DateTime,
     pub uid: crate::Text,

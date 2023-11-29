@@ -1,7 +1,7 @@
 /**
  * See [3.6. Calendar Components](https://datatracker.ietf.org/doc/html/rfc5545#section-3.4)
  */
-#[derive(Debug, Default, PartialEq, crate::Component)]
+#[derive(Clone, Debug, Default, PartialEq, crate::Component)]
 pub struct VCalendar {
     pub prodid: crate::Text,
     pub version: crate::Text,
