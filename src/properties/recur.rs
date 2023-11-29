@@ -121,7 +121,7 @@ impl std::str::FromStr for WeekdayNum {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub enum Weekday {
     Sunday,
     Monday,

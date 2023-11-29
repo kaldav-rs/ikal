@@ -21,6 +21,13 @@ impl DateTime {
             Self::Local(date) => date.format(fmt),
         }
     }
+
+    pub fn naive(&self) -> chrono::NaiveDateTime {
+        match self {
+            Self::Naive(date) => date.clone(),
+            Self::Local(date) => date.naive_local(),
+        }
+    }
 }
 
 impl Default for DateTime {
@@ -29,12 +36,37 @@ impl Default for DateTime {
     }
 }
 
+impl std::ops::Sub for DateTime {
+    type Output = chrono::Duration;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        self.naive().sub(rhs.naive())
+    }
+}
+
+impl std::ops::Sub<chrono::Duration> for DateTime {
+    type Output = chrono::NaiveDateTime;
+
+    fn sub(self, rhs: chrono::Duration) -> Self::Output {
+        self.naive().sub(rhs)
+    }
+}
+
 impl std::fmt::Display for DateTime {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Naive(date) => date.fmt(f),
-            Self::Local(date) => date.fmt(f),
-        }
+        self.naive().fmt(f)
+    }
+}
+
+impl std::cmp::PartialOrd for DateTime {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        self.naive().partial_cmp(&other.naive())
+    }
+}
+
+impl std::cmp::Ord for DateTime {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.naive().cmp(&other.naive())
     }
 }
 
@@ -81,6 +113,28 @@ impl std::fmt::Display for Date {
         match self {
             Self::Date(date) => date.fmt(f),
             Self::DateTime(date_time) => date_time.fmt(f),
+        }
+    }
+}
+
+impl std::cmp::PartialOrd for Date {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        match (self, other) {
+            (Self::Date(a), Self::Date(b)) => a.partial_cmp(b),
+            (Self::DateTime(a), Self::DateTime(b)) => a.partial_cmp(b),
+            (Self::Date(a), Self::DateTime(b)) => a.partial_cmp(&b.date_naive()),
+            (Self::DateTime(a), Self::Date(b)) => a.date_naive().partial_cmp(&b),
+        }
+    }
+}
+
+impl std::cmp::Ord for Date {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        match (self, other) {
+            (Self::Date(a), Self::Date(b)) => a.cmp(b),
+            (Self::DateTime(a), Self::DateTime(b)) => a.cmp(b),
+            (Self::Date(a), Self::DateTime(b)) => a.cmp(&b.date_naive()),
+            (Self::DateTime(a), Self::Date(b)) => a.date_naive().cmp(&b),
         }
     }
 }
