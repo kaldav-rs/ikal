@@ -18,8 +18,13 @@ pub(crate) fn cal_address(input: &str) -> crate::Result<String> {
  * See [3.3.4. Date](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.4)
  */
 pub(crate) fn date(input: &str) -> super::NomResult<&str, chrono::NaiveDate> {
-    let date = chrono::NaiveDate::parse_from_str(input, "%Y%m%d")
-        .map_err(|e| nom::Err::Error(nom::error::VerboseError::from_external_error(input, nom::error::ErrorKind::Fail, e)))?;
+    let date = chrono::NaiveDate::parse_from_str(input, "%Y%m%d").map_err(|e| {
+        nom::Err::Error(nom::error::VerboseError::from_external_error(
+            input,
+            nom::error::ErrorKind::Fail,
+            e,
+        ))
+    })?;
 
     Ok(("", date))
 }
@@ -31,7 +36,13 @@ pub(crate) fn date_time(input: &str) -> super::NomResult<&str, crate::DateTime> 
     let date = input.to_string();
 
     let dt = chrono::NaiveDateTime::parse_from_str(date.trim_end_matches('Z'), "%Y%m%dT%H%M%S")
-        .map_err(|e| nom::Err::Error(nom::error::VerboseError::from_external_error(input, nom::error::ErrorKind::Fail, e)))?;
+        .map_err(|e| {
+            nom::Err::Error(nom::error::VerboseError::from_external_error(
+                input,
+                nom::error::ErrorKind::Fail,
+                e,
+            ))
+        })?;
 
     if date.ends_with('Z') {
         Ok((
@@ -49,7 +60,7 @@ pub(crate) fn date_or_dt(input: &str) -> super::NomResult<&str, crate::Date> {
         nom::branch::alt((
             map(date, crate::Date::Date),
             map(date_time, crate::Date::DateTime),
-        ))
+        )),
     )(input)
 }
 
@@ -60,23 +71,22 @@ pub(crate) fn duration(input: &str) -> super::NomResult<&str, chrono::Duration> 
     fn week(input: &str) -> super::NomResult<&str, i64> {
         context(
             "week",
-            map_res(terminated(super::digits, tag("W")), str::parse)
+            map_res(terminated(super::digits, tag("W")), str::parse),
         )(input)
     }
 
     fn day(input: &str) -> super::NomResult<&str, i64> {
         context(
             "day",
-            map_res(terminated(super::digits, tag("D")), str::parse)
+            map_res(terminated(super::digits, tag("D")), str::parse),
         )(input)
     }
 
     fn time(input: &str) -> super::NomResult<&str, (i64, i64, i64)> {
-        let (input, (h, i, s)) =
-            context(
-                "time",
-                preceded(tag("T"), tuple((opt(hour), opt(minute), opt(seconde))))
-            )(input)?;
+        let (input, (h, i, s)) = context(
+            "time",
+            preceded(tag("T"), tuple((opt(hour), opt(minute), opt(seconde)))),
+        )(input)?;
 
         Ok((
             input,
@@ -91,21 +101,21 @@ pub(crate) fn duration(input: &str) -> super::NomResult<&str, chrono::Duration> 
     fn hour(input: &str) -> super::NomResult<&str, i64> {
         context(
             "hour",
-            map_res(terminated(super::digits, tag("H")), str::parse)
+            map_res(terminated(super::digits, tag("H")), str::parse),
         )(input)
     }
 
     fn minute(input: &str) -> super::NomResult<&str, i64> {
         context(
             "minute",
-            map_res(terminated(super::digits, tag("M")), str::parse)
+            map_res(terminated(super::digits, tag("M")), str::parse),
         )(input)
     }
 
     fn seconde(input: &str) -> super::NomResult<&str, i64> {
         context(
             "seconde",
-            map_res(terminated(super::digits, tag("S")), str::parse)
+            map_res(terminated(super::digits, tag("S")), str::parse),
         )(input)
     }
 
@@ -133,7 +143,7 @@ pub(crate) fn duration(input: &str) -> super::NomResult<&str, chrono::Duration> 
                     duration
                 }
             },
-        )
+        ),
     )(input)
 }
 

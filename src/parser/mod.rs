@@ -53,34 +53,22 @@ fn is_line_ending(chr: char) -> bool {
 }
 
 fn digits(input: &str) -> NomResult<&str, &str> {
-    context(
-        "digits",
-        take_while(is_digit)
-    )(input)
+    context("digits", take_while(is_digit))(input)
 }
 
 fn key(input: &str) -> NomResult<&str, &str> {
-    context(
-        "key",
-        take_while(is_alphanumeric)
-    )(input)
+    context("key", take_while(is_alphanumeric))(input)
 }
 
 fn attr(input: &str) -> NomResult<&str, &str> {
     context(
         "attr",
-        preceded(
-            opt(tag("\r\n ")),
-            take_till(|c| c == ';' || c == ':')
-        )
+        preceded(opt(tag("\r\n ")), take_till(|c| c == ';' || c == ':')),
     )(input)
 }
 
 fn value_line(input: &str) -> NomResult<&str, &str> {
-    context(
-        "value_line",
-        take_till(is_line_ending)
-    )(input)
+    context("value_line", take_till(is_line_ending))(input)
 }
 
 fn value_part(input: &str) -> NomResult<&str, &str> {
@@ -89,7 +77,7 @@ fn value_part(input: &str) -> NomResult<&str, &str> {
         map(
             tuple((value_line, line_ending, tag(" "))),
             |(value, _, _)| value,
-        )
+        ),
     )(input)
 }
 
@@ -106,7 +94,7 @@ fn value(input: &str) -> NomResult<&str, String> {
                 }
                 acc + value_end
             },
-        )
+        ),
     )(input)
 }
 
@@ -117,7 +105,7 @@ fn quote(chr: char) -> bool {
 fn quoted_param(input: &str) -> NomResult<&str, (&str, &str)> {
     context(
         "quoted_param",
-        separated_pair(key, tag("=\""), take_till(quote))
+        separated_pair(key, tag("=\""), take_till(quote)),
     )(input)
 }
 
@@ -130,7 +118,7 @@ fn param(input: &str) -> NomResult<&str, (&str, &str)> {
         alt((
             delimited(char(';'), quoted_param, char('"')),
             preceded(char(';'), separated_pair(key, char('='), attr)),
-        ))
+        )),
     )(input)
 }
 
@@ -140,7 +128,7 @@ fn params(input: &str) -> NomResult<&str, BTreeMap<String, String>> {
         fold_many0(param, BTreeMap::new, |mut acc, (key, value)| {
             acc.insert(key.to_string(), value.to_string());
             acc
-        })
+        }),
     )(input)
 }
 
@@ -169,19 +157,17 @@ pub(crate) fn content_line(input: &str) -> NomResult<&str, (&str, crate::Content
                     },
                 )
             },
-        )
+        ),
     )(input)
 }
 
-pub(crate) fn content_lines(
-    input: &str,
-) -> NomResult<&str, BTreeMap<String, crate::ContentLine>> {
+pub(crate) fn content_lines(input: &str) -> NomResult<&str, BTreeMap<String, crate::ContentLine>> {
     context(
         "content_lines",
         fold_many0(content_line, BTreeMap::new, |mut acc, (key, value)| {
             acc.insert(key.to_string(), value);
             acc
-        })
+        }),
     )(input)
 }
 
@@ -204,7 +190,7 @@ pub(crate) fn weekday(input: &str) -> NomResult<&str, crate::Weekday> {
             };
 
             Ok(weekday)
-        })
+        }),
     )(input)
 }
 
@@ -214,6 +200,6 @@ pub(crate) fn weekdaynum(input: &str) -> NomResult<&str, crate::WeekdayNum> {
         map(
             tuple((opt(nom::character::complete::i8), weekday)),
             |(ord, weekday)| crate::WeekdayNum { weekday, ord },
-        )
+        ),
     )(input)
 }

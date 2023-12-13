@@ -21,24 +21,22 @@ pub(crate) fn exdate(input: crate::ContentLine) -> crate::Result<Vec<crate::Date
  * See [3.8.5.2. Recurrence Date-Times](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.2)
  */
 pub(crate) fn rdate(input: crate::ContentLine) -> crate::Result<crate::RDate> {
-    let tokens = input
-        .value
-        .split(',');
+    let tokens = input.value.split(',');
 
     if input.params.get("VALUE") == Some(&"PERIOD".to_string()) {
-        let periods = tokens.map(|x| {
-            super::datatype::period(x)
-        })
-        .collect::<crate::Result<Vec<_>>>()?;
+        let periods = tokens
+            .map(|x| super::datatype::period(x))
+            .collect::<crate::Result<Vec<_>>>()?;
 
         Ok(crate::RDate::Period(periods))
     } else {
-        let dates = tokens.map(|x| {
-            super::datatype::date_or_dt(x)
-                .map(|x| x.1)
-                .map_err(crate::Error::from)
-        })
-        .collect::<crate::Result<Vec<_>>>()?;
+        let dates = tokens
+            .map(|x| {
+                super::datatype::date_or_dt(x)
+                    .map(|x| x.1)
+                    .map_err(crate::Error::from)
+            })
+            .collect::<crate::Result<Vec<_>>>()?;
 
         Ok(crate::RDate::Date(dates))
     }
@@ -50,8 +48,8 @@ pub(crate) fn rdate(input: crate::ContentLine) -> crate::Result<crate::RDate> {
 pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
     use nom::bytes::complete::take_till;
     use nom::character::complete::char;
-    use nom::error::context;
     use nom::combinator::{map_res, opt};
+    use nom::error::context;
     use nom::multi::many1;
     use nom::sequence::{separated_pair, terminated};
 
@@ -61,7 +59,7 @@ pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
             terminated(
                 separated_pair(super::key, char('='), take_till(|c| c == ';')),
                 opt(char(';')),
-            )
+            ),
         )(input)
     }
 
@@ -126,7 +124,7 @@ pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
             };
 
             Ok::<_, crate::Error>(recur)
-        })
+        }),
     )(input.value.as_str())
     .map(|(_, x)| x)
     .map_err(crate::Error::from)

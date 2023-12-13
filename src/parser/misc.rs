@@ -14,17 +14,11 @@ pub(crate) fn rstatus(input: crate::ContentLine) -> crate::Result<crate::Request
     use nom::sequence::{preceded, tuple};
 
     fn text(input: &str) -> super::NomResult<&str, &str> {
-        context(
-            "text",
-            take_till(|c| c == ';')
-        )(input)
+        context("text", take_till(|c| c == ';'))(input)
     }
 
     fn end(input: &str) -> super::NomResult<&str, &str> {
-        context(
-            "end",
-            take_while(|_| true)
-        )(input)
+        context("end", take_while(|_| true))(input)
     }
 
     context(
@@ -41,7 +35,7 @@ pub(crate) fn rstatus(input: crate::ContentLine) -> crate::Result<crate::Request
                 statdesc,
                 extdata,
             },
-        )
+        ),
     )(input.value.as_str())
     .map_err(crate::Error::from)
     .map(|(_, x)| x)

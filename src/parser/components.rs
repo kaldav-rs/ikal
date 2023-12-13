@@ -59,8 +59,8 @@ pub(crate) fn vevent(input: &str) -> super::NomResult<&str, crate::VEvent> {
                 vevent.alarms = alarms;
 
                 Ok::<_, crate::Error>(vevent)
-            }
-        )
+            },
+        ),
     )(input)
 }
 
@@ -95,7 +95,7 @@ pub(crate) fn vtimezone(input: &str) -> super::NomResult<&str, crate::VTimezone>
 
                 Ok::<_, crate::Error>(vtimezone)
             },
-        )
+        ),
     )(input)
 }
 
@@ -109,15 +109,12 @@ pub(crate) fn component(input: &str) -> super::NomResult<&str, crate::Component>
             map(vjournal, crate::Component::Journal),
             map(vtimezone, crate::Component::Timezone),
             map(vtodo, crate::Component::Todo),
-        ))
+        )),
     )(input)
 }
 
 pub(crate) fn components(input: &str) -> super::NomResult<&str, Vec<crate::Component>> {
-    context(
-        "components",
-        many0(component)
-    )(input)
+    context("components", many0(component))(input)
 }
 
 pub(crate) fn vcalendar(input: &str) -> super::NomResult<&str, crate::VCalendar> {
@@ -130,8 +127,13 @@ pub(crate) fn vcalendar(input: &str) -> super::NomResult<&str, crate::VCalendar>
                 tag("END:VCALENDAR"),
             ),
             |(content_lines, components)| {
-                let mut vcalendar: crate::VCalendar = content_lines.try_into()
-                    .map_err(|e| nom::error::VerboseError::from_external_error(input, nom::error::ErrorKind::Fail, e))?;
+                let mut vcalendar: crate::VCalendar = content_lines.try_into().map_err(|e| {
+                    nom::error::VerboseError::from_external_error(
+                        input,
+                        nom::error::ErrorKind::Fail,
+                        e,
+                    )
+                })?;
 
                 for component in components {
                     match component {
@@ -146,6 +148,6 @@ pub(crate) fn vcalendar(input: &str) -> super::NomResult<&str, crate::VCalendar>
 
                 Ok::<_, nom::error::VerboseError<_>>(vcalendar)
             },
-        )
+        ),
     )(input)
 }

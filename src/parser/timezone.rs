@@ -19,7 +19,9 @@ pub(crate) fn tzname(input: crate::ContentLine) -> crate::Result<crate::Text> {
 /**
  * See [3.8.3.3. Time Zone Offset From](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.3.3)
  */
-pub(crate) fn tzoffsetfrom(input: crate::ContentLine) -> crate::Result<chrono::offset::FixedOffset> {
+pub(crate) fn tzoffsetfrom(
+    input: crate::ContentLine,
+) -> crate::Result<chrono::offset::FixedOffset> {
     input.value.parse().map_err(crate::Error::from)
 }
 
