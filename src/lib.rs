@@ -107,14 +107,14 @@ CALSCALE:GREGORIAN
             };
 
             if extension == std::ffi::OsStr::new("ics") {
-                let input = match file_get_contents(&file) {
+                let input = match std::fs::read_to_string(&file) {
                     Ok(input) => input,
                     Err(_) => continue,
                 };
 
                 let component: crate::Result<T> = input.try_into();
 
-                if let Ok(expected) = file_get_contents(&file.with_extension("out")) {
+                if let Ok(expected) = std::fs::read_to_string(&file.with_extension("out")) {
                     let fail = file.with_extension("fail");
                     std::fs::remove_file(&fail).ok();
 
@@ -130,17 +130,5 @@ CALSCALE:GREGORIAN
                 }
             }
         }
-    }
-
-    fn file_get_contents(path: &std::path::PathBuf) -> Result<String, std::io::Error> {
-        use std::io::Read;
-
-        let mut content = String::new();
-
-        let mut file = std::fs::File::open(path)?;
-
-        file.read_to_string(&mut content)?;
-
-        Ok(content)
     }
 }
