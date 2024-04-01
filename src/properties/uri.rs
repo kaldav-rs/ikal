@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 /**
- * See [3.3.13. URI)
+ * See [3.3.13. URI](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.13)
  */
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Uri {
