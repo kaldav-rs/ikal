@@ -1,0 +1,45 @@
+Ok(
+    VTimezone {
+        tzid: Text {
+            params: {},
+            text: "America/Los Angeles",
+        },
+        last_modified: None,
+        tzurl: None,
+        standard: [
+            Prop {
+                dtstart: DateTime(
+                    Naive(
+                        1883-11-18T12:07:02,
+                    ),
+                ),
+                tzoffsetto: -08:00,
+                tzoffsetfrom: -07:52,
+                rrule: None,
+                comment: [],
+                rdate: [
+                    Date(
+                        [
+                            DateTime(
+                                Naive(
+                                    1883-11-18T12:07:02,
+                                ),
+                            ),
+                        ],
+                    ),
+                ],
+                tzname: [
+                    Text {
+                        params: {},
+                        text: "PST",
+                    },
+                ],
+                x_prop: {},
+                iana_prop: {},
+            },
+        ],
+        daylight: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

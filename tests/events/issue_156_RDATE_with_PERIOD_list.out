@@ -1,0 +1,83 @@
+Ok(
+    VEvent {
+        dtstamp: Naive(
+            2017-02-09T19:23:58,
+        ),
+        uid: Text {
+            params: {},
+            text: "rdate_period",
+        },
+        dtstart: DateTime(
+            Local(
+                1996-12-30T03:00:00+01:00,
+            ),
+        ),
+        class: None,
+        created: None,
+        description: None,
+        geo: None,
+        last_modified: None,
+        location: None,
+        organizer: None,
+        priority: None,
+        sequence: None,
+        status: None,
+        summary: Some(
+            Text {
+                params: {},
+                text: "RDATE period",
+            },
+        ),
+        transp: None,
+        url: None,
+        recurid: None,
+        rrule: None,
+        dtend: Some(
+            DateTime(
+                Local(
+                    1996-12-30T07:00:00+01:00,
+                ),
+            ),
+        ),
+        duration: None,
+        attach: [],
+        attendee: [],
+        categories: [],
+        comment: [],
+        contact: [],
+        exdate: [],
+        rstatus: [],
+        related_to: [],
+        resources: [],
+        rdate: [
+            Period(
+                [
+                    StartEnd(
+                        StartEnd {
+                            start: Local(
+                                1997-01-01T19:00:00+01:00,
+                            ),
+                            end: Local(
+                                1997-01-02T08:00:00+01:00,
+                            ),
+                        },
+                    ),
+                    StartDur(
+                        StartDur {
+                            start: Local(
+                                1997-01-09T19:00:00+01:00,
+                            ),
+                            duration: Duration {
+                                secs: 19800,
+                                nanos: 0,
+                            },
+                        },
+                    ),
+                ],
+            ),
+        ],
+        alarms: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

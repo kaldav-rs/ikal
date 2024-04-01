@@ -1,0 +1,112 @@
+Ok(
+    VTimezone {
+        tzid: Text {
+            params: {},
+            text: "(UTC-03:00) Brasília",
+        },
+        last_modified: None,
+        tzurl: None,
+        standard: [
+            Prop {
+                dtstart: DateTime(
+                    Naive(
+                        1601-01-01T23:59:59,
+                    ),
+                ),
+                tzoffsetto: -03:00,
+                tzoffsetfrom: -02:00,
+                rrule: Some(
+                    Recur {
+                        freq: Yearly,
+                        until: None,
+                        count: None,
+                        interval: Some(
+                            1,
+                        ),
+                        by_second: [],
+                        by_minute: [],
+                        by_hour: [],
+                        by_day: [
+                            WeekdayNum {
+                                weekday: Saturday,
+                                ord: Some(
+                                    3,
+                                ),
+                            },
+                        ],
+                        by_monthday: [],
+                        by_yearday: [],
+                        by_weekno: [],
+                        by_month: [
+                            2,
+                        ],
+                        by_setpos: [],
+                        wkst: None,
+                    },
+                ),
+                comment: [],
+                rdate: [],
+                tzname: [
+                    Text {
+                        params: {},
+                        text: "Brasília standard",
+                    },
+                ],
+                x_prop: {},
+                iana_prop: {},
+            },
+        ],
+        daylight: [
+            Prop {
+                dtstart: DateTime(
+                    Naive(
+                        1601-01-01T23:59:59,
+                    ),
+                ),
+                tzoffsetto: -02:00,
+                tzoffsetfrom: -03:00,
+                rrule: Some(
+                    Recur {
+                        freq: Yearly,
+                        until: None,
+                        count: None,
+                        interval: Some(
+                            1,
+                        ),
+                        by_second: [],
+                        by_minute: [],
+                        by_hour: [],
+                        by_day: [
+                            WeekdayNum {
+                                weekday: Saturday,
+                                ord: Some(
+                                    2,
+                                ),
+                            },
+                        ],
+                        by_monthday: [],
+                        by_yearday: [],
+                        by_weekno: [],
+                        by_month: [
+                            10,
+                        ],
+                        by_setpos: [],
+                        wkst: None,
+                    },
+                ),
+                comment: [],
+                rdate: [],
+                tzname: [
+                    Text {
+                        params: {},
+                        text: "Brasília daylight",
+                    },
+                ],
+                x_prop: {},
+                iana_prop: {},
+            },
+        ],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

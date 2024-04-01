@@ -1,0 +1,91 @@
+Ok(
+    VEvent {
+        dtstamp: Local(
+            2013-07-16T14:06:38+02:00,
+        ),
+        uid: Text {
+            params: {},
+            text: "5UILHLI7RI6K2IDRAQX7O",
+        },
+        dtstart: DateTime(
+            Naive(
+                2012-03-27T10:00:00,
+            ),
+        ),
+        class: None,
+        created: None,
+        description: None,
+        geo: None,
+        last_modified: None,
+        location: None,
+        organizer: None,
+        priority: None,
+        sequence: None,
+        status: None,
+        summary: Some(
+            Text {
+                params: {},
+                text: "A Recurring event with multiple exdates, one per line.",
+            },
+        ),
+        transp: None,
+        url: None,
+        recurid: None,
+        rrule: Some(
+            Recur {
+                freq: Weekly,
+                until: Some(
+                    DateTime(
+                        Local(
+                            2012-07-03T10:00:00+02:00,
+                        ),
+                    ),
+                ),
+                count: None,
+                interval: None,
+                by_second: [],
+                by_minute: [],
+                by_hour: [],
+                by_day: [
+                    WeekdayNum {
+                        weekday: Tuesday,
+                        ord: None,
+                    },
+                ],
+                by_monthday: [],
+                by_yearday: [],
+                by_weekno: [],
+                by_month: [],
+                by_setpos: [],
+                wkst: None,
+            },
+        ),
+        dtend: Some(
+            DateTime(
+                Naive(
+                    2012-03-27T18:00:00,
+                ),
+            ),
+        ),
+        duration: None,
+        attach: [],
+        attendee: [],
+        categories: [],
+        comment: [],
+        contact: [],
+        exdate: [
+            DateTime(
+                Naive(
+                    2012-04-17T10:00:00,
+                ),
+            ),
+        ],
+        rstatus: [],
+        related_to: [],
+        resources: [],
+        rdate: [],
+        alarms: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

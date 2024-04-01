@@ -1,0 +1,83 @@
+Ok(
+    VEvent {
+        dtstamp: Local(
+            2013-04-16T11:26:16+02:00,
+        ),
+        uid: Text {
+            params: {},
+            text: "20130416112341.10064jz0k4j7uem8@acmenet.de",
+        },
+        dtstart: DateTime(
+            Local(
+                2013-04-16T12:00:00+02:00,
+            ),
+        ),
+        class: Some(
+            Public,
+        ),
+        created: Some(
+            Local(
+                2013-04-16T11:23:41+02:00,
+            ),
+        ),
+        description: None,
+        geo: None,
+        last_modified: Some(
+            Local(
+                2013-04-16T11:23:41+02:00,
+            ),
+        ),
+        location: Some(
+            Text {
+                params: {},
+                text: "im büro",
+            },
+        ),
+        organizer: Some(
+            Uri {
+                params: {
+                    "CN": "acme, ädmin",
+                },
+                uri: "mailto:adm-acme@mydomain.de",
+            },
+        ),
+        priority: None,
+        sequence: None,
+        status: Some(
+            Confirmed,
+        ),
+        summary: Some(
+            Text {
+                params: {},
+                text: "wichtiger termin 1",
+            },
+        ),
+        transp: Some(
+            Opaque,
+        ),
+        url: None,
+        recurid: None,
+        rrule: None,
+        dtend: Some(
+            DateTime(
+                Local(
+                    2013-04-16T13:00:00+02:00,
+                ),
+            ),
+        ),
+        duration: None,
+        attach: [],
+        attendee: [],
+        categories: [],
+        comment: [],
+        contact: [],
+        exdate: [],
+        rstatus: [],
+        related_to: [],
+        resources: [],
+        rdate: [],
+        alarms: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

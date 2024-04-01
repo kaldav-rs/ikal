@@ -68,3 +68,11 @@ impl Prop {
         }
     }
 }
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn parse() {
+        crate::test::test_files::<crate::VTimezone>("timezones");
+    }
+}

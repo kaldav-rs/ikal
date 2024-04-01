@@ -1,0 +1,266 @@
+Ok(
+    VCalendar {
+        prodid: Text {
+            params: {},
+            text: "-//tzurl.org//NONSGML Olson 2014g//EN",
+        },
+        version: Text {
+            params: {},
+            text: "2.0",
+        },
+        calscale: None,
+        method: None,
+        alarms: [],
+        events: [
+            VEvent {
+                dtstamp: Naive(
+                    2014-08-29T10:00:00,
+                ),
+                uid: Text {
+                    params: {},
+                    text: "noend123",
+                },
+                dtstart: DateTime(
+                    Naive(
+                        2014-08-29T08:00:00,
+                    ),
+                ),
+                class: None,
+                created: None,
+                description: None,
+                geo: None,
+                last_modified: None,
+                location: None,
+                organizer: None,
+                priority: None,
+                sequence: None,
+                status: None,
+                summary: Some(
+                    Text {
+                        params: {},
+                        text: "an event with a custom tz name",
+                    },
+                ),
+                transp: None,
+                url: None,
+                recurid: None,
+                rrule: None,
+                dtend: None,
+                duration: None,
+                attach: [],
+                attendee: [],
+                categories: [],
+                comment: [],
+                contact: [],
+                exdate: [],
+                rstatus: [],
+                related_to: [],
+                resources: [],
+                rdate: [],
+                alarms: [],
+                x_prop: {},
+                iana_prop: {},
+            },
+        ],
+        freebusy: [],
+        journals: [],
+        todo: [],
+        timezones: [
+            VTimezone {
+                tzid: Text {
+                    params: {},
+                    text: "custom_Pacific/Fiji",
+                },
+                last_modified: None,
+                tzurl: Some(
+                    Uri {
+                        params: {},
+                        uri: "http://tzurl.org/zoneinfo/Pacific/Fiji",
+                    },
+                ),
+                standard: [
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                2014-01-19T02:00:00,
+                            ),
+                        ),
+                        tzoffsetto: +12:00,
+                        tzoffsetfrom: +13:00,
+                        rrule: Some(
+                            Recur {
+                                freq: Yearly,
+                                until: None,
+                                count: None,
+                                interval: None,
+                                by_second: [],
+                                by_minute: [],
+                                by_hour: [],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: None,
+                                    },
+                                ],
+                                by_monthday: [
+                                    18,
+                                    19,
+                                    20,
+                                    21,
+                                    22,
+                                    23,
+                                    24,
+                                ],
+                                by_yearday: [],
+                                by_weekno: [],
+                                by_month: [
+                                    1,
+                                ],
+                                by_setpos: [],
+                                wkst: None,
+                            },
+                        ),
+                        comment: [],
+                        rdate: [],
+                        tzname: [],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                1915-10-26T00:00:00,
+                            ),
+                        ),
+                        tzoffsetto: +12:00,
+                        tzoffsetfrom: +11:55,
+                        rrule: None,
+                        comment: [],
+                        rdate: [
+                            Date(
+                                [
+                                    DateTime(
+                                        Naive(
+                                            1915-10-26T00:00:00,
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
+                        tzname: [],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                1999-02-28T03:00:00,
+                            ),
+                        ),
+                        tzoffsetto: +12:00,
+                        tzoffsetfrom: +13:00,
+                        rrule: None,
+                        comment: [],
+                        rdate: [
+                            Date(
+                                [
+                                    DateTime(
+                                        Naive(
+                                            2013-01-20T03:00:00,
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
+                        tzname: [],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                ],
+                daylight: [
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                2010-10-24T02:00:00,
+                            ),
+                        ),
+                        tzoffsetto: +13:00,
+                        tzoffsetfrom: +12:00,
+                        rrule: Some(
+                            Recur {
+                                freq: Yearly,
+                                until: None,
+                                count: None,
+                                interval: None,
+                                by_second: [],
+                                by_minute: [],
+                                by_hour: [],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: None,
+                                    },
+                                ],
+                                by_monthday: [
+                                    21,
+                                    22,
+                                    23,
+                                    24,
+                                    25,
+                                    26,
+                                    27,
+                                ],
+                                by_yearday: [],
+                                by_weekno: [],
+                                by_month: [
+                                    10,
+                                ],
+                                by_setpos: [],
+                                wkst: None,
+                            },
+                        ),
+                        comment: [],
+                        rdate: [],
+                        tzname: [],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                1998-11-01T02:00:00,
+                            ),
+                        ),
+                        tzoffsetto: +13:00,
+                        tzoffsetfrom: +12:00,
+                        rrule: None,
+                        comment: [],
+                        rdate: [
+                            Date(
+                                [
+                                    DateTime(
+                                        Naive(
+                                            2009-11-29T02:00:00,
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
+                        tzname: [],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                ],
+                x_prop: {
+                    "X-LIC-LOCATION": ContentLine {
+                        params: {},
+                        value: "Pacific/Fiji",
+                    },
+                },
+                iana_prop: {},
+            },
+        ],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

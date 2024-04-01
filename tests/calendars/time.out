@@ -1,0 +1,29 @@
+Ok(
+    VCalendar {
+        prodid: Text {
+            params: {},
+            text: "collective/icalendar",
+        },
+        version: Text {
+            params: {},
+            text: "2.0",
+        },
+        calscale: None,
+        method: None,
+        alarms: [],
+        events: [],
+        freebusy: [],
+        journals: [],
+        todo: [],
+        timezones: [],
+        x_prop: {
+            "X-SOMETIME": ContentLine {
+                params: {
+                    "VALUE": "TIME",
+                },
+                value: "172010",
+            },
+        },
+        iana_prop: {},
+    },
+)

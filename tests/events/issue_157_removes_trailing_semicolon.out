@@ -1,0 +1,72 @@
+Ok(
+    VEvent {
+        dtstamp: Naive(
+            2017-02-09T19:23:58,
+        ),
+        uid: Text {
+            params: {},
+            text: "5UILHLI7RI6K2IDRAQX7O",
+        },
+        dtstart: DateTime(
+            Naive(
+                2015-03-25T10:10:10,
+            ),
+        ),
+        class: None,
+        created: None,
+        description: None,
+        geo: None,
+        last_modified: None,
+        location: None,
+        organizer: None,
+        priority: None,
+        sequence: None,
+        status: None,
+        summary: None,
+        transp: None,
+        url: None,
+        recurid: None,
+        rrule: Some(
+            Recur {
+                freq: Yearly,
+                until: None,
+                count: None,
+                interval: None,
+                by_second: [],
+                by_minute: [],
+                by_hour: [],
+                by_day: [
+                    WeekdayNum {
+                        weekday: Sunday,
+                        ord: Some(
+                            1,
+                        ),
+                    },
+                ],
+                by_monthday: [],
+                by_yearday: [],
+                by_weekno: [],
+                by_month: [
+                    11,
+                ],
+                by_setpos: [],
+                wkst: None,
+            },
+        ),
+        dtend: None,
+        duration: None,
+        attach: [],
+        attendee: [],
+        categories: [],
+        comment: [],
+        contact: [],
+        exdate: [],
+        rstatus: [],
+        related_to: [],
+        resources: [],
+        rdate: [],
+        alarms: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

@@ -1,0 +1,90 @@
+Ok(
+    VEvent {
+        dtstamp: Local(
+            2007-02-21T10:54:12+01:00,
+        ),
+        uid: Text {
+            params: {},
+            text: "D449CA84-00A3-4E55-83E1-34B58268853B",
+        },
+        dtstart: DateTime(
+            Naive(
+                2007-02-20T17:00:00,
+            ),
+        ),
+        class: None,
+        created: Some(
+            Local(
+                2008-11-14T08:28:04+01:00,
+            ),
+        ),
+        description: None,
+        geo: None,
+        last_modified: None,
+        location: None,
+        organizer: None,
+        priority: None,
+        sequence: Some(
+            0,
+        ),
+        status: None,
+        summary: Some(
+            Text {
+                params: {},
+                text: "Esb mellon phone conf",
+            },
+        ),
+        transp: Some(
+            Opaque,
+        ),
+        url: None,
+        recurid: None,
+        rrule: Some(
+            Recur {
+                freq: Weekly,
+                until: Some(
+                    DateTime(
+                        Naive(
+                            2007-06-19T22:59:59,
+                        ),
+                    ),
+                ),
+                count: None,
+                interval: Some(
+                    1,
+                ),
+                by_second: [],
+                by_minute: [],
+                by_hour: [],
+                by_day: [],
+                by_monthday: [],
+                by_yearday: [],
+                by_weekno: [],
+                by_month: [],
+                by_setpos: [],
+                wkst: None,
+            },
+        ),
+        dtend: Some(
+            DateTime(
+                Naive(
+                    2007-02-20T18:00:00,
+                ),
+            ),
+        ),
+        duration: None,
+        attach: [],
+        attendee: [],
+        categories: [],
+        comment: [],
+        contact: [],
+        exdate: [],
+        rstatus: [],
+        related_to: [],
+        resources: [],
+        rdate: [],
+        alarms: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

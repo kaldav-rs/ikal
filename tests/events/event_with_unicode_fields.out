@@ -1,0 +1,71 @@
+Ok(
+    VEvent {
+        dtstamp: Naive(
+            2017-02-09T19:23:58,
+        ),
+        uid: Text {
+            params: {},
+            text: "123456",
+        },
+        dtstart: DateTime(
+            Local(
+                2010-10-10T12:00:00+02:00,
+            ),
+        ),
+        class: None,
+        created: Some(
+            Local(
+                2010-10-10T12:00:00+02:00,
+            ),
+        ),
+        description: Some(
+            Text {
+                params: {},
+                text: "icalendar should be able to handle non-ascii: €äüöÄÜÖ.",
+            },
+        ),
+        geo: None,
+        last_modified: None,
+        location: Some(
+            Text {
+                params: {},
+                text: "Tribstrül",
+            },
+        ),
+        organizer: None,
+        priority: None,
+        sequence: None,
+        status: None,
+        summary: Some(
+            Text {
+                params: {},
+                text: "Non-ASCII Test: ÄÖÜ äöü €",
+            },
+        ),
+        transp: None,
+        url: None,
+        recurid: None,
+        rrule: None,
+        dtend: Some(
+            DateTime(
+                Local(
+                    2010-10-10T14:00:00+02:00,
+                ),
+            ),
+        ),
+        duration: None,
+        attach: [],
+        attendee: [],
+        categories: [],
+        comment: [],
+        contact: [],
+        exdate: [],
+        rstatus: [],
+        related_to: [],
+        resources: [],
+        rdate: [],
+        alarms: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

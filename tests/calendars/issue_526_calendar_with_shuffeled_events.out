@@ -1,0 +1,133 @@
+Ok(
+    VCalendar {
+        prodid: Text {
+            params: {},
+            text: "icalendar-2023",
+        },
+        version: Text {
+            params: {},
+            text: "2.0",
+        },
+        calscale: None,
+        method: None,
+        alarms: [],
+        events: [
+            VEvent {
+                dtstamp: Local(
+                    2021-10-04T17:02:45+02:00,
+                ),
+                uid: Text {
+                    params: {},
+                    text: "2",
+                },
+                dtstart: DateTime(
+                    Naive(
+                        2021-11-01T16:40:00,
+                    ),
+                ),
+                class: None,
+                created: None,
+                description: None,
+                geo: None,
+                last_modified: None,
+                location: None,
+                organizer: None,
+                priority: None,
+                sequence: None,
+                status: None,
+                summary: Some(
+                    Text {
+                        params: {},
+                        text: " Some other event",
+                    },
+                ),
+                transp: None,
+                url: None,
+                recurid: None,
+                rrule: None,
+                dtend: Some(
+                    DateTime(
+                        Naive(
+                            2021-11-01T16:50:00,
+                        ),
+                    ),
+                ),
+                duration: None,
+                attach: [],
+                attendee: [],
+                categories: [],
+                comment: [],
+                contact: [],
+                exdate: [],
+                rstatus: [],
+                related_to: [],
+                resources: [],
+                rdate: [],
+                alarms: [],
+                x_prop: {},
+                iana_prop: {},
+            },
+            VEvent {
+                dtstamp: Local(
+                    2021-10-04T17:02:45+02:00,
+                ),
+                uid: Text {
+                    params: {},
+                    text: "1",
+                },
+                dtstart: DateTime(
+                    Naive(
+                        2021-11-01T16:00:00,
+                    ),
+                ),
+                class: None,
+                created: None,
+                description: None,
+                geo: None,
+                last_modified: None,
+                location: None,
+                organizer: None,
+                priority: None,
+                sequence: None,
+                status: None,
+                summary: Some(
+                    Text {
+                        params: {},
+                        text: " Some event ':'",
+                    },
+                ),
+                transp: None,
+                url: None,
+                recurid: None,
+                rrule: None,
+                dtend: Some(
+                    DateTime(
+                        Naive(
+                            2021-11-01T16:30:00,
+                        ),
+                    ),
+                ),
+                duration: None,
+                attach: [],
+                attendee: [],
+                categories: [],
+                comment: [],
+                contact: [],
+                exdate: [],
+                rstatus: [],
+                related_to: [],
+                resources: [],
+                rdate: [],
+                alarms: [],
+                x_prop: {},
+                iana_prop: {},
+            },
+        ],
+        freebusy: [],
+        journals: [],
+        todo: [],
+        timezones: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

@@ -1,0 +1,62 @@
+Ok(
+    VEvent {
+        dtstamp: Naive(
+            2015-02-19T13:30:00,
+        ),
+        uid: Text {
+            params: {},
+            text: "1234567",
+        },
+        dtstart: DateTime(
+            Naive(
+                2015-02-19T13:30:00,
+            ),
+        ),
+        class: None,
+        created: None,
+        description: None,
+        geo: None,
+        last_modified: None,
+        location: None,
+        organizer: None,
+        priority: None,
+        sequence: None,
+        status: None,
+        summary: None,
+        transp: None,
+        url: None,
+        recurid: None,
+        rrule: None,
+        dtend: None,
+        duration: None,
+        attach: [],
+        attendee: [],
+        categories: [],
+        comment: [],
+        contact: [],
+        exdate: [],
+        rstatus: [],
+        related_to: [],
+        resources: [],
+        rdate: [
+            Period(
+                [
+                    StartDur(
+                        StartDur {
+                            start: Naive(
+                                2015-02-19T13:30:00,
+                            ),
+                            duration: Duration {
+                                secs: 36000,
+                                nanos: 0,
+                            },
+                        },
+                    ),
+                ],
+            ),
+        ],
+        alarms: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

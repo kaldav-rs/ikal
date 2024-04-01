@@ -1,0 +1,89 @@
+Ok(
+    VEvent {
+        dtstamp: Local(
+            2012-06-05T02:37:59+02:00,
+        ),
+        uid: Text {
+            params: {},
+            text: "event_qtkfrcyqkbnb@meetup.com",
+        },
+        dtstart: DateTime(
+            Naive(
+                2012-07-12T18:30:00,
+            ),
+        ),
+        class: Some(
+            Public,
+        ),
+        created: Some(
+            Local(
+                2012-01-11T13:03:39+01:00,
+            ),
+        ),
+        description: Some(
+            Text {
+                params: {},
+                text: "DevOpsDC\\nThursday\\, July 12 at 6:30 PM\\n\\nThis will be a joint meetup / hack night with the DC jQuery Users Group.   The idea behind the hack night:  Small teams consisting of at least 1 member...\\n\\nDetails: http://www.meetup.com/DevOpsDC/events/47635522/",
+            },
+        ),
+        geo: Some(
+            Geo {
+                lat: 38.9,
+                lon: -77.01,
+            },
+        ),
+        last_modified: Some(
+            Local(
+                2012-05-22T19:44:06+02:00,
+            ),
+        ),
+        location: Some(
+            Text {
+                params: {},
+                text: "Fathom Creative\\, Inc. (1333 14th Street Northwest\\, WashingtonD.C.\\, DC 20005)",
+            },
+        ),
+        organizer: None,
+        priority: None,
+        sequence: None,
+        status: Some(
+            Confirmed,
+        ),
+        summary: Some(
+            Text {
+                params: {},
+                text: "DevOps DC Meetup",
+            },
+        ),
+        transp: None,
+        url: Some(
+            Uri {
+                params: {},
+                uri: "http://www.meetup.com/DevOpsDC/events/47635522/",
+            },
+        ),
+        recurid: None,
+        rrule: None,
+        dtend: Some(
+            DateTime(
+                Naive(
+                    2012-07-12T21:30:00,
+                ),
+            ),
+        ),
+        duration: None,
+        attach: [],
+        attendee: [],
+        categories: [],
+        comment: [],
+        contact: [],
+        exdate: [],
+        rstatus: [],
+        related_to: [],
+        resources: [],
+        rdate: [],
+        alarms: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

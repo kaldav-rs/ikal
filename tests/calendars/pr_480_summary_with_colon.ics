@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:collective/icalendar
+BEGIN:VEVENT
+UID:1
+SUMMARY:Example calendar with a ': ' in the summary
+DTSTAMP;TZID=America/Vancouver:20230920T120000
+DTSTART;TZID=America/Vancouver:20230920T120000
+END:VEVENT
+BEGIN:VEVENT
+UID:2
+SUMMARY:Another event with a ': ' in the summary
+DTSTAMP;TZID=America/Vancouver:20230920T120000
+DTSTART;TZID=America/Vancouver:20230920T120000
+END:VEVENT

@@ -1,0 +1,299 @@
+Ok(
+    VCalendar {
+        prodid: Text {
+            params: {},
+            text: "-//PIMUTILS.ORG//NONSGML khal / icalendar //EN",
+        },
+        version: Text {
+            params: {},
+            text: "2.0",
+        },
+        calscale: None,
+        method: None,
+        alarms: [],
+        events: [
+            VEvent {
+                dtstamp: Local(
+                    2018-03-23T21:03:33+01:00,
+                ),
+                uid: Text {
+                    params: {},
+                    text: "BF5109494E67AAE20025875100566D31-Lotus_Notes_Generated",
+                },
+                dtstart: DateTime(
+                    Naive(
+                        2018-03-27T08:00:00,
+                    ),
+                ),
+                class: Some(
+                    Public,
+                ),
+                created: None,
+                description: None,
+                geo: None,
+                last_modified: None,
+                location: None,
+                organizer: None,
+                priority: None,
+                sequence: Some(
+                    10,
+                ),
+                status: None,
+                summary: Some(
+                    Text {
+                        params: {},
+                        text: "Event",
+                    },
+                ),
+                transp: None,
+                url: None,
+                recurid: None,
+                rrule: None,
+                dtend: Some(
+                    DateTime(
+                        Naive(
+                            2018-03-27T09:00:00,
+                        ),
+                    ),
+                ),
+                duration: None,
+                attach: [],
+                attendee: [
+                    Uri {
+                        params: {
+                            "CN": "XYZ",
+                            "PARTSTAT": "ACCEPTED",
+                            "ROLE": "CHAIR",
+                            "RSVP": "FALSE",
+                        },
+                        uri: "mailto:xyz@xyz.com",
+                    },
+                ],
+                categories: [],
+                comment: [],
+                contact: [],
+                exdate: [],
+                rstatus: [],
+                related_to: [],
+                resources: [],
+                rdate: [
+                    Period(
+                        [
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-03-27T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-03-27T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-04-03T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-04-03T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-04-10T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-04-10T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-04-17T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-04-17T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-04-24T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-04-24T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-05-01T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-05-01T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-05-08T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-05-08T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-05-15T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-05-15T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-05-22T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-05-22T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-05-29T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-05-29T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-06-05T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-06-05T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-06-12T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-06-12T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-06-19T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-06-19T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-06-26T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-06-26T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-07-03T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-07-03T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-07-10T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-07-10T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-07-17T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-07-17T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-07-24T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-07-24T09:00:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2018-07-31T08:00:00,
+                                    ),
+                                    end: Naive(
+                                        2018-07-31T09:00:00,
+                                    ),
+                                },
+                            ),
+                        ],
+                    ),
+                ],
+                alarms: [],
+                x_prop: {},
+                iana_prop: {
+                    "RECURRENCE-ID": ContentLine {
+                        params: {
+                            "RANGE": "THISANDFUTURE",
+                        },
+                        value: "20180327T130000Z",
+                    },
+                },
+            },
+        ],
+        freebusy: [],
+        journals: [],
+        todo: [],
+        timezones: [],
+        x_prop: {
+            "X-SOURCE-URL": ContentLine {
+                params: {},
+                value: "https://github.com/pimutils/khal/issues/152#issuecomment-387410353",
+            },
+        },
+        iana_prop: {},
+    },
+)

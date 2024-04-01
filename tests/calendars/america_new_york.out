@@ -1,0 +1,421 @@
+Ok(
+    VCalendar {
+        prodid: Text {
+            params: {},
+            text: "collective/icalendar",
+        },
+        version: Text {
+            params: {},
+            text: "2.0",
+        },
+        calscale: None,
+        method: None,
+        alarms: [],
+        events: [
+            VEvent {
+                dtstamp: Naive(
+                    2007-11-04T02:00:00,
+                ),
+                uid: Text {
+                    params: {},
+                    text: "noend123",
+                },
+                dtstart: DateTime(
+                    Naive(
+                        2014-08-29T10:00:00,
+                    ),
+                ),
+                class: None,
+                created: None,
+                description: None,
+                geo: None,
+                last_modified: None,
+                location: None,
+                organizer: None,
+                priority: None,
+                sequence: None,
+                status: None,
+                summary: Some(
+                    Text {
+                        params: {},
+                        text: "an event with a custom tz name",
+                    },
+                ),
+                transp: None,
+                url: None,
+                recurid: None,
+                rrule: None,
+                dtend: None,
+                duration: None,
+                attach: [],
+                attendee: [],
+                categories: [],
+                comment: [],
+                contact: [],
+                exdate: [],
+                rstatus: [],
+                related_to: [],
+                resources: [],
+                rdate: [],
+                alarms: [],
+                x_prop: {},
+                iana_prop: {},
+            },
+        ],
+        freebusy: [],
+        journals: [],
+        todo: [],
+        timezones: [
+            VTimezone {
+                tzid: Text {
+                    params: {},
+                    text: "custom_America/New_York",
+                },
+                last_modified: Some(
+                    Local(
+                        2005-08-09T07:00:00+02:00,
+                    ),
+                ),
+                tzurl: None,
+                standard: [
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                1967-10-29T02:00:00,
+                            ),
+                        ),
+                        tzoffsetto: -05:00,
+                        tzoffsetfrom: -04:00,
+                        rrule: Some(
+                            Recur {
+                                freq: Yearly,
+                                until: Some(
+                                    DateTime(
+                                        Local(
+                                            2006-10-29T07:00:00+01:00,
+                                        ),
+                                    ),
+                                ),
+                                count: None,
+                                interval: None,
+                                by_second: [],
+                                by_minute: [],
+                                by_hour: [],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: Some(
+                                            -1,
+                                        ),
+                                    },
+                                ],
+                                by_monthday: [],
+                                by_yearday: [],
+                                by_weekno: [],
+                                by_month: [
+                                    10,
+                                ],
+                                by_setpos: [],
+                                wkst: None,
+                            },
+                        ),
+                        comment: [],
+                        rdate: [],
+                        tzname: [
+                            Text {
+                                params: {},
+                                text: "EST",
+                            },
+                        ],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                2007-11-04T02:00:00,
+                            ),
+                        ),
+                        tzoffsetto: -05:00,
+                        tzoffsetfrom: -04:00,
+                        rrule: Some(
+                            Recur {
+                                freq: Yearly,
+                                until: None,
+                                count: None,
+                                interval: None,
+                                by_second: [],
+                                by_minute: [],
+                                by_hour: [],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: Some(
+                                            1,
+                                        ),
+                                    },
+                                ],
+                                by_monthday: [],
+                                by_yearday: [],
+                                by_weekno: [],
+                                by_month: [
+                                    11,
+                                ],
+                                by_setpos: [],
+                                wkst: None,
+                            },
+                        ),
+                        comment: [],
+                        rdate: [],
+                        tzname: [
+                            Text {
+                                params: {},
+                                text: "EST",
+                            },
+                        ],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                ],
+                daylight: [
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                1967-04-30T02:00:00,
+                            ),
+                        ),
+                        tzoffsetto: -04:00,
+                        tzoffsetfrom: -05:00,
+                        rrule: Some(
+                            Recur {
+                                freq: Yearly,
+                                until: Some(
+                                    DateTime(
+                                        Local(
+                                            1973-04-29T08:00:00+01:00,
+                                        ),
+                                    ),
+                                ),
+                                count: None,
+                                interval: None,
+                                by_second: [],
+                                by_minute: [],
+                                by_hour: [],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: Some(
+                                            -1,
+                                        ),
+                                    },
+                                ],
+                                by_monthday: [],
+                                by_yearday: [],
+                                by_weekno: [],
+                                by_month: [
+                                    4,
+                                ],
+                                by_setpos: [],
+                                wkst: None,
+                            },
+                        ),
+                        comment: [],
+                        rdate: [],
+                        tzname: [
+                            Text {
+                                params: {},
+                                text: "EDT",
+                            },
+                        ],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                1974-01-06T02:00:00,
+                            ),
+                        ),
+                        tzoffsetto: -04:00,
+                        tzoffsetfrom: -05:00,
+                        rrule: None,
+                        comment: [],
+                        rdate: [
+                            Date(
+                                [
+                                    DateTime(
+                                        Naive(
+                                            1975-02-23T02:00:00,
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
+                        tzname: [
+                            Text {
+                                params: {},
+                                text: "EDT",
+                            },
+                        ],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                1976-04-25T02:00:00,
+                            ),
+                        ),
+                        tzoffsetto: -04:00,
+                        tzoffsetfrom: -05:00,
+                        rrule: Some(
+                            Recur {
+                                freq: Yearly,
+                                until: Some(
+                                    DateTime(
+                                        Local(
+                                            1986-04-27T09:00:00+02:00,
+                                        ),
+                                    ),
+                                ),
+                                count: None,
+                                interval: None,
+                                by_second: [],
+                                by_minute: [],
+                                by_hour: [],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: Some(
+                                            -1,
+                                        ),
+                                    },
+                                ],
+                                by_monthday: [],
+                                by_yearday: [],
+                                by_weekno: [],
+                                by_month: [
+                                    4,
+                                ],
+                                by_setpos: [],
+                                wkst: None,
+                            },
+                        ),
+                        comment: [],
+                        rdate: [],
+                        tzname: [
+                            Text {
+                                params: {},
+                                text: "EDT",
+                            },
+                        ],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                1987-04-05T02:00:00,
+                            ),
+                        ),
+                        tzoffsetto: -04:00,
+                        tzoffsetfrom: -05:00,
+                        rrule: Some(
+                            Recur {
+                                freq: Yearly,
+                                until: Some(
+                                    DateTime(
+                                        Local(
+                                            2006-04-02T09:00:00+02:00,
+                                        ),
+                                    ),
+                                ),
+                                count: None,
+                                interval: None,
+                                by_second: [],
+                                by_minute: [],
+                                by_hour: [],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: Some(
+                                            1,
+                                        ),
+                                    },
+                                ],
+                                by_monthday: [],
+                                by_yearday: [],
+                                by_weekno: [],
+                                by_month: [
+                                    4,
+                                ],
+                                by_setpos: [],
+                                wkst: None,
+                            },
+                        ),
+                        comment: [],
+                        rdate: [],
+                        tzname: [
+                            Text {
+                                params: {},
+                                text: "EDT",
+                            },
+                        ],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                2007-03-11T02:00:00,
+                            ),
+                        ),
+                        tzoffsetto: -04:00,
+                        tzoffsetfrom: -05:00,
+                        rrule: Some(
+                            Recur {
+                                freq: Yearly,
+                                until: None,
+                                count: None,
+                                interval: None,
+                                by_second: [],
+                                by_minute: [],
+                                by_hour: [],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: Some(
+                                            2,
+                                        ),
+                                    },
+                                ],
+                                by_monthday: [],
+                                by_yearday: [],
+                                by_weekno: [],
+                                by_month: [
+                                    3,
+                                ],
+                                by_setpos: [],
+                                wkst: None,
+                            },
+                        ),
+                        comment: [],
+                        rdate: [],
+                        tzname: [
+                            Text {
+                                params: {},
+                                text: "EDT",
+                            },
+                        ],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                ],
+                x_prop: {},
+                iana_prop: {},
+            },
+        ],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

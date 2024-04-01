@@ -1,0 +1,309 @@
+Ok(
+    VCalendar {
+        prodid: Text {
+            params: {},
+            text: "-//PIMUTILS.ORG//NONSGML khal / icalendar //EN",
+        },
+        version: Text {
+            params: {},
+            text: "2.0",
+        },
+        calscale: None,
+        method: None,
+        alarms: [],
+        events: [
+            VEvent {
+                dtstamp: Local(
+                    2021-10-04T17:02:45+02:00,
+                ),
+                uid: Text {
+                    params: {},
+                    text: "BF5109494E67AAE20025875100566D31-Lotus_Notes_Generated",
+                },
+                dtstart: DateTime(
+                    Naive(
+                        2021-11-01T16:00:00,
+                    ),
+                ),
+                class: Some(
+                    Public,
+                ),
+                created: None,
+                description: None,
+                geo: None,
+                last_modified: None,
+                location: None,
+                organizer: None,
+                priority: None,
+                sequence: Some(
+                    0,
+                ),
+                status: None,
+                summary: Some(
+                    Text {
+                        params: {},
+                        text: "(omitted)",
+                    },
+                ),
+                transp: Some(
+                    Opaque,
+                ),
+                url: None,
+                recurid: None,
+                rrule: None,
+                dtend: Some(
+                    DateTime(
+                        Naive(
+                            2021-11-01T16:30:00,
+                        ),
+                    ),
+                ),
+                duration: None,
+                attach: [],
+                attendee: [
+                    Uri {
+                        params: {
+                            "CN": "(omitted)",
+                            "PARTSTAT": "ACCEPTED",
+                            "ROLE": "CHAIR",
+                            "RSVP": "FAL\r\n SE",
+                        },
+                        uri: "mailto:omitted@example.com",
+                    },
+                ],
+                categories: [],
+                comment: [],
+                contact: [],
+                exdate: [],
+                rstatus: [],
+                related_to: [],
+                resources: [],
+                rdate: [
+                    Period(
+                        [
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2021-11-01T16:00:00,
+                                    ),
+                                    end: Naive(
+                                        2021-11-01T16:30:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2021-12-06T16:00:00,
+                                    ),
+                                    end: Naive(
+                                        2021-12-06T16:30:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2022-01-03T16:00:00,
+                                    ),
+                                    end: Naive(
+                                        2022-01-03T16:30:00,
+                                    ),
+                                },
+                            ),
+                            StartEnd(
+                                StartEnd {
+                                    start: Naive(
+                                        2022-02-07T16:00:00,
+                                    ),
+                                    end: Naive(
+                                        2022-02-07T16:30:00,
+                                    ),
+                                },
+                            ),
+                        ],
+                    ),
+                ],
+                alarms: [],
+                x_prop: {
+                    "X-LOTUS-APPTTYPE": ContentLine {
+                        params: {},
+                        value: "3",
+                    },
+                    "X-LOTUS-AUDIOVIDEOFLAGS": ContentLine {
+                        params: {},
+                        value: "0",
+                    },
+                    "X-LOTUS-BROADCAST": ContentLine {
+                        params: {},
+                        value: "FALSE",
+                    },
+                    "X-LOTUS-CHANGE-INST-DATES": ContentLine {
+                        params: {},
+                        value: "20211101T150000Z\\,20211206T150000Z\\,20220103T150000Z\\,20220207T150000Z",
+                    },
+                    "X-LOTUS-CHILD-UID": ContentLine {
+                        params: {},
+                        value: "567EFBAF6CBD07FC0025875100566D3B",
+                    },
+                    "X-LOTUS-INITIAL-RDATES": ContentLine {
+                        params: {},
+                        value: "20211101T150000Z\\,20211206T150000Z\\,20220103T150000Z\\,20220207T150000Z",
+                    },
+                    "X-LOTUS-LASTALL-RDATES": ContentLine {
+                        params: {
+                            "TZID": "Western/Central Europe",
+                        },
+                        value: "20211101T160000\\,20211206T160000\\,20220103T160000\\,20220207T160000",
+                    },
+                    "X-LOTUS-NOTESVERSION": ContentLine {
+                        params: {},
+                        value: "2",
+                    },
+                    "X-LOTUS-NOTICETYPE": ContentLine {
+                        params: {},
+                        value: "I",
+                    },
+                    "X-LOTUS-RECURID": ContentLine {
+                        params: {
+                            "RANGE": "THISANDFUTURE",
+                        },
+                        value: "20211101T150000Z",
+                    },
+                    "X-LOTUS-UPDATE-SEQ": ContentLine {
+                        params: {},
+                        value: "2",
+                    },
+                    "X-LOTUS-UPDATE-WISL": ContentLine {
+                        params: {},
+                        value: "$W:1\\;$O:1\\;$M:1\\;RequiredAttendees:1\\;INetRequiredNames:1\\;AltRequiredNames:1\\;StorageRequiredNames:1\\;OptionalAttendees:1\\;INetOptionalNames:1\\;AltOptionalNames:1\\;StorageOptionalNames:1\\;ApptUNIDURL:1\\;STUnyteConferenceURL:1\\;STUnyteConferenceID:1\\;SametimeType:1\\;WhiteBoardContent:1\\;STRoomName:1\\;$S:2\\;$B:2\\;$L:2\\;$E:2\\;$R:2",
+                    },
+                },
+                iana_prop: {
+                    "RECURRENCE-ID": ContentLine {
+                        params: {
+                            "RANGE": "THISANDFUTURE",
+                        },
+                        value: "20211101T150000Z",
+                    },
+                },
+            },
+        ],
+        freebusy: [],
+        journals: [],
+        todo: [],
+        timezones: [
+            VTimezone {
+                tzid: Text {
+                    params: {},
+                    text: "Western/Central Europe",
+                },
+                last_modified: None,
+                tzurl: None,
+                standard: [
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                1950-10-29T02:00:00,
+                            ),
+                        ),
+                        tzoffsetto: +01:00,
+                        tzoffsetfrom: +02:00,
+                        rrule: Some(
+                            Recur {
+                                freq: Yearly,
+                                until: None,
+                                count: None,
+                                interval: None,
+                                by_second: [],
+                                by_minute: [
+                                    0,
+                                ],
+                                by_hour: [
+                                    2,
+                                ],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: Some(
+                                            -1,
+                                        ),
+                                    },
+                                ],
+                                by_monthday: [],
+                                by_yearday: [],
+                                by_weekno: [],
+                                by_month: [
+                                    10,
+                                ],
+                                by_setpos: [],
+                                wkst: None,
+                            },
+                        ),
+                        comment: [],
+                        rdate: [],
+                        tzname: [],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                ],
+                daylight: [
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                1950-03-26T02:00:00,
+                            ),
+                        ),
+                        tzoffsetto: +02:00,
+                        tzoffsetfrom: +01:00,
+                        rrule: Some(
+                            Recur {
+                                freq: Yearly,
+                                until: None,
+                                count: None,
+                                interval: None,
+                                by_second: [],
+                                by_minute: [
+                                    0,
+                                ],
+                                by_hour: [
+                                    2,
+                                ],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: Some(
+                                            -1,
+                                        ),
+                                    },
+                                ],
+                                by_monthday: [],
+                                by_yearday: [],
+                                by_weekno: [],
+                                by_month: [
+                                    3,
+                                ],
+                                by_setpos: [],
+                                wkst: None,
+                            },
+                        ),
+                        comment: [],
+                        rdate: [],
+                        tzname: [],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                ],
+                x_prop: {},
+                iana_prop: {},
+            },
+        ],
+        x_prop: {
+            "X-SOURCE-URL": ContentLine {
+                params: {},
+                value: "https://github.com/pimutils/khal/issues/152#issuecomment-933635248",
+            },
+        },
+        iana_prop: {},
+    },
+)

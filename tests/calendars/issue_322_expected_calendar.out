@@ -1,0 +1,75 @@
+Ok(
+    VCalendar {
+        prodid: Text {
+            params: {},
+            text: "collective/icalendar",
+        },
+        version: Text {
+            params: {},
+            text: "2.0",
+        },
+        calscale: None,
+        method: None,
+        alarms: [],
+        events: [
+            VEvent {
+                dtstamp: Local(
+                    2022-11-08T09:01:05+01:00,
+                ),
+                uid: Text {
+                    params: {},
+                    text: "636a0cc1dbd5a1667894465@icalendar",
+                },
+                dtstart: Date(
+                    2022-01-01,
+                ),
+                class: None,
+                created: None,
+                description: None,
+                geo: None,
+                last_modified: None,
+                location: None,
+                organizer: None,
+                priority: None,
+                sequence: None,
+                status: None,
+                summary: Some(
+                    Text {
+                        params: {},
+                        text: "Event with bare string as argument for categories",
+                    },
+                ),
+                transp: None,
+                url: None,
+                recurid: None,
+                rrule: None,
+                dtend: None,
+                duration: None,
+                attach: [],
+                attendee: [],
+                categories: [
+                    Text {
+                        params: {},
+                        text: "Lecture",
+                    },
+                ],
+                comment: [],
+                contact: [],
+                exdate: [],
+                rstatus: [],
+                related_to: [],
+                resources: [],
+                rdate: [],
+                alarms: [],
+                x_prop: {},
+                iana_prop: {},
+            },
+        ],
+        freebusy: [],
+        journals: [],
+        todo: [],
+        timezones: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

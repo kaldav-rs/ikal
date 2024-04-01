@@ -1,0 +1,217 @@
+Ok(
+    VCalendar {
+        prodid: Text {
+            params: {},
+            text: "collective/icalendar",
+        },
+        version: Text {
+            params: {},
+            text: "2.0",
+        },
+        calscale: None,
+        method: None,
+        alarms: [],
+        events: [
+            VEvent {
+                dtstamp: Local(
+                    2022-10-19T12:29:50+02:00,
+                ),
+                uid: Text {
+                    params: {},
+                    text: "0cab49a0-1167-40f0-bfed-ecb4d117047d",
+                },
+                dtstart: DateTime(
+                    Naive(
+                        2022-10-21T20:00:00,
+                    ),
+                ),
+                class: None,
+                created: None,
+                description: Some(
+                    Text {
+                        params: {},
+                        text: "Just Chatting.",
+                    },
+                ),
+                geo: None,
+                last_modified: None,
+                location: None,
+                organizer: None,
+                priority: None,
+                sequence: None,
+                status: None,
+                summary: Some(
+                    Text {
+                        params: {},
+                        text: "Just chatting",
+                    },
+                ),
+                transp: None,
+                url: None,
+                recurid: None,
+                rrule: Some(
+                    Recur {
+                        freq: Weekly,
+                        until: None,
+                        count: None,
+                        interval: None,
+                        by_second: [],
+                        by_minute: [],
+                        by_hour: [],
+                        by_day: [
+                            WeekdayNum {
+                                weekday: Friday,
+                                ord: None,
+                            },
+                        ],
+                        by_monthday: [],
+                        by_yearday: [],
+                        by_weekno: [],
+                        by_month: [],
+                        by_setpos: [],
+                        wkst: None,
+                    },
+                ),
+                dtend: Some(
+                    DateTime(
+                        Naive(
+                            2022-10-21T21:00:00,
+                        ),
+                    ),
+                ),
+                duration: None,
+                attach: [],
+                attendee: [],
+                categories: [
+                    Text {
+                        params: {},
+                        text: "Just Chatting",
+                    },
+                ],
+                comment: [],
+                contact: [],
+                exdate: [],
+                rstatus: [],
+                related_to: [],
+                resources: [],
+                rdate: [],
+                alarms: [],
+                x_prop: {},
+                iana_prop: {},
+            },
+        ],
+        freebusy: [],
+        journals: [],
+        todo: [],
+        timezones: [
+            VTimezone {
+                tzid: Text {
+                    params: {},
+                    text: "/Europe/CUSTOM",
+                },
+                last_modified: None,
+                tzurl: None,
+                standard: [
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                1970-10-25T03:00:00,
+                            ),
+                        ),
+                        tzoffsetto: +01:00,
+                        tzoffsetfrom: +02:00,
+                        rrule: Some(
+                            Recur {
+                                freq: Yearly,
+                                until: None,
+                                count: None,
+                                interval: None,
+                                by_second: [],
+                                by_minute: [],
+                                by_hour: [],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: Some(
+                                            -1,
+                                        ),
+                                    },
+                                ],
+                                by_monthday: [],
+                                by_yearday: [],
+                                by_weekno: [],
+                                by_month: [
+                                    10,
+                                ],
+                                by_setpos: [],
+                                wkst: None,
+                            },
+                        ),
+                        comment: [],
+                        rdate: [],
+                        tzname: [
+                            Text {
+                                params: {},
+                                text: "CET",
+                            },
+                        ],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                ],
+                daylight: [
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                1970-03-29T02:00:00,
+                            ),
+                        ),
+                        tzoffsetto: +02:00,
+                        tzoffsetfrom: +01:00,
+                        rrule: Some(
+                            Recur {
+                                freq: Yearly,
+                                until: None,
+                                count: None,
+                                interval: None,
+                                by_second: [],
+                                by_minute: [],
+                                by_hour: [],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: Some(
+                                            -1,
+                                        ),
+                                    },
+                                ],
+                                by_monthday: [],
+                                by_yearday: [],
+                                by_weekno: [],
+                                by_month: [
+                                    3,
+                                ],
+                                by_setpos: [],
+                                wkst: None,
+                            },
+                        ),
+                        comment: [],
+                        rdate: [],
+                        tzname: [
+                            Text {
+                                params: {},
+                                text: "CEST",
+                            },
+                        ],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                ],
+                x_prop: {},
+                iana_prop: {},
+            },
+        ],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

@@ -1,0 +1,51 @@
+Ok(
+    VEvent {
+        dtstamp: Naive(
+            2017-02-09T19:23:58,
+        ),
+        uid: Text {
+            params: {},
+            text: "5UILHLI7RI6K2IDRAQX7O",
+        },
+        dtstart: Date(
+            2017-02-09,
+        ),
+        class: None,
+        created: None,
+        description: None,
+        geo: None,
+        last_modified: None,
+        location: None,
+        organizer: None,
+        priority: None,
+        sequence: None,
+        status: None,
+        summary: None,
+        transp: None,
+        url: None,
+        recurid: None,
+        rrule: None,
+        dtend: None,
+        duration: None,
+        attach: [],
+        attendee: [
+            Uri {
+                params: {
+                    "RSVP": "TRUE",
+                },
+                uri: "mailto:someone@example.com",
+            },
+        ],
+        categories: [],
+        comment: [],
+        contact: [],
+        exdate: [],
+        rstatus: [],
+        related_to: [],
+        resources: [],
+        rdate: [],
+        alarms: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

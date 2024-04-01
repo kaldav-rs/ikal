@@ -1,0 +1,221 @@
+Ok(
+    VCalendar {
+        prodid: Text {
+            params: {},
+            text: "-//Plone.org//NONSGML plone.app.event//EN",
+        },
+        version: Text {
+            params: {},
+            text: "2.0",
+        },
+        calscale: None,
+        method: None,
+        alarms: [],
+        events: [
+            VEvent {
+                dtstamp: Local(
+                    2010-10-10T11:10:10+02:00,
+                ),
+                uid: Text {
+                    params: {},
+                    text: "123456",
+                },
+                dtstart: DateTime(
+                    Naive(
+                        2012-02-13T10:00:00,
+                    ),
+                ),
+                class: None,
+                created: Some(
+                    Local(
+                        2010-10-10T11:10:10+02:00,
+                    ),
+                ),
+                description: Some(
+                    Text {
+                        params: {},
+                        text: "sprinting at the artsprint",
+                    },
+                ),
+                geo: None,
+                last_modified: None,
+                location: Some(
+                    Text {
+                        params: {},
+                        text: "aka bild, wien",
+                    },
+                ),
+                organizer: None,
+                priority: None,
+                sequence: None,
+                status: None,
+                summary: Some(
+                    Text {
+                        params: {},
+                        text: "artsprint 2012",
+                    },
+                ),
+                transp: None,
+                url: None,
+                recurid: None,
+                rrule: None,
+                dtend: Some(
+                    DateTime(
+                        Naive(
+                            2012-02-17T18:00:00,
+                        ),
+                    ),
+                ),
+                duration: None,
+                attach: [],
+                attendee: [],
+                categories: [],
+                comment: [],
+                contact: [],
+                exdate: [],
+                rstatus: [],
+                related_to: [],
+                resources: [],
+                rdate: [],
+                alarms: [],
+                x_prop: {},
+                iana_prop: {},
+            },
+        ],
+        freebusy: [],
+        journals: [],
+        todo: [],
+        timezones: [
+            VTimezone {
+                tzid: Text {
+                    params: {},
+                    text: "Europe/Vienna",
+                },
+                last_modified: None,
+                tzurl: None,
+                standard: [
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                1970-10-25T03:00:00,
+                            ),
+                        ),
+                        tzoffsetto: +01:00,
+                        tzoffsetfrom: +02:00,
+                        rrule: Some(
+                            Recur {
+                                freq: Yearly,
+                                until: None,
+                                count: None,
+                                interval: None,
+                                by_second: [],
+                                by_minute: [],
+                                by_hour: [],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: Some(
+                                            -1,
+                                        ),
+                                    },
+                                ],
+                                by_monthday: [],
+                                by_yearday: [],
+                                by_weekno: [],
+                                by_month: [
+                                    10,
+                                ],
+                                by_setpos: [],
+                                wkst: None,
+                            },
+                        ),
+                        comment: [],
+                        rdate: [],
+                        tzname: [
+                            Text {
+                                params: {},
+                                text: "CET",
+                            },
+                        ],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                ],
+                daylight: [
+                    Prop {
+                        dtstart: DateTime(
+                            Naive(
+                                1970-03-29T02:00:00,
+                            ),
+                        ),
+                        tzoffsetto: +02:00,
+                        tzoffsetfrom: +01:00,
+                        rrule: Some(
+                            Recur {
+                                freq: Yearly,
+                                until: None,
+                                count: None,
+                                interval: None,
+                                by_second: [],
+                                by_minute: [],
+                                by_hour: [],
+                                by_day: [
+                                    WeekdayNum {
+                                        weekday: Sunday,
+                                        ord: Some(
+                                            -1,
+                                        ),
+                                    },
+                                ],
+                                by_monthday: [],
+                                by_yearday: [],
+                                by_weekno: [],
+                                by_month: [
+                                    3,
+                                ],
+                                by_setpos: [],
+                                wkst: None,
+                            },
+                        ),
+                        comment: [],
+                        rdate: [],
+                        tzname: [
+                            Text {
+                                params: {},
+                                text: "CEST",
+                            },
+                        ],
+                        x_prop: {},
+                        iana_prop: {},
+                    },
+                ],
+                x_prop: {
+                    "X-LIC-LOCATION": ContentLine {
+                        params: {},
+                        value: "Europe/Vienna",
+                    },
+                },
+                iana_prop: {},
+            },
+        ],
+        x_prop: {
+            "X-WR-CALDESC": ContentLine {
+                params: {},
+                value: "icalendar test",
+            },
+            "X-WR-CALNAME": ContentLine {
+                params: {},
+                value: "test create calendar",
+            },
+            "X-WR-RELCALID": ContentLine {
+                params: {},
+                value: "12345",
+            },
+            "X-WR-TIMEZONE": ContentLine {
+                params: {},
+                value: "Europe/Vienna",
+            },
+        },
+        iana_prop: {},
+    },
+)
