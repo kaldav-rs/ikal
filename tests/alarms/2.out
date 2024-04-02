@@ -6,7 +6,7 @@ Ok(
                 text: "DISPLAY",
             },
             trigger: Duration(
-                Duration {
+                TimeDelta {
                     secs: -1800,
                     nanos: 0,
                 },
@@ -16,7 +16,7 @@ Ok(
                 text: "Breakfast meeting with executive\\nteam at 8:30 AM EST.",
             },
             duration: Some(
-                Duration {
+                TimeDelta {
                     secs: 900,
                     nanos: 0,
                 },

@@ -46,7 +46,7 @@ Ok(
                             start: Naive(
                                 2015-02-19T13:30:00,
                             ),
-                            duration: Duration {
+                            duration: TimeDelta {
                                 secs: 36000,
                                 nanos: 0,
                             },

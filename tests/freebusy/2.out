@@ -40,7 +40,7 @@ Ok(
                     start: Local(
                         1997-10-15T07:00:00+02:00,
                     ),
-                    duration: Duration {
+                    duration: TimeDelta {
                         secs: 30600,
                         nanos: 0,
                     },
@@ -51,7 +51,7 @@ Ok(
                     start: Local(
                         1997-10-15T18:00:00+02:00,
                     ),
-                    duration: Duration {
+                    duration: TimeDelta {
                         secs: 19800,
                         nanos: 0,
                     },
@@ -62,7 +62,7 @@ Ok(
                     start: Local(
                         1997-10-16T00:30:00+02:00,
                     ),
-                    duration: Duration {
+                    duration: TimeDelta {
                         secs: 23400,
                         nanos: 0,
                     },

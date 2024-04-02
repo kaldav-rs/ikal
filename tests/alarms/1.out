@@ -11,7 +11,7 @@ Ok(
                 ),
             ),
             duration: Some(
-                Duration {
+                TimeDelta {
                     secs: 900,
                     nanos: 0,
                 },
