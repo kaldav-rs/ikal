@@ -126,7 +126,7 @@ CALSCALE:GREGORIAN
 
                     similar_asserts::assert_eq!(actual, expected, "{file:?}");
                 } else {
-                    assert!(component.is_err());
+                    assert!(component.is_err(), "{file:?}");
                 }
             }
         }
