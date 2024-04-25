@@ -1,5 +1,13 @@
-mod params;
-mod symbol;
+use darling::FromField;
+
+#[derive(Clone, Default, Debug, FromField)]
+#[darling(attributes(component))]
+pub(crate) struct Field {
+    #[darling(default)]
+    pub append: bool,
+    #[darling(default)]
+    pub ignore: bool,
+}
 
 #[proc_macro_derive(Component, attributes(component))]
 pub fn component_derive(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
@@ -31,7 +39,7 @@ fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
     for field in fields {
         let name = &field.ident;
         let ty = &field.ty;
-        let field_params = crate::params::Field::from_ast(field)?;
+        let field_params = Field::from_field(field)?;
 
         if field_params.ignore {
             continue;
