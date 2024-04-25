@@ -24,7 +24,7 @@ impl DateTime {
 
     pub fn naive(&self) -> chrono::NaiveDateTime {
         match self {
-            Self::Naive(date) => date.clone(),
+            Self::Naive(date) => *date,
             Self::Local(date) => date.naive_local(),
         }
     }
@@ -60,7 +60,7 @@ impl std::fmt::Display for DateTime {
 
 impl std::cmp::PartialOrd for DateTime {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.naive().partial_cmp(&other.naive())
+        Some(self.cmp(other))
     }
 }
 
@@ -119,12 +119,7 @@ impl std::fmt::Display for Date {
 
 impl std::cmp::PartialOrd for Date {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        match (self, other) {
-            (Self::Date(a), Self::Date(b)) => a.partial_cmp(b),
-            (Self::DateTime(a), Self::DateTime(b)) => a.partial_cmp(b),
-            (Self::Date(a), Self::DateTime(b)) => a.partial_cmp(&b.date_naive()),
-            (Self::DateTime(a), Self::Date(b)) => a.date_naive().partial_cmp(&b),
-        }
+        Some(self.cmp(other))
     }
 }
 
@@ -134,7 +129,7 @@ impl std::cmp::Ord for Date {
             (Self::Date(a), Self::Date(b)) => a.cmp(b),
             (Self::DateTime(a), Self::DateTime(b)) => a.cmp(b),
             (Self::Date(a), Self::DateTime(b)) => a.cmp(&b.date_naive()),
-            (Self::DateTime(a), Self::Date(b)) => a.date_naive().cmp(&b),
+            (Self::DateTime(a), Self::Date(b)) => a.date_naive().cmp(b),
         }
     }
 }

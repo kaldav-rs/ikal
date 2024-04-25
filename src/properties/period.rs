@@ -42,7 +42,7 @@ impl std::str::FromStr for Period {
 
 impl std::cmp::PartialOrd for Period {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.duration().partial_cmp(&other.duration())
+        Some(self.cmp(other))
     }
 }
 
@@ -60,10 +60,7 @@ pub struct StartEnd {
 
 impl std::cmp::PartialOrd for StartEnd {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        let a = self.end.clone() - self.start.clone();
-        let b = other.end.clone() - other.start.clone();
-
-        a.partial_cmp(&b)
+        Some(self.cmp(other))
     }
 }
 
@@ -84,10 +81,7 @@ pub struct StartDur {
 
 impl std::cmp::PartialOrd for StartDur {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        let a = self.start.clone() - self.duration;
-        let b = other.start.clone() - other.duration;
-
-        a.partial_cmp(&b)
+        Some(self.cmp(other))
     }
 }
 

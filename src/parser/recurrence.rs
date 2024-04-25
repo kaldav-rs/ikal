@@ -25,7 +25,7 @@ pub(crate) fn rdate(input: crate::ContentLine) -> crate::Result<crate::RDate> {
 
     if input.params.get("VALUE") == Some(&"PERIOD".to_string()) {
         let periods = tokens
-            .map(|x| super::datatype::period(x))
+            .map(super::datatype::period)
             .collect::<crate::Result<Vec<_>>>()?;
 
         Ok(crate::RDate::Period(periods))
