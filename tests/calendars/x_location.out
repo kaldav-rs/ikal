@@ -140,9 +140,9 @@ Ok(
                     "X-APPLE-STRUCTURED-LOCATION": ContentLine {
                         params: {
                             "VALUE": "URI",
-                            "X-ADDRESS": "Röadstar 16\\n12764 Happyvi\r\n lle\\nDenmark",
-                            "X-APPLE-MAPKIT-HANDLE": "CAESARoSCWYTYFhHQBEGfw4hQCIBDQoHRGVubW\r\n FyaxJES0hhcHB5dmlsbGUqSGFwcHl2aWxsZTIHSGFwcHl2aWxsZToEMTI3NjRCDQpSb2Fkc3Rh\r\n cloCMTZiUm9hZHN0YXIgMTYBEU1vcmRvcgENCk1vcmRvcioSUm9hZHN0YXIgMTYyUm9hZHN0YX\r\n IgMTYxMjc2NCBIYXBweXZpbGxlMgdEZW5tYXJrOThA=",
-                            "X-APPLE-RADIUS": "49.913058665846\r\n 98",
+                            "X-ADDRESS": "Röadstar 16\\n12764 Happyville\\nDenmark",
+                            "X-APPLE-MAPKIT-HANDLE": "CAESARoSCWYTYFhHQBEGfw4hQCIBDQoHRGVubWFyaxJES0hhcHB5dmlsbGUqSGFwcHl2aWxsZTIHSGFwcHl2aWxsZToEMTI3NjRCDQpSb2Fkc3RhcloCMTZiUm9hZHN0YXIgMTYBEU1vcmRvcgENCk1vcmRvcioSUm9hZHN0YXIgMTYyUm9hZHN0YXIgMTYxMjc2NCBIYXBweXZpbGxlMgdEZW5tYXJrOThA=",
+                            "X-APPLE-RADIUS": "49.91305866584698",
                             "X-APPLE-REFERENCEFRAME": "1",
                             "X-TITLE": "",
                         },

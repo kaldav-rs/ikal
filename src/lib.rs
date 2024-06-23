@@ -30,24 +30,6 @@ PRODID:-//Nextcloud calendar v1.5.0";
     }
 
     #[test]
-    fn test_folding() {
-        let line = "DESCRIPTION:This is a lo
- ng description
-  that exists on a long line.
-PRODID:-//Nextcloud calendar v1.5.0";
-
-        let expected = (
-            "DESCRIPTION",
-            crate::ContentLine::from("This is a long description that exists on a long line."),
-        );
-
-        assert_eq!(
-            crate::parser::content_line(line),
-            Ok(("PRODID:-//Nextcloud calendar v1.5.0", expected))
-        );
-    }
-
-    #[test]
     fn test_binary_content() {
         // @TODO https://tools.ietf.org/html/rfc2445#section-4.1.3
     }

@@ -46,7 +46,7 @@ impl std::str::FromStr for VAlarm {
     type Err = crate::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        crate::parser::valarm(s)
+        crate::parser::valarm(&s.replace("\r\n ", ""))
             .map_err(crate::Error::from)
             .map(|(_, x)| x)
     }

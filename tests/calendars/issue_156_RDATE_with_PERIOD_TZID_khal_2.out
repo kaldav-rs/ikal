@@ -66,7 +66,7 @@ Ok(
                             "CN": "(omitted)",
                             "PARTSTAT": "ACCEPTED",
                             "ROLE": "CHAIR",
-                            "RSVP": "FAL\r\n SE",
+                            "RSVP": "FALSE",
                         },
                         uri: "mailto:omitted@example.com",
                     },

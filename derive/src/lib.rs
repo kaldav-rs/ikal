@@ -65,7 +65,7 @@ fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             let new_part = quote::quote! {
                 #name: crate::parser::#name(
                     properties.get(#field_name)
-                    .ok_or_else(|| dbg!(crate::Error::Parser(concat!("Missing field ", #field_name).to_string())))?
+                    .ok_or_else(|| crate::Error::Parser(concat!("Missing field ", #field_name).to_string()))?
                     .clone()
                 )?
             };
@@ -133,7 +133,7 @@ fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::TokenStream> {
             type Err = crate::Error;
 
             fn from_str(s: &str) -> Result<Self, Self::Err> {
-                crate::parser::#parser(s)
+                crate::parser::#parser(&s.replace("\r\n ", ""))
                     .map_err(crate::Error::from)
                     .map(|(_, x)| x)
             }

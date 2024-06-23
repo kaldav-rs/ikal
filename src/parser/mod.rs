@@ -26,7 +26,7 @@ use nom::bytes::complete::{tag, take_till, take_while};
 use nom::character::complete::{anychar, char, line_ending};
 use nom::combinator::{map, map_res, not, opt};
 use nom::error::context;
-use nom::multi::{count, fold_many0, many0};
+use nom::multi::{count, fold_many0};
 use nom::sequence::{preceded, separated_pair, tuple};
 use std::collections::BTreeMap;
 
@@ -67,35 +67,8 @@ fn attr(input: &str) -> NomResult<&str, &str> {
     )(input)
 }
 
-fn value_line(input: &str) -> NomResult<&str, &str> {
-    context("value_line", take_till(is_line_ending))(input)
-}
-
-fn value_part(input: &str) -> NomResult<&str, &str> {
-    context(
-        "value_part",
-        map(
-            tuple((value_line, line_ending, tag(" "))),
-            |(value, _, _)| value,
-        ),
-    )(input)
-}
-
-fn value(input: &str) -> NomResult<&str, String> {
-    context(
-        "value",
-        map(
-            tuple((many0(value_part), value_line)),
-            |(value, value_end)| {
-                let mut acc = String::new();
-
-                for v in value {
-                    acc.push_str(v);
-                }
-                acc + value_end
-            },
-        ),
-    )(input)
+fn value(input: &str) -> NomResult<&str, &str> {
+    context("value", take_till(is_line_ending))(input)
 }
 
 fn quote(chr: char) -> bool {
@@ -153,7 +126,7 @@ pub(crate) fn content_line(input: &str) -> NomResult<&str, (&str, crate::Content
                     key,
                     crate::ContentLine {
                         params,
-                        value: value.unwrap_or_default(),
+                        value: value.unwrap_or_default().to_string(),
                     },
                 )
             },
