@@ -20,9 +20,7 @@ Ok(
                         freq: Yearly,
                         until: None,
                         count: None,
-                        interval: Some(
-                            1,
-                        ),
+                        interval: 1,
                         by_second: [],
                         by_minute: [],
                         by_hour: [],
@@ -70,9 +68,7 @@ Ok(
                         freq: Yearly,
                         until: None,
                         count: None,
-                        interval: Some(
-                            1,
-                        ),
+                        interval: 1,
                         by_second: [],
                         by_minute: [],
                         by_hour: [],

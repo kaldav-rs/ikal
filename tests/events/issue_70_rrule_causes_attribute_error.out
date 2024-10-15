@@ -50,9 +50,7 @@ Ok(
                     ),
                 ),
                 count: None,
-                interval: Some(
-                    1,
-                ),
+                interval: 2,
                 by_second: [],
                 by_minute: [],
                 by_hour: [],

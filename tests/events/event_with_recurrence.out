@@ -38,7 +38,7 @@ Ok(
                 count: Some(
                     100,
                 ),
-                interval: None,
+                interval: 1,
                 by_second: [],
                 by_minute: [],
                 by_hour: [],

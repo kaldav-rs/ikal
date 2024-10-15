@@ -31,7 +31,7 @@ Ok(
                 freq: Yearly,
                 until: None,
                 count: None,
-                interval: None,
+                interval: 1,
                 by_second: [],
                 by_minute: [],
                 by_hour: [],

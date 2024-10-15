@@ -6,7 +6,7 @@ pub struct Recur {
     pub freq: Freq,
     pub until: Option<crate::Date>,
     pub count: Option<u8>,
-    pub interval: Option<u8>,
+    pub interval: u8,
     pub by_second: Vec<i8>,
     pub by_minute: Vec<i8>,
     pub by_hour: Vec<i8>,
