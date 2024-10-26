@@ -113,6 +113,17 @@ impl std::cmp::Ord for DateTime {
     }
 }
 
+impl std::ops::Add<chrono::TimeDelta> for DateTime {
+    type Output = Self;
+
+    fn add(self, rhs: chrono::TimeDelta) -> Self::Output {
+        match self {
+            Self::Naive(naive) => Self::Naive(naive + rhs),
+            Self::Local(local) => Self::Local(local + rhs),
+        }
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Date {
     Date(chrono::NaiveDate),
