@@ -1,5 +1,7 @@
 #![warn(warnings)]
 
+pub mod iter;
+
 mod components;
 mod content_line;
 mod errors;

@@ -10,6 +10,8 @@ pub enum Error {
     Freq(String),
     #[error("Unknow key {0}")]
     Key(String),
+    #[error("Invalid date in local timezone: {0:?}")]
+    Local(crate::properties::DateTime),
     #[error("{0}")]
     ParseIntError(#[from] std::num::ParseIntError),
     #[error("{0}")]
