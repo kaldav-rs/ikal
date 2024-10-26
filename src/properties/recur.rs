@@ -105,11 +105,7 @@ impl std::ops::Add<chrono::DateTime<chrono::Local>> for crate::Recur {
             Freq::Daily => chrono::TimeDelta::days(self.interval.into()),
             Freq::Weekly => chrono::TimeDelta::weeks(self.interval.into()),
             Freq::Monthly => return rhs + chrono::Months::new(self.interval.into()),
-            Freq::Yearly => {
-                return rhs
-                    .with_year(rhs.year() + self.interval as i32)
-                    .unwrap()
-            }
+            Freq::Yearly => return rhs.with_year(rhs.year() + self.interval as i32).unwrap(),
         };
 
         rhs + interval
@@ -127,11 +123,7 @@ impl std::ops::Add<chrono::NaiveDateTime> for crate::Recur {
             Freq::Daily => chrono::TimeDelta::days(self.interval.into()),
             Freq::Weekly => chrono::TimeDelta::weeks(self.interval.into()),
             Freq::Monthly => return rhs + chrono::Months::new(self.interval.into()),
-            Freq::Yearly => {
-                return rhs
-                    .with_year(rhs.year() + self.interval as i32)
-                    .unwrap()
-            }
+            Freq::Yearly => return rhs.with_year(rhs.year() + self.interval as i32).unwrap(),
         };
 
         rhs + interval

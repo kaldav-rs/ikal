@@ -98,7 +98,11 @@ pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
                     })
                     .transpose()?,
                 count: map.get("COUNT").map(|x| x.parse()).transpose()?,
-                interval: map.get("INTERVAL").map(|x| x.parse()).transpose()?.unwrap_or(1),
+                interval: map
+                    .get("INTERVAL")
+                    .map(|x| x.parse())
+                    .transpose()?
+                    .unwrap_or(1),
                 by_second: map.get("BYSECOND").map(by).transpose()?.unwrap_or_default(),
                 by_minute: map.get("BYMINUTE").map(by).transpose()?.unwrap_or_default(),
                 by_hour: map.get("BYHOUR").map(by).transpose()?.unwrap_or_default(),

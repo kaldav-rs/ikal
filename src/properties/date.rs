@@ -73,7 +73,10 @@ impl TryFrom<DateTime> for chrono::DateTime<chrono::Local> {
 
     fn try_from(value: DateTime) -> Result<Self, Self::Error> {
         match value {
-            DateTime::Naive(naive) => naive.and_local_timezone(chrono::Local).earliest().ok_or(crate::Error::Local(value)),
+            DateTime::Naive(naive) => naive
+                .and_local_timezone(chrono::Local)
+                .earliest()
+                .ok_or(crate::Error::Local(value)),
             DateTime::Local(local) => Ok(local),
         }
     }
