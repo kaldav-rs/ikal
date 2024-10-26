@@ -11,6 +11,7 @@ impl Default for RDate {
 }
 
 impl RDate {
+    #[must_use]
     pub fn new() -> Self {
         Self::Date(Vec::new())
     }

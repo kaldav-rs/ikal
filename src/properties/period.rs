@@ -8,6 +8,7 @@ pub enum Period {
 }
 
 impl Period {
+    #[must_use]
     pub fn duration(&self) -> chrono::Duration {
         match self {
             Self::StartEnd(StartEnd { start, end }) => end.clone() - start.clone(),

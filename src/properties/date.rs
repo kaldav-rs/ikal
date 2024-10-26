@@ -5,6 +5,7 @@ pub enum DateTime {
 }
 
 impl DateTime {
+    #[must_use]
     pub fn date_naive(&self) -> chrono::NaiveDate {
         match self {
             Self::Naive(date) => date.date(),
@@ -12,6 +13,7 @@ impl DateTime {
         }
     }
 
+    #[must_use]
     pub fn format<'a>(
         &self,
         fmt: &'a str,
@@ -22,6 +24,7 @@ impl DateTime {
         }
     }
 
+    #[must_use]
     pub fn naive(&self) -> chrono::NaiveDateTime {
         match self {
             Self::Naive(date) => *date,
