@@ -1,3 +1,5 @@
+use chrono::Datelike as _;
+
 /**
  * See [3.3.10. Recurrence Rule](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3)
  */
@@ -42,6 +44,102 @@ impl std::str::FromStr for Recur {
         crate::parser::rrule(s.into())
     }
 }
+
+impl std::ops::Add<crate::Date> for crate::Recur {
+    type Output = crate::DateTime;
+
+    fn add(self, rhs: crate::Date) -> Self::Output {
+        match rhs {
+            crate::Date::Date(date) => {
+                crate::DateTime::Naive(self + date.and_hms_opt(0, 0, 0).unwrap())
+            }
+            crate::Date::DateTime(dt) => self + dt,
+        }
+    }
+}
+impl std::ops::Add<chrono::NaiveDate> for crate::Recur {
+    type Output = chrono::NaiveDateTime;
+
+    fn add(self, rhs: chrono::NaiveDate) -> Self::Output {
+        let interval = match self.freq {
+            Freq::Secondly => chrono::TimeDelta::seconds(self.interval.into()),
+            Freq::Minutely => chrono::TimeDelta::minutes(self.interval.into()),
+            Freq::Hourly => chrono::TimeDelta::hours(self.interval.into()),
+            Freq::Daily => chrono::TimeDelta::days(self.interval.into()),
+            Freq::Weekly => chrono::TimeDelta::weeks(self.interval.into()),
+            Freq::Monthly => {
+                return rhs.and_hms_opt(0, 0, 0).unwrap()
+                    + chrono::Months::new(self.interval.into())
+            }
+            Freq::Yearly => {
+                return rhs
+                    .with_year(rhs.year() + self.interval as i32)
+                    .unwrap()
+                    .into()
+            }
+        };
+
+        (rhs + interval).into()
+    }
+}
+
+impl std::ops::Add<crate::DateTime> for crate::Recur {
+    type Output = crate::DateTime;
+
+    fn add(self, rhs: crate::DateTime) -> Self::Output {
+        match rhs {
+            crate::DateTime::Naive(date) => crate::DateTime::Naive(self + date),
+            crate::DateTime::Local(date) => crate::DateTime::Local(self + date),
+        }
+    }
+}
+
+impl std::ops::Add<chrono::DateTime<chrono::Local>> for crate::Recur {
+    type Output = chrono::DateTime<chrono::Local>;
+
+    fn add(self, rhs: chrono::DateTime<chrono::Local>) -> Self::Output {
+        let interval = match self.freq {
+            Freq::Secondly => chrono::TimeDelta::seconds(self.interval.into()),
+            Freq::Minutely => chrono::TimeDelta::minutes(self.interval.into()),
+            Freq::Hourly => chrono::TimeDelta::hours(self.interval.into()),
+            Freq::Daily => chrono::TimeDelta::days(self.interval.into()),
+            Freq::Weekly => chrono::TimeDelta::weeks(self.interval.into()),
+            Freq::Monthly => return rhs + chrono::Months::new(self.interval.into()),
+            Freq::Yearly => {
+                return rhs
+                    .with_year(rhs.year() + self.interval as i32)
+                    .unwrap()
+                    .into()
+            }
+        };
+
+        rhs + interval
+    }
+}
+
+impl std::ops::Add<chrono::NaiveDateTime> for crate::Recur {
+    type Output = chrono::NaiveDateTime;
+
+    fn add(self, rhs: chrono::NaiveDateTime) -> Self::Output {
+        let interval = match self.freq {
+            Freq::Secondly => chrono::TimeDelta::seconds(self.interval.into()),
+            Freq::Minutely => chrono::TimeDelta::minutes(self.interval.into()),
+            Freq::Hourly => chrono::TimeDelta::hours(self.interval.into()),
+            Freq::Daily => chrono::TimeDelta::days(self.interval.into()),
+            Freq::Weekly => chrono::TimeDelta::weeks(self.interval.into()),
+            Freq::Monthly => return rhs + chrono::Months::new(self.interval.into()),
+            Freq::Yearly => {
+                return rhs
+                    .with_year(rhs.year() + self.interval as i32)
+                    .unwrap()
+                    .into()
+            }
+        };
+
+        rhs + interval
+    }
+}
+
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub enum Freq {
     Secondly,
