@@ -220,3 +220,14 @@ impl std::cmp::Ord for Date {
         }
     }
 }
+
+impl std::ops::Add<chrono::TimeDelta> for Date {
+    type Output = Self;
+
+    fn add(self, rhs: chrono::TimeDelta) -> Self::Output {
+        match self {
+            Self::Date(date) => Self::Date(date + rhs),
+            Self::DateTime(dt) => Self::DateTime(dt + rhs),
+        }
+    }
+}
