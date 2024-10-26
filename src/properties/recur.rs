@@ -1,7 +1,7 @@
 /**
  * See [3.3.10. Recurrence Rule](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3)
  */
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Recur {
     pub freq: Freq,
     pub until: Option<crate::Date>,
@@ -42,11 +42,12 @@ impl std::str::FromStr for Recur {
         crate::parser::rrule(s.into())
     }
 }
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub enum Freq {
     Secondly,
     Minutely,
     Hourly,
+    #[default]
     Daily,
     Weekly,
     Monthly,
