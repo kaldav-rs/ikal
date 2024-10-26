@@ -39,6 +39,46 @@ impl Default for DateTime {
     }
 }
 
+impl From<Date> for DateTime {
+    fn from(value: Date) -> Self {
+        match value {
+            Date::Date(date) => DateTime::Naive(date.and_hms_opt(0, 0, 0).unwrap()),
+            Date::DateTime(dt) => dt.clone(),
+        }
+    }
+}
+impl From<chrono::NaiveDateTime> for DateTime {
+    fn from(value: chrono::NaiveDateTime) -> Self {
+        Self::Naive(value)
+    }
+}
+
+impl From<chrono::DateTime<chrono::Local>> for DateTime {
+    fn from(value: chrono::DateTime<chrono::Local>) -> Self {
+        Self::Local(value)
+    }
+}
+
+impl From<DateTime> for chrono::NaiveDateTime {
+    fn from(value: DateTime) -> Self {
+        match value {
+            DateTime::Naive(naive) => naive,
+            DateTime::Local(local) => local.naive_local(),
+        }
+    }
+}
+
+impl TryFrom<DateTime> for chrono::DateTime<chrono::Local> {
+    type Error = crate::Error;
+
+    fn try_from(value: DateTime) -> Result<Self, Self::Error> {
+        match value {
+            DateTime::Naive(naive) => naive.and_local_timezone(chrono::Local).earliest().ok_or(crate::Error::Local(value)),
+            DateTime::Local(local) => Ok(local),
+        }
+    }
+}
+
 impl std::ops::Sub for DateTime {
     type Output = chrono::Duration;
 
@@ -116,6 +156,39 @@ impl std::fmt::Display for Date {
         match self {
             Self::Date(date) => date.fmt(f),
             Self::DateTime(date_time) => date_time.fmt(f),
+        }
+    }
+}
+
+impl From<DateTime> for Date {
+    fn from(value: DateTime) -> Self {
+        Date::DateTime(value)
+    }
+}
+
+impl From<chrono::NaiveDate> for Date {
+    fn from(value: chrono::NaiveDate) -> Self {
+        Self::Date(value)
+    }
+}
+
+impl From<chrono::DateTime<chrono::Local>> for Date {
+    fn from(value: chrono::DateTime<chrono::Local>) -> Self {
+        Self::DateTime(value.into())
+    }
+}
+
+impl From<chrono::NaiveDateTime> for Date {
+    fn from(value: chrono::NaiveDateTime) -> Self {
+        Self::DateTime(value.into())
+    }
+}
+
+impl From<Date> for chrono::NaiveDate {
+    fn from(value: Date) -> Self {
+        match value {
+            Date::Date(date) => date,
+            Date::DateTime(dt) => dt.date_naive(),
         }
     }
 }
