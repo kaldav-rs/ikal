@@ -1,4 +1,4 @@
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum DateTime {
     Naive(chrono::NaiveDateTime),
     Local(chrono::DateTime<chrono::Local>),
@@ -70,7 +70,7 @@ impl std::cmp::Ord for DateTime {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Date {
     Date(chrono::NaiveDate),
     DateTime(DateTime),
