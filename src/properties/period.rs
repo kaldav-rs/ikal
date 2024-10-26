@@ -11,7 +11,7 @@ impl Period {
     #[must_use]
     pub fn duration(&self) -> chrono::Duration {
         match self {
-            Self::StartEnd(StartEnd { start, end }) => end.clone() - start.clone(),
+            Self::StartEnd(StartEnd { start, end }) => *end - *start,
             Self::StartDur(StartDur { duration, .. }) => *duration,
         }
     }
@@ -67,8 +67,8 @@ impl std::cmp::PartialOrd for StartEnd {
 
 impl std::cmp::Ord for StartEnd {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        let a = self.end.clone() - self.start.clone();
-        let b = other.end.clone() - other.start.clone();
+        let a = self.end - self.start;
+        let b = other.end - other.start;
 
         a.cmp(&b)
     }
@@ -88,8 +88,8 @@ impl std::cmp::PartialOrd for StartDur {
 
 impl std::cmp::Ord for StartDur {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        let a = self.start.clone() - self.duration;
-        let b = other.start.clone() - other.duration;
+        let a = self.start - self.duration;
+        let b = other.start - other.duration;
 
         a.cmp(&b)
     }

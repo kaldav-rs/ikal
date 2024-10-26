@@ -43,7 +43,7 @@ impl From<Date> for DateTime {
     fn from(value: Date) -> Self {
         match value {
             Date::Date(date) => DateTime::Naive(date.and_hms_opt(0, 0, 0).unwrap()),
-            Date::DateTime(dt) => dt.clone(),
+            Date::DateTime(dt) => dt,
         }
     }
 }

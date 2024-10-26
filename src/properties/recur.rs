@@ -109,7 +109,6 @@ impl std::ops::Add<chrono::DateTime<chrono::Local>> for crate::Recur {
                 return rhs
                     .with_year(rhs.year() + self.interval as i32)
                     .unwrap()
-                    .into()
             }
         };
 
@@ -132,7 +131,6 @@ impl std::ops::Add<chrono::NaiveDateTime> for crate::Recur {
                 return rhs
                     .with_year(rhs.year() + self.interval as i32)
                     .unwrap()
-                    .into()
             }
         };
 
