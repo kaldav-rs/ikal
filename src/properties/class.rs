@@ -1,8 +1,9 @@
 /**
  * See [3.8.1.3. Classification](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.3)
  */
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub enum Class {
+    #[default]
     Public,
     Private,
     Confidential,
