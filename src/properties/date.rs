@@ -100,7 +100,26 @@ impl std::ops::Sub<chrono::Duration> for DateTime {
 
 impl std::fmt::Display for DateTime {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        self.naive().fmt(f)
+        match self {
+            DateTime::Naive(naive) => naive.format("%Y%m%dT%H%M%S").fmt(f),
+            DateTime::Local(local) => local.format("%Y%m%dT%H%M%SZ").fmt(f),
+        }
+    }
+}
+
+impl std::str::FromStr for DateTime {
+    type Err = crate::Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        if let Ok(naive) = chrono::NaiveDateTime::parse_from_str(s, "%Y%m%dT%H%M%S") {
+            Ok(Self::Naive(naive))
+        } else {
+            let naive = chrono::NaiveDateTime::parse_from_str(s, "%Y%m%dT%H%M%SZ")?;
+
+            Ok(Self::Local(
+                naive.and_local_timezone(chrono::Local).unwrap(),
+            ))
+        }
     }
 }
 
@@ -126,6 +145,8 @@ impl std::ops::Add<chrono::TimeDelta> for DateTime {
         }
     }
 }
+
+crate::ser::ical_for_tostring!(DateTime);
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Date {
@@ -165,10 +186,22 @@ impl Default for Date {
     }
 }
 
+impl std::str::FromStr for Date {
+    type Err = crate::Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        if let Ok(date) = chrono::NaiveDate::parse_from_str(s, "%Y%m%d") {
+            return Ok(Self::Date(date));
+        }
+
+        DateTime::from_str(s).map(Into::into)
+    }
+}
+
 impl std::fmt::Display for Date {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Date(date) => date.fmt(f),
+            Self::Date(date) => date.format("%Y%m%d").to_string().fmt(f),
             Self::DateTime(date_time) => date_time.fmt(f),
         }
     }
@@ -232,5 +265,38 @@ impl std::ops::Add<chrono::TimeDelta> for Date {
             Self::Date(date) => Self::Date(date + rhs),
             Self::DateTime(dt) => Self::DateTime(dt + rhs),
         }
+    }
+}
+
+impl crate::ser::Serialize for Date {
+    fn attr(&self) -> Option<String> {
+        match self {
+            Date::Date(_) => "VALUE=DATE".to_string().into(),
+            Date::DateTime(_) => None,
+        }
+    }
+
+    fn ical(&self) -> crate::Result<String> {
+        Ok(self.to_string())
+    }
+}
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn ser() -> crate::Result {
+        let date = crate::Date::default();
+        assert_eq!(crate::ser::ical(&date)?, "19700101T000000");
+
+        let date = crate::Date::Date(chrono::NaiveDate::default());
+        assert_eq!(crate::ser::ical(&date)?, "VALUE=DATE:19700101");
+
+        let date_time = crate::DateTime::Naive(chrono::NaiveDateTime::default());
+        assert_eq!(crate::ser::ical(&date_time)?, "19700101T000000");
+
+        let date_time = crate::DateTime::Local(chrono::DateTime::default());
+        assert_eq!(crate::ser::ical(&date_time)?, "19700101T010000Z");
+
+        Ok(())
     }
 }

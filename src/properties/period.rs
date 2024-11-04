@@ -53,6 +53,19 @@ impl std::cmp::Ord for Period {
     }
 }
 
+impl std::fmt::Display for Period {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Period::StartEnd(start_end) => start_end.to_string(),
+            Period::StartDur(start_dur) => start_dur.to_string(),
+        };
+
+        f.write_str(&s)
+    }
+}
+
+crate::ser::ical_for_tostring!(Period);
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct StartEnd {
     pub start: crate::DateTime,
@@ -74,6 +87,14 @@ impl std::cmp::Ord for StartEnd {
     }
 }
 
+impl std::fmt::Display for StartEnd {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}/{}", self.start, self.end)
+    }
+}
+
+crate::ser::ical_for_tostring!(StartEnd);
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct StartDur {
     pub start: crate::DateTime,
@@ -92,5 +113,36 @@ impl std::cmp::Ord for StartDur {
         let b = other.start - other.duration;
 
         a.cmp(&b)
+    }
+}
+
+impl std::fmt::Display for StartDur {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}/{}", self.start, self.duration)
+    }
+}
+
+crate::ser::ical_for_tostring!(StartDur);
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn ser() -> crate::Result {
+        let period = crate::Period::StartEnd(crate::period::StartEnd {
+            start: crate::DateTime::default(),
+            end: crate::DateTime::default(),
+        });
+        assert_eq!(
+            crate::ser::ical(&period)?,
+            "19700101T000000/19700101T000000"
+        );
+
+        let period = crate::Period::StartDur(crate::period::StartDur {
+            start: crate::DateTime::default(),
+            duration: chrono::TimeDelta::hours(5),
+        });
+        assert_eq!(crate::ser::ical(&period)?, "19700101T000000/PT18000S");
+
+        Ok(())
     }
 }

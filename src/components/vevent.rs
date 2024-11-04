@@ -62,4 +62,41 @@ mod test {
     fn parse() {
         crate::test::test_files::<crate::VEvent>("events");
     }
+
+    #[test]
+    fn ser() -> crate::Result {
+        let vevent = crate::VEvent {
+            created: Some("20170209T192358".parse()?),
+            dtstamp: "20170209T192358".parse()?,
+            last_modified: Some("20170209T192358".parse()?),
+            uid: "5UILHLI7RI6K2IDRAQX7O".into(),
+            summary: Some("Vers".into()),
+            class: crate::Class::Public.into(),
+            status: crate::Status::Confirmed.into(),
+            dtstart: "20170209".parse()?,
+            dtend: Some("20170210".parse()?),
+
+            ..Default::default()
+        };
+
+        let ical = crate::ser::ical(&vevent)?;
+
+        similar_asserts::assert_eq!(
+            ical,
+            "BEGIN:VEVENT\r
+DTSTAMP:20170209T192358\r
+UID:5UILHLI7RI6K2IDRAQX7O\r
+DTSTART;VALUE=DATE:20170209\r
+CLASS:PUBLIC\r
+CREATED:20170209T192358\r
+LAST-MODIFIED:20170209T192358\r
+STATUS:CONFIRMED\r
+SUMMARY:Vers\r
+DTEND;VALUE=DATE:20170210\r
+END:VEVENT\r
+"
+        );
+
+        Ok(())
+    }
 }

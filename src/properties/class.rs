@@ -40,3 +40,32 @@ impl std::str::FromStr for Class {
         Ok(class)
     }
 }
+
+impl std::fmt::Display for Class {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Self::Public => "PUBLIC".to_string(),
+            Self::Private => "PRIVATE".to_string(),
+            Self::Confidential => "CONFIDENTIAL".to_string(),
+            Self::Custom(s) => s.to_uppercase(),
+        };
+
+        f.write_str(&s)
+    }
+}
+
+crate::ser::ical_for_tostring!(Class);
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn ser() -> crate::Result {
+        let class = crate::Class::Public;
+        assert_eq!(crate::ser::ical(&class)?, "PUBLIC");
+
+        let class = crate::Class::Custom("Custom".to_string());
+        assert_eq!(crate::ser::ical(&class)?, "CUSTOM");
+
+        Ok(())
+    }
+}

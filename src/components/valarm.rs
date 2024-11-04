@@ -52,6 +52,24 @@ impl std::str::FromStr for VAlarm {
     }
 }
 
+impl crate::ser::Serialize for VAlarm {
+    fn ical(&self) -> crate::Result<String> {
+        let s = match self {
+            Self::Audio(audio) => audio.ical(),
+            Self::Display(display) => display.ical(),
+            Self::Email(email) => email.ical(),
+        }?;
+
+        let mut lines = s.split("\n").collect::<Vec<_>>();
+        lines[0] = "BEGIN:VALARM\r";
+        lines.pop();
+        lines.pop();
+        lines.push("END:VALARM\r\n");
+
+        Ok(lines.join("\n"))
+    }
+}
+
 #[derive(Clone, Debug, Default, Eq, PartialEq, crate::Component)]
 pub struct Audio {
     pub action: crate::Text,
@@ -120,5 +138,39 @@ mod test {
     #[test]
     fn parse() {
         crate::test::test_files::<crate::VAlarm>("alarms");
+    }
+
+    #[test]
+    fn ser() -> crate::Result {
+        let mut attach = crate::Text::from("ftp://example.com/pub/sounds/bell-01.aud");
+        attach
+            .params
+            .insert("FMTTYPE".to_string(), "audio/basic".to_string());
+
+        let valarm = crate::VAlarm::Audio(crate::valarm::Audio {
+            action: "AUDIO".into(),
+            trigger: "19970317T133000Z".parse()?,
+            duration: chrono::Duration::days(15).into(),
+            repeat: 4.into(),
+            attach: vec![attach],
+
+            ..Default::default()
+        });
+
+        let ical = crate::ser::ical(&valarm)?;
+
+        similar_asserts::assert_eq!(
+            ical,
+            "BEGIN:VALARM\r
+ACTION:AUDIO\r
+TRIGGER;VALUE=DATE-TIME:19970317T133000Z\r
+DURATION:PT1296000S\r
+REPEAT:4\r
+ATTACH;FMTTYPE=audio/basic:ftp://example.com/pub/sounds/bell-01.aud\r
+END:VALARM\r
+"
+        );
+
+        Ok(())
     }
 }

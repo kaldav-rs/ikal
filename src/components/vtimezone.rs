@@ -9,9 +9,9 @@ pub struct VTimezone {
     pub last_modified: Option<crate::DateTime>,
     pub tzurl: Option<crate::Uri>,
     #[component(ignore)]
-    pub standard: Vec<Prop>,
+    pub standard: Vec<Standard>,
     #[component(ignore)]
-    pub daylight: Vec<Prop>,
+    pub daylight: Vec<Daylight>,
     #[component(ignore)]
     pub x_prop: std::collections::BTreeMap<String, crate::ContentLine>,
     #[component(ignore)]
@@ -27,52 +27,110 @@ impl VTimezone {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub(crate) enum Component {
-    Standard(Prop),
-    Daylight(Prop),
+    Standard(Standard),
+    Daylight(Daylight),
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, crate::Component)]
-pub struct Prop {
-    pub dtstart: crate::Date,
-    pub tzoffsetto: chrono::offset::FixedOffset,
-    pub tzoffsetfrom: chrono::offset::FixedOffset,
-    pub rrule: Option<crate::Recur>,
-    pub comment: Vec<crate::Text>,
-    pub rdate: Vec<crate::RDate>,
-    pub tzname: Vec<crate::Text>,
-    #[component(ignore)]
-    pub x_prop: BTreeMap<String, crate::ContentLine>,
-    #[component(ignore)]
-    pub iana_prop: BTreeMap<String, crate::ContentLine>,
-}
+macro_rules! prop {
+    ($name:ident) => {
+        #[derive(Clone, Debug, Eq, PartialEq, crate::Component)]
+        pub struct $name {
+            pub dtstart: crate::Date,
+            pub tzoffsetto: chrono::offset::FixedOffset,
+            pub tzoffsetfrom: chrono::offset::FixedOffset,
+            pub rrule: Option<crate::Recur>,
+            pub comment: Vec<crate::Text>,
+            pub rdate: Vec<crate::RDate>,
+            pub tzname: Vec<crate::Text>,
+            #[component(ignore)]
+            pub x_prop: BTreeMap<String, crate::ContentLine>,
+            #[component(ignore)]
+            pub iana_prop: BTreeMap<String, crate::ContentLine>,
+        }
 
-impl Default for Prop {
-    fn default() -> Self {
-        Self::new()
-    }
-}
+        impl Default for $name {
+            fn default() -> Self {
+                Self::new()
+            }
+        }
 
-impl Prop {
-    #[must_use]
-    fn new() -> Self {
-        Self {
-            dtstart: crate::Date::default(),
-            tzoffsetto: chrono::offset::FixedOffset::east_opt(0).unwrap(),
-            tzoffsetfrom: chrono::offset::FixedOffset::east_opt(0).unwrap(),
-            rrule: None,
-            comment: Vec::new(),
-            rdate: Vec::new(),
-            tzname: Vec::new(),
-            x_prop: BTreeMap::new(),
-            iana_prop: BTreeMap::new(),
+        impl $name {
+            #[must_use]
+            fn new() -> Self {
+                Self {
+                    dtstart: crate::Date::default(),
+                    tzoffsetto: chrono::offset::FixedOffset::east_opt(0).unwrap(),
+                    tzoffsetfrom: chrono::offset::FixedOffset::east_opt(0).unwrap(),
+                    rrule: None,
+                    comment: Vec::new(),
+                    rdate: Vec::new(),
+                    tzname: Vec::new(),
+                    x_prop: BTreeMap::new(),
+                    iana_prop: BTreeMap::new(),
+                }
+            }
         }
     }
 }
+
+prop!(Standard);
+prop!(Daylight);
 
 #[cfg(test)]
 mod test {
     #[test]
     fn parse() {
         crate::test::test_files::<crate::VTimezone>("timezones");
+    }
+
+    #[test]
+    fn ser() -> crate::Result {
+        let vtimezone = crate::VTimezone {
+            tzid: "America/New_York".into(),
+            last_modified: Some("20050809T050000Z".parse()?),
+            standard: vec![crate::vtimezone::Standard {
+                dtstart: "20071104T020000".parse()?,
+                tzoffsetfrom: chrono::FixedOffset::west_opt(4 * 3600).unwrap(),
+                tzoffsetto: chrono::FixedOffset::west_opt(5 * 3600).unwrap(),
+                tzname: vec!["EST".into()],
+
+                ..Default::default()
+            }],
+            daylight: vec![crate::vtimezone::Daylight {
+                dtstart: "20070311T020000".parse()?,
+                tzoffsetfrom: chrono::FixedOffset::west_opt(5 * 3600).unwrap(),
+                tzoffsetto: chrono::FixedOffset::west_opt(4 * 3600).unwrap(),
+                tzname: vec!["EDT".into()],
+
+                ..Default::default()
+            }],
+
+            ..Default::default()
+        };
+
+        let ical = crate::ser::ical(&vtimezone)?;
+
+        similar_asserts::assert_eq!(
+            ical,
+            "BEGIN:VTIMEZONE\r
+TZID:America/New_York\r
+LAST-MODIFIED:20050809T050000Z\r
+BEGIN:STANDARD\r
+DTSTART:20071104T020000\r
+TZOFFSETTO:-0500\r
+TZOFFSETFROM:-0400\r
+TZNAME:EST\r
+END:STANDARD\r
+BEGIN:DAYLIGHT\r
+DTSTART:20070311T020000\r
+TZOFFSETTO:-0400\r
+TZOFFSETFROM:-0500\r
+TZNAME:EDT\r
+END:DAYLIGHT\r
+END:VTIMEZONE\r
+"
+        );
+
+        Ok(())
     }
 }

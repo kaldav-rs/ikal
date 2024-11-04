@@ -9,6 +9,15 @@ pub struct Text {
     pub text: String,
 }
 
+impl Text {
+    pub fn from(text: &str) -> Self {
+        Self {
+            params: BTreeMap::new(),
+            text: text.to_string(),
+        }
+    }
+}
+
 impl From<crate::ContentLine> for Text {
     fn from(value: crate::ContentLine) -> Self {
         Self {
@@ -43,9 +52,51 @@ impl From<String> for Text {
 
 impl From<&str> for Text {
     fn from(value: &str) -> Self {
-        Self {
-            params: BTreeMap::new(),
-            text: value.to_string(),
+        Self::from(value)
+    }
+}
+
+impl crate::ser::Serialize for Text {
+    fn ical(&self) -> crate::Result<String> {
+        self.to_string().ical()
+    }
+
+    fn attr(&self) -> Option<String> {
+        if self.params.is_empty() {
+            None
+        } else {
+            self.params.ical().ok()
         }
+    }
+}
+
+mod test {
+    #[test]
+    fn ser() -> crate::Result {
+        let text = crate::Text::from(
+            "Project XYZ ; Final Review
+Conference Room - 3B
+Come Prepared.",
+        );
+
+        assert_eq!(
+            crate::ser::ical(&text)?,
+            "Project XYZ \\; Final Review\\nConference Room - 3B\\nCome Prepared."
+        );
+
+        let text = crate::Text {
+            params: [
+                ("VALUE".to_string(), "DATE-TIME".to_string()),
+                ("TZID".to_string(), "Europe/Paris".to_string()),
+            ]
+            .into(),
+            text: "20150219T190000".to_string(),
+        };
+        assert_eq!(
+            crate::ser::ical(&text)?,
+            "TZID=Europe/Paris;VALUE=DATE-TIME:20150219T190000"
+        );
+
+        Ok(())
     }
 }

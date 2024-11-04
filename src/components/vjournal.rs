@@ -47,4 +47,41 @@ mod test {
     fn parse() {
         crate::test::test_files::<crate::VJournal>("journals");
     }
+
+    #[test]
+    fn ser() -> crate::Result {
+        let vjournal = crate::VJournal {
+            uid: "19970901T130000Z-123405@example.com".into(),
+            dtstart: "19970317".parse()?,
+            dtstamp: "19970901T130000Z".parse()?,
+            summary: Some("Staff meeting minutes".into()),
+            description: vec!["1. Staff meeting: Participants include Joe, Lisa, and Bob. Aurora project plans were reviewed. There is currently no budget reserves for this project. Lisa will escalate to management. Next meeting on Tuesday.
+2. Telephone Conference: ABC Corp. sales representative called to discuss new printer. Promised to get us a demo by Friday.
+3. Henry Miller (Handsoff Insurance): Car was totaled by tree. Is looking into a loaner car. 555-2323 (tel).".into()],
+
+            ..Default::default()
+        };
+
+        let ical = crate::ser::ical(&vjournal)?;
+
+        similar_asserts::assert_eq!(
+            ical,
+            "BEGIN:VJOURNAL\r
+DTSTAMP:19970901T130000Z\r
+UID:19970901T130000Z-123405@example.com\r
+DTSTART;VALUE=DATE:19970317\r
+SUMMARY:Staff meeting minutes\r
+DESCRIPTION:1. Staff meeting: Participants include Joe\\, Lisa\\, and Bob. Au\r
+ rora project plans were reviewed. There is currently no budget reserves for\r
+  this project. Lisa will escalate to management. Next meeting on Tuesday.\\n\r
+ 2. Telephone Conference: ABC Corp. sales representative called to discuss n\r
+ ew printer. Promised to get us a demo by Friday.\\n3. Henry Miller (Handsoff\r
+  Insurance): Car was totaled by tree. Is looking into a loaner car. 555-232\r
+ 3 (tel).\r
+END:VJOURNAL\r
+"
+        );
+
+        Ok(())
+    }
 }

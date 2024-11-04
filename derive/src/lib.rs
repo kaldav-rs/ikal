@@ -1,10 +1,20 @@
 mod component;
+mod serialize;
 
 #[proc_macro_derive(Component, attributes(component))]
 pub fn component_derive(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = syn::parse(input).unwrap();
 
     component::impl_macro(&ast)
+        .unwrap_or_else(syn::Error::into_compile_error)
+        .into()
+}
+
+#[proc_macro_derive(Serialize, attributes(serialize))]
+pub fn serialize_derive(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let ast = syn::parse(input).unwrap();
+
+    serialize::impl_macro(&ast)
         .unwrap_or_else(syn::Error::into_compile_error)
         .into()
 }

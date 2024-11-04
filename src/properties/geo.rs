@@ -30,3 +30,26 @@ impl std::str::FromStr for Geo {
         crate::parser::geo(s.into())
     }
 }
+
+impl std::fmt::Display for Geo {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{};{}", self.lat, self.lon)
+    }
+}
+
+crate::ser::ical_for_tostring!(Geo);
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn ser() -> crate::Result {
+        let geo = crate::Geo {
+            lat: 37.386013,
+            lon: -122.08293,
+        };
+
+        assert_eq!(crate::ser::ical(&geo)?, "37.386013;-122.08293");
+
+        Ok(())
+    }
+}

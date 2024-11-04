@@ -18,6 +18,8 @@ pub enum Error {
     Parser(String),
     #[error("Invalid priority: {0}")]
     Priority(u8),
+    #[error("{0}")]
+    Serialize(String),
     #[error("Unknow status {0}")]
     Status(String),
     #[error("Unknow time transparency {0}")]

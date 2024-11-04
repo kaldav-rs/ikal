@@ -1,6 +1,7 @@
 #![warn(warnings)]
 
 pub mod iter;
+pub mod ser;
 
 mod components;
 mod content_line;
@@ -13,7 +14,7 @@ pub use errors::*;
 pub use properties::*;
 
 use content_line::*;
-use ikal_derive::Component;
+use ikal_derive::*;
 
 #[cfg(test)]
 mod test {

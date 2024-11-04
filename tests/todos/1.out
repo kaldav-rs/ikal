@@ -1,0 +1,63 @@
+Ok(
+    VTodo {
+        dtstamp: Local(
+            2007-03-13T13:34:32+01:00,
+        ),
+        uid: Text {
+            params: {},
+            text: "20070313T123432Z-456553@example.com",
+        },
+        class: Some(
+            Confidential,
+        ),
+        completed: None,
+        created: None,
+        dtstart: None,
+        geo: None,
+        last_modified: None,
+        location: None,
+        organizer: None,
+        percent_complete: None,
+        priority: None,
+        recurid: None,
+        sequence: None,
+        status: Some(
+            NeedsAction,
+        ),
+        summary: Some(
+            Text {
+                params: {},
+                text: "Submit Quebec Income Tax Return for 2006",
+            },
+        ),
+        url: None,
+        rrule: None,
+        due: Some(
+            Date(
+                2007-05-01,
+            ),
+        ),
+        duration: None,
+        attach: [],
+        attendee: [],
+        categories: [
+            Text {
+                params: {},
+                text: "FAMILY",
+            },
+            Text {
+                params: {},
+                text: "FINANCE",
+            },
+        ],
+        comment: [],
+        contact: [],
+        exdate: [],
+        rstatus: [],
+        related_to: [],
+        resources: [],
+        rdate: [],
+        x_prop: {},
+        iana_prop: {},
+    },
+)

@@ -39,3 +39,33 @@ impl std::str::FromStr for TimeTransparency {
         Ok(status)
     }
 }
+
+impl std::fmt::Display for TimeTransparency {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Self::Opaque => "OPAQUE",
+            Self::Transparent => "TRANSPARENT",
+        };
+
+        f.write_str(s)
+    }
+}
+
+crate::ser::ical_for_tostring!(TimeTransparency);
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn ser() -> crate::Result {
+        assert_eq!(
+            crate::ser::ical(&crate::TimeTransparency::Transparent)?,
+            "TRANSPARENT"
+        );
+        assert_eq!(
+            crate::ser::ical(&crate::TimeTransparency::Opaque)?,
+            "OPAQUE"
+        );
+
+        Ok(())
+    }
+}

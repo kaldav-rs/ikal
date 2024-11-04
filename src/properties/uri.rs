@@ -49,3 +49,40 @@ impl From<&str> for Uri {
         }
     }
 }
+
+impl crate::ser::Serialize for Uri {
+    fn ical(&self) -> crate::Result<String> {
+        self.to_string().ical()
+    }
+
+    fn attr(&self) -> Option<String> {
+        if self.params.is_empty() {
+            None
+        } else {
+            self.params.ical().ok()
+        }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn ser() -> crate::Result {
+        let uri = crate::Uri::from("http://tzurl.org/zoneinfo/Pacific/Fiji");
+        assert_eq!(
+            crate::ser::ical(&uri)?,
+            "http://tzurl.org/zoneinfo/Pacific/Fiji"
+        );
+
+        let uri = crate::Uri {
+            params: [("RSVP".to_string(), "TRUE".to_string())].into(),
+            uri: "mailto:someone@example.com".to_string(),
+        };
+        assert_eq!(
+            crate::ser::ical(&uri)?,
+            "RSVP=TRUE:mailto:someone@example.com"
+        );
+
+        Ok(())
+    }
+}

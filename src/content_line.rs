@@ -34,3 +34,23 @@ impl From<&str> for ContentLine {
         value.to_string().into()
     }
 }
+
+impl std::fmt::Display for ContentLine {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(&self.value)
+    }
+}
+
+impl crate::ser::Serialize for ContentLine {
+    fn ical(&self) -> crate::Result<String> {
+        self.to_string().ical()
+    }
+
+    fn attr(&self) -> Option<String> {
+        if self.params.is_empty() {
+            None
+        } else {
+            self.params.ical().ok()
+        }
+    }
+}

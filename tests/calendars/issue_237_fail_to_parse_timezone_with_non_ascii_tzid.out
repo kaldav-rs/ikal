@@ -75,7 +75,7 @@ Ok(
                 last_modified: None,
                 tzurl: None,
                 standard: [
-                    Prop {
+                    Standard {
                         dtstart: DateTime(
                             Naive(
                                 1601-01-01T23:59:59,
@@ -123,7 +123,7 @@ Ok(
                     },
                 ],
                 daylight: [
-                    Prop {
+                    Daylight {
                         dtstart: DateTime(
                             Naive(
                                 1601-01-01T23:59:59,

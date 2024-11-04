@@ -48,3 +48,44 @@ impl VTodo {
         Self::default()
     }
 }
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn parse() {
+        crate::test::test_files::<crate::VTodo>("todos");
+    }
+
+    #[test]
+    fn ser() -> crate::Result {
+        let vtodo = crate::VTodo {
+            dtstamp: "20070313T123432Z".parse()?,
+            uid: "20070313T123432Z-456553@example.com".into(),
+            due: Some("20070501".parse()?),
+            summary: Some("Submit Quebec Income Tax Return for 2006".into()),
+            class: crate::Class::Confidential.into(),
+            categories: vec!["FAMILY".into(), "FINANCE".into()],
+            status: Some(crate::Status::NeedsAction),
+
+            ..Default::default()
+        };
+
+        let ical = crate::ser::ical(&vtodo)?;
+
+        similar_asserts::assert_eq!(
+            ical,
+            "BEGIN:VTODO\r
+DTSTAMP:20070313T123432Z\r
+UID:20070313T123432Z-456553@example.com\r
+CLASS:CONFIDENTIAL\r
+STATUS:NEEDS-ACTION\r
+SUMMARY:Submit Quebec Income Tax Return for 2006\r
+DUE;VALUE=DATE:20070501\r
+CATEGORIES:FAMILY,FINANCE\r
+END:VTODO\r
+"
+        );
+
+        Ok(())
+    }
+}

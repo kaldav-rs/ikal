@@ -1,4 +1,5 @@
 use darling::FromField;
+use quote::ToTokens as _;
 
 #[derive(Clone, Default, Debug, FromField)]
 #[darling(attributes(component))]
@@ -21,20 +22,18 @@ pub(crate) fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::Tok
     };
 
     let name = &ast.ident;
+    let name_str = name.to_token_stream().to_string();
     let parser = quote::format_ident!("{}", name.to_string().to_lowercase());
     let (impl_generics, ty_generics, where_clause) = ast.generics.split_for_impl();
 
     let mut new_body = Vec::new();
     let mut from_body = Vec::new();
+    let mut ser_body = Vec::new();
 
     for field in fields {
         let name = &field.ident;
         let ty = &field.ty;
         let field_params = Field::from_field(field)?;
-
-        if field_params.ignore {
-            continue;
-        }
 
         let field_name = name
             .as_ref()
@@ -42,6 +41,31 @@ pub(crate) fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::Tok
             .to_string()
             .to_uppercase()
             .replace('_', "-");
+
+        let ser_part = if crate::is_vec(ty) {
+            quote::quote! {
+                if self.#name.len() == 1 {
+                    s.push_str(&crate::ser::field(#field_name, &self.#name[0])?);
+                }
+                else if self.#name.attr().is_none() {
+                    s.push_str(&crate::ser::field(#field_name, &self.#name)?);
+                } else {
+                    for v in &self.#name {
+                        s.push_str(&crate::ser::field(#field_name, v)?);
+                    }
+                }
+            }
+        } else {
+            quote::quote! {
+                s.push_str(&crate::ser::field(#field_name, &self.#name)?);
+            }
+        };
+
+        ser_body.push(ser_part);
+
+        if field_params.ignore {
+            continue;
+        }
 
         let parser_fn = quote::quote! { crate::parser::#name(content_line)? };
         let parser = if crate::is_option(ty) {
@@ -127,6 +151,28 @@ pub(crate) fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::Tok
                 crate::parser::#parser(&s.replace("\r\n ", ""))
                     .map_err(crate::Error::from)
                     .map(|(_, x)| x)
+            }
+        }
+
+        #[automatically_derived]
+        impl #impl_generics crate::ser::Serialize for #name #ty_generics #where_clause {
+            fn component() -> Option<String> {
+                #name_str.to_uppercase().into()
+            }
+
+            fn ical(&self) -> crate::Result<::std::string::String> {
+                let mut s = String::new();
+                let name = Self::component().unwrap();
+
+                s.push_str("BEGIN:");
+                s.push_str(&name);
+                s.push_str("\r\n");
+                #(#ser_body)*
+                s.push_str("END:");
+                s.push_str(&name);
+                s.push_str("\r\n");
+
+                Ok(s)
             }
         }
     };

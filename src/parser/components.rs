@@ -26,12 +26,8 @@ component!(valarm, crate::VAlarm);
 component!(vfreebusy, crate::VFreebusy);
 component!(vtodo, crate::VTodo);
 component!(vjournal, crate::VJournal);
-component!(standard, crate::vtimezone::Prop);
-component!(daylight, crate::vtimezone::Prop);
-
-pub(crate) fn prop(_: &str) -> super::NomResult<&str, crate::vtimezone::Prop> {
-    unreachable!()
-}
+component!(standard, crate::vtimezone::Standard);
+component!(daylight, crate::vtimezone::Daylight);
 
 pub(crate) fn audio(_: &str) -> super::NomResult<&str, crate::valarm::Audio> {
     unreachable!()

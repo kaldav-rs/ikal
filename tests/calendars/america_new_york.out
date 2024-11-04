@@ -78,7 +78,7 @@ Ok(
                 ),
                 tzurl: None,
                 standard: [
-                    Prop {
+                    Standard {
                         dtstart: DateTime(
                             Naive(
                                 1967-10-29T02:00:00,
@@ -130,7 +130,7 @@ Ok(
                         x_prop: {},
                         iana_prop: {},
                     },
-                    Prop {
+                    Standard {
                         dtstart: DateTime(
                             Naive(
                                 2007-11-04T02:00:00,
@@ -178,7 +178,7 @@ Ok(
                     },
                 ],
                 daylight: [
-                    Prop {
+                    Daylight {
                         dtstart: DateTime(
                             Naive(
                                 1967-04-30T02:00:00,
@@ -230,7 +230,7 @@ Ok(
                         x_prop: {},
                         iana_prop: {},
                     },
-                    Prop {
+                    Daylight {
                         dtstart: DateTime(
                             Naive(
                                 1974-01-06T02:00:00,
@@ -260,7 +260,7 @@ Ok(
                         x_prop: {},
                         iana_prop: {},
                     },
-                    Prop {
+                    Daylight {
                         dtstart: DateTime(
                             Naive(
                                 1976-04-25T02:00:00,
@@ -312,7 +312,7 @@ Ok(
                         x_prop: {},
                         iana_prop: {},
                     },
-                    Prop {
+                    Daylight {
                         dtstart: DateTime(
                             Naive(
                                 1987-04-05T02:00:00,
@@ -364,7 +364,7 @@ Ok(
                         x_prop: {},
                         iana_prop: {},
                     },
-                    Prop {
+                    Daylight {
                         dtstart: DateTime(
                             Naive(
                                 2007-03-11T02:00:00,
