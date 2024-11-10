@@ -51,12 +51,7 @@ impl Iterator for Recur {
             *count = count.checked_sub(1)?;
         }
 
-        let dtstart = match current.dtstart {
-            crate::Date::Date(date) => crate::DateTime::Naive(date.and_hms_opt(0, 0, 0).unwrap()),
-            crate::Date::DateTime(dt) => dt,
-        };
-
-        next.dtstart = crate::Date::DateTime(rrule.clone() + dtstart);
+        next.dtstart = rrule.clone() + current.dtstart;
 
         self.event = next;
 
