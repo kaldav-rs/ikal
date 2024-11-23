@@ -78,6 +78,8 @@ prop!(Daylight);
 
 #[cfg(test)]
 mod test {
+    use crate as ikal;
+
     #[test]
     fn parse() {
         crate::test::test_files::<crate::VTimezone>("timezones");
@@ -85,28 +87,27 @@ mod test {
 
     #[test]
     fn ser() -> crate::Result {
-        let vtimezone = crate::VTimezone {
-            tzid: "America/New_York".into(),
-            last_modified: Some("20050809T050000Z".parse()?),
-            standard: vec![crate::vtimezone::Standard {
-                dtstart: "20071104T020000".parse()?,
-                tzoffsetfrom: chrono::FixedOffset::west_opt(4 * 3600).unwrap(),
-                tzoffsetto: chrono::FixedOffset::west_opt(5 * 3600).unwrap(),
-                tzname: vec!["EST".into()],
-
-                ..Default::default()
-            }],
-            daylight: vec![crate::vtimezone::Daylight {
-                dtstart: "20070311T020000".parse()?,
-                tzoffsetfrom: chrono::FixedOffset::west_opt(5 * 3600).unwrap(),
-                tzoffsetto: chrono::FixedOffset::west_opt(4 * 3600).unwrap(),
-                tzname: vec!["EDT".into()],
-
-                ..Default::default()
-            }],
-
-            ..Default::default()
-        };
+        let vtimezone = crate::vtimezone! {
+            tzid: "America/New_York",
+            last_modified: "20050809T050000Z",
+            tzurl: "http://zones.example.com/tz/America-New_York.ics",
+            standard: [
+                {
+                    dtstart: "20071104T020000",
+                    tzoffsetfrom: "-0400",
+                    tzoffsetto: "-0500",
+                    tzname: ["EST"],
+                },
+            ],
+            daylight: [
+                {
+                    dtstart: "20070311T020000",
+                    tzoffsetfrom: "-0500",
+                    tzoffsetto: "-0400",
+                    tzname: ["EDT"],
+                },
+            ],
+        }?;
 
         let ical = crate::ser::ical(&vtimezone)?;
 
@@ -115,6 +116,7 @@ mod test {
             "BEGIN:VTIMEZONE\r
 TZID:America/New_York\r
 LAST-MODIFIED:20050809T050000Z\r
+TZURL:http://zones.example.com/tz/America-New_York.ics\r
 BEGIN:STANDARD\r
 DTSTART:20071104T020000\r
 TZOFFSETTO:-0500\r

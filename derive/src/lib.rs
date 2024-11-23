@@ -1,4 +1,5 @@
 mod component;
+mod macros;
 mod serialize;
 
 #[proc_macro_derive(Component, attributes(component))]
@@ -18,6 +19,30 @@ pub fn serialize_derive(input: proc_macro::TokenStream) -> proc_macro::TokenStre
         .unwrap_or_else(syn::Error::into_compile_error)
         .into()
 }
+
+macro_rules! component {
+    ($name:ident, $ty:ty) => {
+        #[proc_macro]
+        pub fn $name(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+            let mut ast: macros::Map = syn::parse(input).unwrap();
+            ast.ty = stringify!($ty).to_string();
+
+            macros::impl_macro(&ast)
+                .unwrap_or_else(syn::Error::into_compile_error)
+                .into()
+        }
+    };
+}
+
+component!(audio, valarm::Audio);
+component!(display, valarm::Display);
+component!(email, valarm::Email);
+component!(vcalendar, VCalendar);
+component!(vevent, VEvent);
+component!(vfreebusy, VFreebusy);
+component!(vjournal, VJournal);
+component!(vtimezone, VTimezone);
+component!(vtodo, VTodo);
 
 fn is_option(ty: &syn::Type) -> bool {
     tyname(ty) == "Option"

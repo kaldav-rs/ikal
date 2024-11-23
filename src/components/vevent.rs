@@ -58,6 +58,8 @@ impl VEvent {
 
 #[cfg(test)]
 mod test {
+    use crate as ikal;
+
     #[test]
     fn parse() {
         crate::test::test_files::<crate::VEvent>("events");
@@ -65,19 +67,17 @@ mod test {
 
     #[test]
     fn ser() -> crate::Result {
-        let vevent = crate::VEvent {
-            created: Some("20170209T192358".parse()?),
-            dtstamp: "20170209T192358".parse()?,
-            last_modified: Some("20170209T192358".parse()?),
-            uid: "5UILHLI7RI6K2IDRAQX7O".into(),
-            summary: Some("Vers".into()),
-            class: crate::Class::Public.into(),
-            status: crate::Status::Confirmed.into(),
-            dtstart: "20170209".parse()?,
-            dtend: Some("20170210".parse()?),
-
-            ..Default::default()
-        };
+        let vevent = crate::vevent! {
+            created: "20170209T192358",
+            dtstamp: "20170209T192358",
+            last_modified: "20170209T192358",
+            uid: "5UILHLI7RI6K2IDRAQX7O",
+            summary: "Vers",
+            class: Public,
+            status: Confirmed,
+            dtstart: "20170209",
+            dtend: "20170210",
+        }?;
 
         let ical = crate::ser::ical(&vevent)?;
 
@@ -96,6 +96,59 @@ DTEND;VALUE=DATE:20170210\r
 END:VEVENT\r
 "
         );
+
+        Ok(())
+    }
+
+    #[test]
+    fn macros() -> crate::Result {
+        let _vevent = crate::vevent! {
+            dtstamp: "20170209T192358",
+            uid: "5UILHLI7RI6K2IDRAQX7O",
+            dtstart: "20170209",
+            class: Public,
+            created: "20170209T192358",
+            description: "",
+            geo: {
+                lat: 37.386013,
+                lon: -122.08293,
+            },
+            last_modified: "20170209T192358",
+            location: "",
+            organizer: "",
+            priority: 1,
+            sequence: 0,
+            status: Confirmed,
+            summary: "Vers",
+            transp: Transparent,
+            recurid: "20170210",
+            rrule: {
+                freq: Yearly,
+                interval: 1,
+            },
+            dtend: "20170210",
+            duration: "P1Y",
+            attach: [""],
+            attendee: [""],
+            categories: [""],
+            comment: [""],
+            contact: [""],
+            exdate: ["20170209"],
+            rstatus: [
+                {
+                    statcode: 2.0,
+                    statdesc: "Success",
+                }
+            ],
+            related_to: [""],
+            resources: [""],
+            //rdate: [],
+            alarms: [
+                //crate::valarm! {
+                //    @email,
+                //},
+            ],
+        }?;
 
         Ok(())
     }

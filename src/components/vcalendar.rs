@@ -34,6 +34,8 @@ impl VCalendar {
 
 #[cfg(test)]
 mod test {
+    use crate as ikal;
+
     #[test]
     fn parse() {
         crate::test::test_files::<crate::VCalendar>("calendars")
@@ -41,21 +43,19 @@ mod test {
 
     #[test]
     fn ser() -> crate::Result {
-        let vcalendar = crate::VCalendar {
-            version: "2.0".into(),
-            prodid: "-//hacksw/handcal//NONSGML v1.0//EN".into(),
-            events: vec![crate::VEvent {
-                uid: "19970610T172345Z-AF23B2@example.com".into(),
-                dtstamp: "19970610T172345Z".parse()?,
-                dtstart: "19970714T170000Z".parse()?,
-                dtend: "19970715T040000Z".parse().ok(),
-                summary: Some("Bastille Day Party".into()),
-
-                ..Default::default()
-            }],
-
-            ..Default::default()
-        };
+        let vcalendar = crate::vcalendar! {
+            version: "2.0",
+            prodid: "-//hacksw/handcal//NONSGML v1.0//EN",
+            events: [
+                {
+                    uid: "19970610T172345Z-AF23B2@example.com",
+                    dtstamp: "19970610T172345Z",
+                    dtstart: "19970714T170000Z",
+                    dtend: "19970715T040000Z",
+                    summary: "Bastille Day Party",
+                }
+            ],
+        }?;
 
         let ical = crate::ser::ical(&vcalendar)?;
 

@@ -51,6 +51,8 @@ impl VTodo {
 
 #[cfg(test)]
 mod test {
+    use crate as ikal;
+
     #[test]
     fn parse() {
         crate::test::test_files::<crate::VTodo>("todos");
@@ -58,17 +60,15 @@ mod test {
 
     #[test]
     fn ser() -> crate::Result {
-        let vtodo = crate::VTodo {
-            dtstamp: "20070313T123432Z".parse()?,
-            uid: "20070313T123432Z-456553@example.com".into(),
-            due: Some("20070501".parse()?),
-            summary: Some("Submit Quebec Income Tax Return for 2006".into()),
-            class: crate::Class::Confidential.into(),
-            categories: vec!["FAMILY".into(), "FINANCE".into()],
-            status: Some(crate::Status::NeedsAction),
-
-            ..Default::default()
-        };
+        let vtodo = crate::vtodo! {
+            dtstamp: "20070313T123432Z",
+            uid: "20070313T123432Z-456553@example.com",
+            due: "20070501",
+            summary: "Submit Quebec Income Tax Return for 2006",
+            class: Confidential,
+            categories: ["FAMILY", "FINANCE"],
+            status: NeedsAction,
+        }?;
 
         let ical = crate::ser::ical(&vtodo)?;
 
@@ -85,6 +85,56 @@ CATEGORIES:FAMILY,FINANCE\r
 END:VTODO\r
 "
         );
+
+        Ok(())
+    }
+
+    #[test]
+    fn macros() -> crate::Result {
+        let _vtodo = crate::vtodo! {
+            dtstamp: "20070313T123432Z",
+            uid: "20070313T123432Z-456553@example.com",
+            class: Confidential,
+            completed: "20070313T123432Z",
+            created: "20070313T123432Z",
+            dtstart: "20070501",
+            geo: {
+                lat: 0.,
+                lon: 0.,
+            },
+            last_modified: "20070313T123432Z",
+            location: "",
+            organizer: "",
+            percent_complete: 100,
+            priority: 10,
+            recurid: "20070313T123432Z",
+            sequence: 0,
+            status: NeedsAction,
+            summary: "",
+            url: "",
+            rrule: {
+                freq: Yearly,
+                interval: 1,
+            },
+            due: "20070501",
+            duration: "-PT10M",
+            attach: [""],
+            attendee: [""],
+            categories: ["FAMILY", "FINANCE"],
+            comment: [""],
+            contact: [""],
+            exdate: ["20070501"],
+            rstatus: [
+                {
+                    statcode: 2.8,
+                    statdesc: "Success",
+                    extdata: "",
+                }
+            ],
+            related_to: [""],
+            resources: [""],
+            //rdate: [""],
+        }?;
 
         Ok(())
     }

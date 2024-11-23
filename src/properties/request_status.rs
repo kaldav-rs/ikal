@@ -1,7 +1,7 @@
 /**
  * See [3.8.8.3. Request Status](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.8.3)
  */
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct RequestStatus {
     pub statcode: f32,
     pub statdesc: String,

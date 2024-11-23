@@ -28,7 +28,7 @@ impl std::str::FromStr for Trigger {
         if let Ok(dt) = crate::DateTime::from_str(s) {
             Ok(Self::DateTime(dt))
         } else {
-            todo!()
+            crate::parse_duration(s).map(Self::Duration)
         }
     }
 }

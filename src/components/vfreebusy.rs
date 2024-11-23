@@ -29,6 +29,8 @@ impl VFreebusy {
 
 #[cfg(test)]
 mod test {
+    use crate as ikal;
+
     #[test]
     fn parse() {
         crate::test::test_files::<crate::VFreebusy>("freebusy");
@@ -36,16 +38,14 @@ mod test {
 
     #[test]
     fn ser() -> crate::Result {
-        let vfreebusy = crate::VFreebusy {
-            dtstamp: "19970901T083000Z".parse()?,
-            uid: "19970901T082949Z-FA43EF@example.com".into(),
-            organizer: Some("mailto:jane_doe@example.com".into()),
-            attendee: vec!["mailto:john_public@example.com".into()],
-            dtstart: "19971015T050000Z".parse().ok(),
-            dtend: "19971016T050000Z".parse().ok(),
-
-            ..Default::default()
-        };
+        let vfreebusy = crate::vfreebusy! {
+            dtstamp: "19970901T083000Z",
+            uid: "19970901T082949Z-FA43EF@example.com",
+            organizer: "mailto:jane_doe@example.com",
+            attendee: ["mailto:john_public@example.com"],
+            dtstart: "19971015T050000Z",
+            dtend: "19971016T050000Z",
+        }?;
 
         let ical = crate::ser::ical(&vfreebusy)?;
 
@@ -61,6 +61,23 @@ ATTENDEE:mailto:john_public@example.com\r
 END:VFREEBUSY\r
 "
         );
+
+        Ok(())
+    }
+
+    #[test]
+    fn macros() -> crate::Result {
+        let _vfreebusy = crate::vfreebusy! {
+            dtstamp: "19970901T083000Z",
+            uid: "19970901T082949Z-FA43EF@example.com",
+            contact: "",
+            dtstart: "19971015T050000Z",
+            dtend: "19971016T050000Z",
+            organizer: "mailto:jane_doe@example.com",
+            url: "",
+            attendee: ["mailto:john_public@example.com"],
+            comment: [""],
+        }?;
 
         Ok(())
     }
