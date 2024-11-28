@@ -1,4 +1,4 @@
-/**
+/*!
  * See [3.7. Calendar Properties](https://datatracker.ietf.org/doc/html/rfc5545#section-3.7)
  */
 

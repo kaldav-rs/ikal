@@ -1,11 +1,11 @@
+/*!
+ * See [3.3. Property Value Data Types](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.5)
+ */
+
 use nom::bytes::complete::tag;
 use nom::combinator::{map, map_res, opt};
 use nom::error::{context, FromExternalError};
 use nom::sequence::{pair, preceded, terminated, tuple};
-
-/**
- * See [3.3. Property Value Data Types](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.5)
- */
 
 /**
  * See [3.3.3. Calendar User Address](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.3)

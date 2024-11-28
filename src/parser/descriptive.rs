@@ -1,4 +1,4 @@
-/**
+/*!
  * See [Descriptive Component Properties](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1)
  */
 

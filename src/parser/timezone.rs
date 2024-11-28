@@ -1,4 +1,4 @@
-/**
+/*!
  * See [3.8.3. Time Zone Component Properties](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.3)
  */
 

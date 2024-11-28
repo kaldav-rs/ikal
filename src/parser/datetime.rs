@@ -1,4 +1,4 @@
-/**
+/*!
  * See [.8.2. Date and Time Component Properties](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2)
  */
 
