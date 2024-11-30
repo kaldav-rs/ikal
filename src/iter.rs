@@ -52,6 +52,9 @@ impl Iterator for Recur {
         }
 
         next.dtstart = rrule.clone() + current.dtstart;
+        if let Some(dtend) = next.dtend.as_mut() {
+            *dtend = rrule.clone() + *dtend;
+        }
 
         self.event = next;
 
@@ -65,35 +68,36 @@ mod test {
 
     #[test]
     fn at() {
-        let now = chrono::Local::now()
-            .with_time(chrono::NaiveTime::default())
+        let now = chrono::Local::now().date_naive().into();
+
+        let event = crate::vevent! {
+            dtstart: "20240101",
+            dtend: "20240101",
+            rrule: {
+                freq: Daily,
+                interval: 1,
+            }
+        }
+        .unwrap();
+
+        let next = event.recurrent().at(now)
+            .next()
             .unwrap();
 
-        let mut event = crate::VEvent::new();
-        event.rrule = crate::Recur {
-            freq: crate::Freq::Daily,
-            interval: 1,
-
-            ..Default::default()
-        }
-        .into();
-
-        let mut events = event.recurrent().at(now);
-
-        assert_eq!(events.next().unwrap().dtstart, now.naive_local().into());
+        assert_eq!(next.dtstart, now);
+        assert_eq!(next.dtend, Some(now));
     }
 
     #[test]
     fn count() {
-        let mut event = crate::VEvent::new();
-        event.rrule = crate::Recur {
-            freq: crate::Freq::Weekly,
-            interval: 1,
-            count: Some(10),
-
-            ..Default::default()
+        let event = crate::vevent! {
+            rrule: {
+                freq: Weekly,
+                interval: 1,
+                count: 10,
+            }
         }
-        .into();
+        .unwrap();
 
         let events = event.recurrent();
 
@@ -102,17 +106,16 @@ mod test {
 
     #[test]
     fn after() {
-        let now = chrono::Local::now().into();
+        let now: crate::Date = chrono::Local::now().into();
 
-        let mut event = crate::VEvent::new();
-        event.rrule = crate::Recur {
-            freq: crate::Freq::Monthly,
-            interval: 1,
-            until: Some(now),
-
-            ..Default::default()
+        let event = crate::vevent! {
+            rrule: {
+                freq: Monthly,
+                interval: 1,
+                until: now,
+            }
         }
-        .into();
+        .unwrap();
 
         let mut events = event.recurrent().after(now);
 
@@ -123,14 +126,13 @@ mod test {
     fn between() {
         let now = chrono::Local::now();
 
-        let mut event = crate::VEvent::new();
-        event.rrule = crate::Recur {
-            freq: crate::Freq::Yearly,
-            interval: 10,
-
-            ..Default::default()
+        let event = crate::vevent! {
+            rrule: {
+                freq: Yearly,
+                interval: 10,
+            }
         }
-        .into();
+        .unwrap();
 
         use chrono::Datelike as _;
         let end = now.with_year(now.year() + 20).unwrap();
