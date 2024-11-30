@@ -47,6 +47,11 @@ impl VTodo {
     pub fn new() -> Self {
         Self::default()
     }
+
+    #[must_use]
+    pub fn recurrent(&self) -> crate::iter::Recur<Self> {
+        crate::iter::Recur::from(self)
+    }
 }
 
 #[cfg(test)]
