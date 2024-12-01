@@ -13,10 +13,109 @@ pub use components::*;
 pub use errors::*;
 pub use properties::*;
 
+/**
+ * Easily create a [`components::VCalendar`].
+ *
+ * This macro helps you to create a component with a nice syntax.
+ *
+ * Instead of writing this:
+ *
+ * ```
+ * let vcalendar = ikal::VCalendar {
+ *     version: "2.0".into(),
+ *     prodid: "-//hacksw/handcal//NONSGML v1.0//EN".into(),
+ *     events: vec![
+ *         ikal::VEvent {
+ *             uid: "19970610T172345Z-AF23B2@example.com".into(),
+ *             dtstamp: "19970610T172345Z".parse()?,
+ *             dtstart: "19970714T170000Z".parse()?,
+ *             summary: Some("Bastille Day Party".into()),
+ *             status: Some(ikal::Status::Confirmed),
+ *
+ *             ..Default::default()
+ *         }
+ *     ],
+ *
+ *     .. Default::default()
+ * };
+ * # Ok::<(), ikal::Error>(())
+ * ```
+ *
+ * You can write:
+ *
+ * ```ignore
+ * let vcalendar = ikal::vcalendar! {
+ *     version: "2.0",
+ *     prodid: "-//hacksw/handcal//NONSGML v1.0//EN",
+ *     events: [
+ *         {
+ *             uid: "19970610T172345Z-AF23B2@example.com",
+ *             dtstamp: "19970610T172345Z",
+ *             dtstart: "19970714T170000Z",
+ *             summary: "Bastille Day Party",
+ *             status: Confirmed,
+ *         }
+ *     ],
+ * }?;
+ * ```
+ *
+ * With this macro you don’t care if the value is optional, should be converted or parsed.
+ *
+ * Enum values are also shortened.
+ *
+ * This macro returns an `ikal::Result`.
+ */
+pub use ikal_derive::vcalendar;
+
+/**
+ * Easily create a [`components::VEvent`].
+ *
+ * See [`vcalendar!`] for more information.
+ */
+pub use ikal_derive::vevent;
+
+/**
+ * Easily create a [`components::VFreebusy`].
+ *
+ * See [`vcalendar!`] for more information.
+ */
+pub use ikal_derive::vfreebusy;
+
+/**
+ * Easily create a [`components::VJournal`].
+ *
+ * See [`vcalendar!`] for more information.
+ */
+pub use ikal_derive::vjournal;
+
+/**
+ * Easily create a [`components::VTimezone`].
+ *
+ * See [`vcalendar!`] for more information.
+ */
+pub use ikal_derive::vtimezone;
+
+/**
+ * Easily create a [`components::VTodo`].
+ *
+ * See [`vcalendar!`] for more information.
+ */
+pub use ikal_derive::vtodo;
+
+#[doc(hidden)]
+pub use ikal_derive::{audio, display, email};
+pub use ikal_derive::{Component, Serialize};
+
 use content_line::*;
-use ikal_derive::*;
 
 #[macro_export]
+/**
+ * Easily create a [`components::VAlarm`].
+ *
+ * The first argument of this macro is the kind of alarm: `@audio`, `@display` or `@email`.
+ *
+ * See [`vcalendar!`] for more information.
+ */
 macro_rules! valarm {
     (@$ty:ident, $( $tt:tt )*) => {
         $crate::$ty! { $( $tt )* }.map($crate::VAlarm::from)
