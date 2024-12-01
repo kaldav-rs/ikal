@@ -58,8 +58,6 @@ impl VEvent {
 
 #[cfg(test)]
 mod test {
-    use crate as ikal;
-
     #[test]
     fn parse() {
         crate::test::test_files::<crate::VEvent>("events");

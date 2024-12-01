@@ -1,12 +1,28 @@
 use quote::ToTokens as _;
 
+fn ikal() -> proc_macro2::TokenStream {
+    match (
+        proc_macro_crate::crate_name("ikal"),
+        std::env::var("CARGO_CRATE_NAME").as_deref(),
+    ) {
+        (Ok(proc_macro_crate::FoundCrate::Itself), Ok("ikal")) => quote::quote!(crate),
+        (Ok(proc_macro_crate::FoundCrate::Name(name)), _) => {
+            let ident = proc_macro2::Ident::new(&name, proc_macro2::Span::call_site());
+            quote::quote!(::#ident)
+        }
+        _ => quote::quote!(::ikal),
+    }
+}
+
 pub(crate) fn impl_macro(ast: &Map) -> syn::Result<proc_macro2::TokenStream> {
+    let ikal = ikal();
+
     Ok(quote::quote! {
         (|| {
             #[allow(clippy::needless_update)]
             let v = #ast;
 
-            Ok::<_, ikal::Error>(v)
+            Ok::<_, #ikal::Error>(v)
         })()
     })
 }
@@ -60,12 +76,11 @@ impl quote::ToTokens for Map {
             .entries
             .iter()
             .map(|x| TypedEntry(self.ty.clone(), x.clone()));
-        let ty = format!("ikal::{}", self.ty)
-            .parse::<proc_macro2::TokenStream>()
-            .unwrap();
+        let ikal = ikal();
+        let ty = self.ty.parse::<proc_macro2::TokenStream>().unwrap();
 
         let v = quote::quote! {
-            #ty {
+            #ikal::#ty {
                 #( #entries, )*
                 .. Default::default()
             }
@@ -163,7 +178,8 @@ impl quote::ToTokens for TypedValue {
 
                 let v = if Type::should_parsed(&self.0, &self.1) {
                     if self.1 == "duration" {
-                        quote::quote! { ikal::parse_duration(#v)? }
+                        let ikal = ikal();
+                        quote::quote! { #ikal::parse_duration(#v)? }
                     } else {
                         quote::quote! { #v.parse()? }
                     }
@@ -271,12 +287,17 @@ impl Type {
     }
 
     fn r#enum(_ty: &str, field: &str) -> Option<proc_macro2::TokenStream> {
-        match field {
-            "class" => "ikal::Class".parse().ok(),
-            "freq" => "ikal::Freq".parse().ok(),
-            "status" => "ikal::Status".parse().ok(),
-            "transp" => "ikal::TimeTransparency".parse().ok(),
-            _ => None,
+        let ikal = ikal();
+        let ty = match field {
+            "class" => "Class",
+            "freq" => "Freq",
+            "status" => "Status",
+            "transp" => "TimeTransparency",
+            _ => return None,
         }
+        .parse::<proc_macro2::TokenStream>()
+        .unwrap();
+
+        Some(quote::quote! { #ikal::#ty })
     }
 }

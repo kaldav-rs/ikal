@@ -159,8 +159,6 @@ impl From<Email> for VAlarm {
 
 #[cfg(test)]
 mod test {
-    use crate as ikal;
-
     #[test]
     fn parse() {
         crate::test::test_files::<crate::VAlarm>("alarms");

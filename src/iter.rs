@@ -153,8 +153,6 @@ impl<T: Recurring> Iterator for Recur<T> {
 
 #[cfg(test)]
 mod test {
-    use crate as ikal;
-
     #[test]
     fn at() {
         let now = chrono::Local::now().date_naive().into();
