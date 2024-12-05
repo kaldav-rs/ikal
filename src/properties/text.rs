@@ -70,6 +70,12 @@ impl crate::ser::Serialize for Text {
     }
 }
 
+impl AsRef<str> for Text {
+    fn as_ref(&self) -> &str {
+        self.text.as_ref()
+    }
+}
+
 mod test {
     #[test]
     fn ser() -> crate::Result {
