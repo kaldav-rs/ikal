@@ -27,17 +27,18 @@ use nom::character::complete::{anychar, char, line_ending};
 use nom::combinator::{map, map_res, not, opt};
 use nom::error::context;
 use nom::multi::{count, fold_many0};
-use nom::sequence::{preceded, separated_pair, tuple};
+use nom::sequence::{preceded, separated_pair};
+use nom::Parser as _;
 use std::collections::BTreeMap;
 
-pub(crate) type NomResult<I, O> = nom::IResult<I, O, nom::error::VerboseError<I>>;
+pub(crate) type NomResult<I, O> = nom::IResult<I, O, nom_language::error::VerboseError<I>>;
 
 fn is_alphabetic(chr: char) -> bool {
-    nom::character::is_alphabetic(chr as u8)
+    nom::AsChar::is_alpha(chr)
 }
 
 fn is_digit(chr: char) -> bool {
-    nom::character::is_digit(chr as u8)
+    nom::AsChar::is_dec_digit(chr)
 }
 
 fn is_sep(chr: char) -> bool {
@@ -53,22 +54,23 @@ fn is_line_ending(chr: char) -> bool {
 }
 
 fn digits(input: &str) -> NomResult<&str, &str> {
-    context("digits", take_while(is_digit))(input)
+    context("digits", take_while(is_digit)).parse(input)
 }
 
 fn key(input: &str) -> NomResult<&str, &str> {
-    context("key", take_while(is_alphanumeric))(input)
+    context("key", take_while(is_alphanumeric)).parse(input)
 }
 
 fn attr(input: &str) -> NomResult<&str, &str> {
     context(
         "attr",
         preceded(opt(tag("\r\n ")), take_till(|c| c == ';' || c == ':')),
-    )(input)
+    )
+    .parse(input)
 }
 
 fn value(input: &str) -> NomResult<&str, &str> {
-    context("value", take_till(is_line_ending))(input)
+    context("value", take_till(is_line_ending)).parse(input)
 }
 
 fn quote(chr: char) -> bool {
@@ -79,7 +81,8 @@ fn quoted_param(input: &str) -> NomResult<&str, (&str, &str)> {
     context(
         "quoted_param",
         separated_pair(key, tag("=\""), take_till(quote)),
-    )(input)
+    )
+    .parse(input)
 }
 
 fn param(input: &str) -> NomResult<&str, (&str, &str)> {
@@ -92,7 +95,8 @@ fn param(input: &str) -> NomResult<&str, (&str, &str)> {
             delimited(char(';'), quoted_param, char('"')),
             preceded(char(';'), separated_pair(key, char('='), attr)),
         )),
-    )(input)
+    )
+    .parse(input)
 }
 
 fn params(input: &str) -> NomResult<&str, BTreeMap<String, String>> {
@@ -102,7 +106,8 @@ fn params(input: &str) -> NomResult<&str, BTreeMap<String, String>> {
             acc.insert(key.to_string(), value.to_string());
             acc
         }),
-    )(input)
+    )
+    .parse(input)
 }
 
 /**
@@ -112,7 +117,7 @@ pub(crate) fn content_line(input: &str) -> NomResult<&str, (&str, crate::Content
     context(
         "content_line",
         map(
-            tuple((
+            (
                 not(tag("BEGIN:")),
                 not(tag("END:")),
                 key,
@@ -120,7 +125,7 @@ pub(crate) fn content_line(input: &str) -> NomResult<&str, (&str, crate::Content
                 char(':'),
                 opt(value),
                 line_ending,
-            )),
+            ),
             |(_, _, key, params, _, value, _)| {
                 (
                     key,
@@ -131,7 +136,8 @@ pub(crate) fn content_line(input: &str) -> NomResult<&str, (&str, crate::Content
                 )
             },
         ),
-    )(input)
+    )
+    .parse(input)
 }
 
 pub(crate) fn content_lines(input: &str) -> NomResult<&str, BTreeMap<String, crate::ContentLine>> {
@@ -141,7 +147,8 @@ pub(crate) fn content_lines(input: &str) -> NomResult<&str, BTreeMap<String, cra
             acc.insert(key.to_string(), value);
             acc
         }),
-    )(input)
+    )
+    .parse(input)
 }
 
 pub(crate) fn weekday(input: &str) -> NomResult<&str, crate::Weekday> {
@@ -164,15 +171,17 @@ pub(crate) fn weekday(input: &str) -> NomResult<&str, crate::Weekday> {
 
             Ok(weekday)
         }),
-    )(input)
+    )
+    .parse(input)
 }
 
 pub(crate) fn weekdaynum(input: &str) -> NomResult<&str, crate::WeekdayNum> {
     context(
         "weekdaynum",
         map(
-            tuple((opt(nom::character::complete::i8), weekday)),
+            (opt(nom::character::complete::i8), weekday),
             |(ord, weekday)| crate::WeekdayNum { weekday, ord },
         ),
-    )(input)
+    )
+    .parse(input)
 }

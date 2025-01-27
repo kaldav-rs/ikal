@@ -52,6 +52,7 @@ pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
     use nom::error::context;
     use nom::multi::many1;
     use nom::sequence::{separated_pair, terminated};
+    use nom::Parser as _;
 
     fn item(input: &str) -> super::NomResult<&str, (&str, &str)> {
         context(
@@ -60,7 +61,8 @@ pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
                 separated_pair(super::key, char('='), take_till(|c| c == ';')),
                 opt(char(';')),
             ),
-        )(input)
+        )
+        .parse(input)
     }
 
     fn by(input: &&&str) -> crate::Result<Vec<i8>> {
@@ -129,7 +131,8 @@ pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
 
             Ok::<_, crate::Error>(recur)
         }),
-    )(input.value.as_str())
+    )
+    .parse(input.value.as_str())
     .map(|(_, x)| x)
     .map_err(crate::Error::from)
 }

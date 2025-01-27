@@ -3,7 +3,8 @@ use nom::bytes::complete::tag;
 use nom::combinator::{map, map_res};
 use nom::error::{context, FromExternalError};
 use nom::multi::many0;
-use nom::sequence::{delimited, tuple};
+use nom::sequence::delimited;
+use nom::Parser as _;
 
 macro_rules! component {
     ($name:ident, $ty:ty) => {
@@ -17,7 +18,8 @@ macro_rules! component {
                     tag(format!("END:{c}\r\n").as_str()),
                 ),
                 |values| values.try_into(),
-            )(input)
+            )
+            .parse(input)
         }
     };
 }
@@ -47,7 +49,7 @@ pub(crate) fn vevent(input: &str) -> super::NomResult<&str, crate::VEvent> {
         map_res(
             delimited(
                 tag("BEGIN:VEVENT\r\n"),
-                tuple((super::content_lines, many0(valarm))),
+                (super::content_lines, many0(valarm)),
                 tag("END:VEVENT\r\n"),
             ),
             |(content_lines, alarms)| {
@@ -57,7 +59,8 @@ pub(crate) fn vevent(input: &str) -> super::NomResult<&str, crate::VEvent> {
                 Ok::<_, crate::Error>(vevent)
             },
         ),
-    )(input)
+    )
+    .parse(input)
 }
 
 pub(crate) fn vtimezone(input: &str) -> super::NomResult<&str, crate::VTimezone> {
@@ -66,13 +69,13 @@ pub(crate) fn vtimezone(input: &str) -> super::NomResult<&str, crate::VTimezone>
         map_res(
             delimited(
                 tag("BEGIN:VTIMEZONE\r\n"),
-                tuple((
+                (
                     super::content_lines,
                     many0(alt((
                         map(standard, crate::vtimezone::Component::Standard),
                         map(daylight, crate::vtimezone::Component::Daylight),
                     ))),
-                )),
+                ),
                 tag("END:VTIMEZONE\r\n"),
             ),
             |(values, components)| {
@@ -92,7 +95,8 @@ pub(crate) fn vtimezone(input: &str) -> super::NomResult<&str, crate::VTimezone>
                 Ok::<_, crate::Error>(vtimezone)
             },
         ),
-    )(input)
+    )
+    .parse(input)
 }
 
 pub(crate) fn component(input: &str) -> super::NomResult<&str, crate::Component> {
@@ -106,11 +110,12 @@ pub(crate) fn component(input: &str) -> super::NomResult<&str, crate::Component>
             map(vtimezone, crate::Component::Timezone),
             map(vtodo, crate::Component::Todo),
         )),
-    )(input)
+    )
+    .parse(input)
 }
 
 pub(crate) fn components(input: &str) -> super::NomResult<&str, Vec<crate::Component>> {
-    context("components", many0(component))(input)
+    context("components", many0(component)).parse(input)
 }
 
 pub(crate) fn vcalendar(input: &str) -> super::NomResult<&str, crate::VCalendar> {
@@ -119,12 +124,12 @@ pub(crate) fn vcalendar(input: &str) -> super::NomResult<&str, crate::VCalendar>
         map_res(
             delimited(
                 tag("BEGIN:VCALENDAR\r\n"),
-                tuple((super::content_lines, components)),
+                (super::content_lines, components),
                 tag("END:VCALENDAR"),
             ),
             |(content_lines, components)| {
                 let mut vcalendar: crate::VCalendar = content_lines.try_into().map_err(|e| {
-                    nom::error::VerboseError::from_external_error(
+                    nom_language::error::VerboseError::from_external_error(
                         input,
                         nom::error::ErrorKind::Fail,
                         e,
@@ -142,8 +147,9 @@ pub(crate) fn vcalendar(input: &str) -> super::NomResult<&str, crate::VCalendar>
                     }
                 }
 
-                Ok::<_, nom::error::VerboseError<_>>(vcalendar)
+                Ok::<_, nom_language::error::VerboseError<&str>>(vcalendar)
             },
         ),
-    )(input)
+    )
+    .parse(input)
 }

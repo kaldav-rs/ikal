@@ -45,10 +45,12 @@ pub(crate) fn geo(input: crate::ContentLine) -> crate::Result<crate::Geo> {
     use nom::combinator::map;
     use nom::number::complete::float;
     use nom::sequence::separated_pair;
+    use nom::Parser as _;
 
     map(separated_pair(float, char(';'), float), |(lat, lon)| {
         crate::Geo { lat, lon }
-    })(input.value.as_str())
+    })
+    .parse(input.value.as_str())
     .map_err(crate::Error::from)
     .map(|(_, x)| x)
 }

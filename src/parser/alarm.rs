@@ -22,11 +22,13 @@ pub(crate) fn repeat(input: crate::ContentLine) -> crate::Result<u32> {
 pub(crate) fn trigger(input: crate::ContentLine) -> crate::Result<crate::Trigger> {
     use nom::branch::alt;
     use nom::combinator::map;
+    use nom::Parser as _;
 
     alt((
         map(super::datatype::duration, crate::Trigger::Duration),
         map(super::datatype::date_time, crate::Trigger::DateTime),
-    ))(input.value.as_str())
+    ))
+    .parse(input.value.as_str())
     .map_err(crate::Error::from)
     .map(|(_, x)| x)
 }
