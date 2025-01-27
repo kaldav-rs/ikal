@@ -14,7 +14,7 @@ categories = ["parser-implementations", "text-processing"]
 edition = "2021"
 
 [dependencies]
-nom = "7.0"
+nom = "8.0"
 thiserror = "2.0"
 
 [dependencies.chrono]
