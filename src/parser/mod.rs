@@ -113,7 +113,7 @@ fn params(input: &str) -> NomResult<&str, BTreeMap<String, String>> {
 /**
  * See [3.1. Content Lines](https://datatracker.ietf.org/doc/html/rfc5545#section-3.1)
  */
-pub(crate) fn content_line(input: &str) -> NomResult<&str, (&str, crate::ContentLine)> {
+pub(crate) fn content_line(input: &str) -> NomResult<&str, crate::ContentLine> {
     context(
         "content_line",
         map(
@@ -126,25 +126,21 @@ pub(crate) fn content_line(input: &str) -> NomResult<&str, (&str, crate::Content
                 opt(value),
                 line_ending,
             ),
-            |(_, _, key, params, _, value, _)| {
-                (
-                    key,
-                    crate::ContentLine {
-                        params,
-                        value: value.unwrap_or_default().to_string(),
-                    },
-                )
+            |(_, _, key, params, _, value, _)| crate::ContentLine {
+                key: key.to_string(),
+                params,
+                value: value.unwrap_or_default().to_string(),
             },
         ),
     )
     .parse(input)
 }
 
-pub(crate) fn content_lines(input: &str) -> NomResult<&str, BTreeMap<String, crate::ContentLine>> {
+pub(crate) fn content_lines(input: &str) -> NomResult<&str, Vec<crate::ContentLine>> {
     context(
         "content_lines",
-        fold_many0(content_line, BTreeMap::new, |mut acc, (key, value)| {
-            acc.insert(key.to_string(), value);
+        fold_many0(content_line, Vec::new, |mut acc, value| {
+            acc.push(value);
             acc
         }),
     )

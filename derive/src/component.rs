@@ -79,7 +79,7 @@ pub(crate) fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::Tok
         } else {
             let new_part = quote::quote! {
                 #name: crate::parser::#name(
-                    properties.get(#field_name)
+                    properties.iter().filter(|x| x.key == #field_name).last()
                     .ok_or_else(|| crate::Error::Parser(concat!("Missing field ", #field_name).to_string()))?
                     .clone()
                 )?
@@ -99,23 +99,23 @@ pub(crate) fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::Tok
     let traits = quote::quote! {
         #[automatically_derived]
         #[doc(hidden)]
-        impl #impl_generics TryFrom<std::collections::BTreeMap<String, crate::ContentLine>> for #name #ty_generics #where_clause {
+        impl #impl_generics TryFrom<Vec<crate::ContentLine>> for #name #ty_generics #where_clause {
             type Error = crate::Error;
 
-            fn try_from(properties: std::collections::BTreeMap<String, crate::ContentLine>) -> crate::Result<Self> {
+            fn try_from(properties: Vec<crate::ContentLine>) -> crate::Result<Self> {
                 let mut component = Self {
                     #(#new_body, )*
                     .. Default::default()
                 };
 
-                for (key, content_line) in properties {
-                    match key.as_str() {
+                for content_line in properties {
+                    match content_line.key.as_str() {
                         #(#from_body, )*
-                        _ => {
+                        key => {
                             if key.starts_with("X-") {
-                                component.x_prop.insert(key, content_line);
+                                component.x_prop.insert(key.to_string(), content_line);
                             } else {
-                                component.iana_prop.insert(key, content_line);
+                                component.iana_prop.insert(key.to_string(), content_line);
                             }
                         }
                     }

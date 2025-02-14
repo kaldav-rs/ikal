@@ -4,16 +4,27 @@ use std::collections::BTreeMap;
  * See [3.1. Content Lines](https://datatracker.ietf.org/doc/html/rfc5545#section-3.1)
  */
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Eq, PartialEq)]
 pub struct ContentLine {
+    pub key: String,
     pub params: BTreeMap<String, String>,
     pub value: String,
+}
+
+impl std::fmt::Debug for ContentLine {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> std::fmt::Result {
+        f.debug_struct("ContentLine")
+            .field("params", &self.params)
+            .field("value", &self.value)
+            .finish()
+    }
 }
 
 impl ContentLine {
     #[cfg(test)]
     pub fn from(value: &str) -> Self {
         Self {
+            key: String::new(),
             value: value.to_string(),
             params: BTreeMap::new(),
         }
@@ -23,6 +34,7 @@ impl ContentLine {
 impl From<String> for ContentLine {
     fn from(value: String) -> Self {
         Self {
+            key: String::new(),
             params: BTreeMap::new(),
             value,
         }

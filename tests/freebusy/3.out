@@ -40,6 +40,26 @@ Ok(
             StartEnd(
                 StartEnd {
                     start: Local(
+                        1998-03-15T00:30:00+01:00,
+                    ),
+                    end: Local(
+                        1998-03-15T01:30:00+01:00,
+                    ),
+                },
+            ),
+            StartEnd(
+                StartEnd {
+                    start: Local(
+                        1998-03-16T16:30:00+01:00,
+                    ),
+                    end: Local(
+                        1998-03-16T17:30:00+01:00,
+                    ),
+                },
+            ),
+            StartEnd(
+                StartEnd {
+                    start: Local(
                         1998-03-18T04:00:00+01:00,
                     ),
                     end: Local(

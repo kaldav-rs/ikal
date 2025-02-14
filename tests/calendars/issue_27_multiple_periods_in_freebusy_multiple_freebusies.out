@@ -59,6 +59,76 @@ Ok(
                     StartEnd(
                         StartEnd {
                             start: Local(
+                                2012-01-03T10:15:00+01:00,
+                            ),
+                            end: Local(
+                                2012-01-03T11:15:00+01:00,
+                            ),
+                        },
+                    ),
+                    StartEnd(
+                        StartEnd {
+                            start: Local(
+                                2012-01-13T14:00:00+01:00,
+                            ),
+                            end: Local(
+                                2012-01-13T16:00:00+01:00,
+                            ),
+                        },
+                    ),
+                    StartEnd(
+                        StartEnd {
+                            start: Local(
+                                2012-01-16T14:00:00+01:00,
+                            ),
+                            end: Local(
+                                2012-01-16T16:00:00+01:00,
+                            ),
+                        },
+                    ),
+                    StartEnd(
+                        StartEnd {
+                            start: Local(
+                                2012-01-17T10:15:00+01:00,
+                            ),
+                            end: Local(
+                                2012-01-17T11:15:00+01:00,
+                            ),
+                        },
+                    ),
+                    StartEnd(
+                        StartEnd {
+                            start: Local(
+                                2012-01-18T17:00:00+01:00,
+                            ),
+                            end: Local(
+                                2012-01-18T17:30:00+01:00,
+                            ),
+                        },
+                    ),
+                    StartEnd(
+                        StartEnd {
+                            start: Local(
+                                2012-01-24T09:30:00+01:00,
+                            ),
+                            end: Local(
+                                2012-01-24T10:30:00+01:00,
+                            ),
+                        },
+                    ),
+                    StartEnd(
+                        StartEnd {
+                            start: Local(
+                                2012-01-24T13:30:00+01:00,
+                            ),
+                            end: Local(
+                                2012-01-24T15:30:00+01:00,
+                            ),
+                        },
+                    ),
+                    StartEnd(
+                        StartEnd {
+                            start: Local(
                                 2012-01-31T10:15:00+01:00,
                             ),
                             end: Local(

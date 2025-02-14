@@ -189,7 +189,9 @@ mod test {
         let line = "VERSION:2.0
 PRODID:-//Nextcloud calendar v1.5.0";
 
-        let expected = ("VERSION", crate::ContentLine::from("2.0"));
+        let mut expected = crate::ContentLine::from("2.0");
+        expected.key = "VERSION".to_string();
+
         assert_eq!(
             crate::parser::content_line(line),
             Ok(("PRODID:-//Nextcloud calendar v1.5.0", expected))
@@ -207,14 +209,12 @@ PRODID:-//Nextcloud calendar v1.5.0";
 
         let mut params = BTreeMap::new();
         params.insert("VALUE".to_string(), "DATE-TIME".to_string());
-        let mut expected = BTreeMap::new();
-        expected.insert(
-            "CREATED".to_string(),
-            crate::ContentLine {
-                value: "20141009T141617Z".to_string(),
-                params,
-            },
-        );
+        let mut expected = Vec::new();
+        expected.push(crate::ContentLine {
+            key: "CREATED".to_string(),
+            value: "20141009T141617Z".to_string(),
+            params,
+        });
 
         assert_eq!(crate::parser::content_lines(line), Ok(("", expected)));
     }
@@ -226,12 +226,15 @@ CALSCALE:GREGORIAN
 
 ";
 
-        let mut expected = BTreeMap::new();
-        expected.insert("VERSION".to_string(), crate::ContentLine::from("2.0"));
-        expected.insert(
-            "CALSCALE".to_string(),
-            crate::ContentLine::from("GREGORIAN"),
-        );
+        let mut expected = Vec::new();
+
+        let mut cl = crate::ContentLine::from("2.0");
+        cl.key = "VERSION".to_string();
+        expected.push(cl);
+
+        let mut cl = crate::ContentLine::from("GREGORIAN");
+        cl.key = "CALSCALE".to_string();
+        expected.push(cl);
 
         assert_eq!(crate::parser::content_lines(line), Ok(("\n", expected)));
     }

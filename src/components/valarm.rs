@@ -8,13 +8,13 @@ pub enum VAlarm {
     Email(Email),
 }
 
-impl TryFrom<std::collections::BTreeMap<String, crate::ContentLine>> for VAlarm {
+impl TryFrom<Vec<crate::ContentLine>> for VAlarm {
     type Error = crate::Error;
 
-    fn try_from(
-        properties: std::collections::BTreeMap<String, crate::ContentLine>,
-    ) -> crate::Result<Self> {
-        let component = match properties["ACTION"].value.as_str() {
+    fn try_from(properties: Vec<crate::ContentLine>) -> crate::Result<Self> {
+        let action = properties.iter().find(|x| x.key == "ACTION").unwrap();
+
+        let component = match action.value.as_str() {
             "AUDIO" => Self::Audio(Audio::try_from(properties)?),
             "DISPLAY" => Self::Display(Display::try_from(properties)?),
             "EMAIL" => Self::Email(Email::try_from(properties)?),
