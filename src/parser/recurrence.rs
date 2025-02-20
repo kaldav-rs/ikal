@@ -78,7 +78,6 @@ pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
             .split(',')
             .map(str::parse)
             .collect::<Result<_, _>>()
-            .map_err(crate::Error::from)
     }
 
     context(

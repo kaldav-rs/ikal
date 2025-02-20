@@ -11,7 +11,7 @@ repository = "https://github.com/sanpii/ikal.git"
 documentation = "https://docs.rs/ikal/"
 keywords = ["icalendar"]
 categories = ["parser-implementations", "text-processing"]
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 nom = "8.0"
