@@ -46,13 +46,13 @@ pub(crate) fn rdate(input: crate::ContentLine) -> crate::Result<crate::RDate> {
  * See [3.8.5.3. Recurrence Rule](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3)
  */
 pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
+    use nom::Parser as _;
     use nom::bytes::complete::take_till;
     use nom::character::complete::char;
     use nom::combinator::{map_res, opt};
     use nom::error::context;
     use nom::multi::many1;
     use nom::sequence::{separated_pair, terminated};
-    use nom::Parser as _;
 
     fn item(input: &str) -> super::NomResult<&str, (&str, &str)> {
         context(
@@ -74,10 +74,7 @@ pub(crate) fn rrule(input: crate::ContentLine) -> crate::Result<crate::Recur> {
     }
 
     fn bywdaylist(input: &&&str) -> crate::Result<Vec<crate::WeekdayNum>> {
-        input
-            .split(',')
-            .map(str::parse)
-            .collect::<Result<_, _>>()
+        input.split(',').map(str::parse).collect::<Result<_, _>>()
     }
 
     context(

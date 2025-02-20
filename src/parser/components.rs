@@ -1,10 +1,10 @@
+use nom::Parser as _;
 use nom::branch::alt;
 use nom::bytes::complete::tag;
 use nom::combinator::{map, map_res};
-use nom::error::{context, FromExternalError};
+use nom::error::{FromExternalError, context};
 use nom::multi::many0;
 use nom::sequence::delimited;
-use nom::Parser as _;
 
 macro_rules! component {
     ($name:ident, $ty:ty) => {

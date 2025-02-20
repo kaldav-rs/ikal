@@ -102,9 +102,9 @@ pub use ikal_derive::vtimezone;
  */
 pub use ikal_derive::vtodo;
 
+pub use ikal_derive::{Component, Serialize};
 #[doc(hidden)]
 pub use ikal_derive::{audio, display, email};
-pub use ikal_derive::{Component, Serialize};
 
 use content_line::*;
 
@@ -166,7 +166,7 @@ pub fn parse_duration(value: &str) -> crate::Result<chrono::TimeDelta> {
             _ => {
                 return Err(crate::Error::ParseDuration(format!(
                     "Invalid duration: {interval}"
-                )))
+                )));
             }
         };
 
@@ -209,13 +209,11 @@ PRODID:-//Nextcloud calendar v1.5.0";
 
         let mut params = BTreeMap::new();
         params.insert("VALUE".to_string(), "DATE-TIME".to_string());
-        let expected = vec![
-            crate::ContentLine {
-                key: "CREATED".to_string(),
-                value: "20141009T141617Z".to_string(),
-                params,
-            }
-        ];
+        let expected = vec![crate::ContentLine {
+            key: "CREATED".to_string(),
+            value: "20141009T141617Z".to_string(),
+            params,
+        }];
 
         assert_eq!(crate::parser::content_lines(line), Ok(("", expected)));
     }

@@ -2,11 +2,11 @@
  * See [3.3. Property Value Data Types](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.5)
  */
 
+use nom::Parser as _;
 use nom::bytes::complete::tag;
 use nom::combinator::{map, map_res, opt};
-use nom::error::{context, FromExternalError};
+use nom::error::{FromExternalError, context};
 use nom::sequence::{pair, preceded, terminated};
-use nom::Parser as _;
 
 /**
  * See [3.3.3. Calendar User Address](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.3)
@@ -145,11 +145,7 @@ pub(crate) fn duration(input: &str) -> super::NomResult<&str, chrono::Duration> 
                         + chrono::Duration::seconds(s);
                 }
 
-                if neg.is_some() {
-                    -duration
-                } else {
-                    duration
-                }
+                if neg.is_some() { -duration } else { duration }
             },
         ),
     )

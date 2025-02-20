@@ -6,13 +6,13 @@
  * See [3.8.8.3. Request Status](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.8.3)
  */
 pub(crate) fn rstatus(input: crate::ContentLine) -> crate::Result<crate::RequestStatus> {
+    use nom::Parser as _;
     use nom::bytes::complete::{take_till, take_while};
     use nom::character::complete::char;
     use nom::combinator::{map, opt};
     use nom::error::context;
     use nom::number::complete::float;
     use nom::sequence::preceded;
-    use nom::Parser as _;
 
     fn text(input: &str) -> super::NomResult<&str, &str> {
         context("text", take_till(|c| c == ';')).parse(input)

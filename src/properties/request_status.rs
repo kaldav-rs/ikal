@@ -65,7 +65,10 @@ mod test {
             statdesc: "Success, repeating event ignored. Scheduled as a single event.".to_string(),
             extdata: Some("RRULE:FREQ=WEEKLY;INTERVAL=2".to_string()),
         };
-        assert_eq!(crate::ser::ical(&status)?, "2.8;Success\\, repeating event ignored. Scheduled as a single event.;RRULE:FREQ=WEEKLY\\;INTERVAL=2");
+        assert_eq!(
+            crate::ser::ical(&status)?,
+            "2.8;Success\\, repeating event ignored. Scheduled as a single event.;RRULE:FREQ=WEEKLY\\;INTERVAL=2"
+        );
 
         Ok(())
     }

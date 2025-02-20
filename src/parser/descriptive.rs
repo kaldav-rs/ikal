@@ -41,11 +41,11 @@ pub(crate) fn description(input: crate::ContentLine) -> crate::Result<crate::Tex
  * See [3.8.1.6. Geographic Position](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.6)
  */
 pub(crate) fn geo(input: crate::ContentLine) -> crate::Result<crate::Geo> {
+    use nom::Parser as _;
     use nom::character::complete::char;
     use nom::combinator::map;
     use nom::number::complete::float;
     use nom::sequence::separated_pair;
-    use nom::Parser as _;
 
     map(separated_pair(float, char(';'), float), |(lat, lon)| {
         crate::Geo { lat, lon }

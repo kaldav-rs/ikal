@@ -20,9 +20,9 @@ pub(crate) fn repeat(input: crate::ContentLine) -> crate::Result<u32> {
  * See [3.8.6.3. Trigger](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.6.3)
  */
 pub(crate) fn trigger(input: crate::ContentLine) -> crate::Result<crate::Trigger> {
+    use nom::Parser as _;
     use nom::branch::alt;
     use nom::combinator::map;
-    use nom::Parser as _;
 
     alt((
         map(super::datatype::duration, crate::Trigger::Duration),

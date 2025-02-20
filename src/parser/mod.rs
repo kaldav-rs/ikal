@@ -22,13 +22,13 @@ pub(crate) use recurrence::*;
 pub(crate) use relationship::*;
 pub(crate) use timezone::*;
 
+use nom::Parser as _;
 use nom::bytes::complete::{tag, take_till, take_while};
 use nom::character::complete::{anychar, char, line_ending};
 use nom::combinator::{map, map_res, not, opt};
 use nom::error::context;
 use nom::multi::{count, fold_many0};
 use nom::sequence::{preceded, separated_pair};
-use nom::Parser as _;
 use std::collections::BTreeMap;
 
 pub(crate) type NomResult<I, O> = nom::IResult<I, O, nom_language::error::VerboseError<I>>;
