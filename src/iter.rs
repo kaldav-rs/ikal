@@ -141,10 +141,10 @@ impl<T: Recurring> Iterator for Recur<T> {
             let dtstart = next.dtstart()?;
             let mut rrule = next.rrule()?.clone();
 
-            if let Some(until) = &rrule.until {
-                if dtstart.date_naive() > until.date_naive() {
-                    return None;
-                }
+            if let Some(until) = &rrule.until
+                && dtstart.date_naive() > until.date_naive()
+            {
+                return None;
             }
 
             let dtstart = rrule.clone() + *dtstart;
