@@ -5,6 +5,7 @@ authors = ["Sanpi <sanpi@homecomputing.fr>"]
 edition = "2024"
 description = "Proc macro for ikal crate"
 license = "MIT"
+repository = "https://github.com/kaldav-rs/ikal.git"
 
 [lib]
 proc-macro = true
