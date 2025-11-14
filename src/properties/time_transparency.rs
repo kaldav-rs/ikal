@@ -56,16 +56,11 @@ crate::ser::ical_for_tostring!(TimeTransparency);
 #[cfg(test)]
 mod test {
     #[test]
-    fn ser() -> crate::Result {
+    fn ser() {
         assert_eq!(
-            crate::ser::ical(&crate::TimeTransparency::Transparent)?,
+            crate::ser::ical(&crate::TimeTransparency::Transparent),
             "TRANSPARENT"
         );
-        assert_eq!(
-            crate::ser::ical(&crate::TimeTransparency::Opaque)?,
-            "OPAQUE"
-        );
-
-        Ok(())
+        assert_eq!(crate::ser::ical(&crate::TimeTransparency::Opaque), "OPAQUE");
     }
 }

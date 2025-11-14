@@ -53,12 +53,12 @@ impl std::str::FromStr for VAlarm {
 }
 
 impl crate::ser::Serialize for VAlarm {
-    fn ical(&self) -> crate::Result<String> {
+    fn ical(&self) -> String {
         let s = match self {
             Self::Audio(audio) => audio.ical(),
             Self::Display(display) => display.ical(),
             Self::Email(email) => email.ical(),
-        }?;
+        };
 
         let mut lines = s.split("\n").collect::<Vec<_>>();
         lines[0] = "BEGIN:VALARM\r";
@@ -66,7 +66,7 @@ impl crate::ser::Serialize for VAlarm {
         lines.pop();
         lines.push("END:VALARM\r\n");
 
-        Ok(lines.join("\n"))
+        lines.join("\n")
     }
 }
 
@@ -179,7 +179,7 @@ mod test {
             attach: [attach],
         }?;
 
-        let ical = crate::ser::ical(&valarm)?;
+        let ical = crate::ser::ical(&valarm);
 
         similar_asserts::assert_eq!(
             ical,

@@ -107,7 +107,7 @@ mod test {
             ],
         }?;
 
-        let ical = crate::ser::ical(&vtimezone)?;
+        let ical = crate::ser::ical(&vtimezone);
 
         similar_asserts::assert_eq!(
             ical,

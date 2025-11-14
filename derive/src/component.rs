@@ -45,19 +45,19 @@ pub(crate) fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::Tok
         let ser_part = if crate::is_vec(ty) {
             quote::quote! {
                 if self.#name.len() == 1 {
-                    s.push_str(&crate::ser::field(#field_name, &self.#name[0])?);
+                    s.push_str(&crate::ser::field(#field_name, &self.#name[0]));
                 }
                 else if self.#name.attr().is_none() {
-                    s.push_str(&crate::ser::field(#field_name, &self.#name)?);
+                    s.push_str(&crate::ser::field(#field_name, &self.#name));
                 } else {
                     for v in &self.#name {
-                        s.push_str(&crate::ser::field(#field_name, v)?);
+                        s.push_str(&crate::ser::field(#field_name, v));
                     }
                 }
             }
         } else {
             quote::quote! {
-                s.push_str(&crate::ser::field(#field_name, &self.#name)?);
+                s.push_str(&crate::ser::field(#field_name, &self.#name));
             }
         };
 
@@ -160,7 +160,7 @@ pub(crate) fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::Tok
                 #name_str.to_uppercase().into()
             }
 
-            fn ical(&self) -> crate::Result<::std::string::String> {
+            fn ical(&self) -> ::std::string::String {
                 let mut s = String::new();
                 let name = Self::component().unwrap();
 
@@ -172,7 +172,7 @@ pub(crate) fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::Tok
                 s.push_str(&name);
                 s.push_str("\r\n");
 
-                Ok(s)
+                s
             }
         }
     };

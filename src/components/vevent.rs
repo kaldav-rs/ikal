@@ -77,7 +77,7 @@ mod test {
             dtend: "20170210",
         }?;
 
-        let ical = crate::ser::ical(&vevent)?;
+        let ical = crate::ser::ical(&vevent);
 
         similar_asserts::assert_eq!(
             ical,

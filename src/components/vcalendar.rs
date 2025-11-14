@@ -55,7 +55,7 @@ mod test {
             ],
         }?;
 
-        let ical = crate::ser::ical(&vcalendar)?;
+        let ical = crate::ser::ical(&vcalendar);
 
         similar_asserts::assert_eq!(
             ical,

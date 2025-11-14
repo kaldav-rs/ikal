@@ -34,7 +34,7 @@ impl std::str::FromStr for Trigger {
 }
 
 impl crate::ser::Serialize for Trigger {
-    fn ical(&self) -> crate::Result<String> {
+    fn ical(&self) -> String {
         match self {
             Self::DateTime(dt) => dt.ical(),
             Self::Duration(duration) => duration.ical(),
@@ -57,12 +57,12 @@ mod test {
     fn ser() -> crate::Result {
         let trigger = crate::Trigger::DateTime("19980101T050000Z".parse()?);
         assert_eq!(
-            crate::ser::ical(&trigger)?,
+            crate::ser::ical(&trigger),
             "VALUE=DATE-TIME:19980101T050000Z"
         );
 
         let trigger = crate::Trigger::Duration(chrono::Duration::days(-15));
-        assert_eq!(crate::ser::ical(&trigger)?, "VALUE=DURATION:-PT1296000S");
+        assert_eq!(crate::ser::ical(&trigger), "VALUE=DURATION:-PT1296000S");
 
         Ok(())
     }

@@ -54,7 +54,7 @@ impl std::fmt::Display for ContentLine {
 }
 
 impl crate::ser::Serialize for ContentLine {
-    fn ical(&self) -> crate::Result<String> {
+    fn ical(&self) -> String {
         self.to_string().ical()
     }
 
@@ -62,7 +62,7 @@ impl crate::ser::Serialize for ContentLine {
         if self.params.is_empty() {
             None
         } else {
-            self.params.ical().ok()
+            Some(self.params.ical())
         }
     }
 }

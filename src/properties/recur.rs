@@ -303,39 +303,31 @@ crate::ser::ical_for_tostring!(Weekday);
 #[cfg(test)]
 mod test {
     #[test]
-    fn ser_recur() -> crate::Result {
+    fn ser_recur() {
         let mut recur = crate::Recur::default();
-        assert_eq!(crate::ser::ical(&recur)?, "FREQ=DAILY;INTERVAL=0");
+        assert_eq!(crate::ser::ical(&recur), "FREQ=DAILY;INTERVAL=0");
 
         recur.by_hour = vec![1];
-        assert_eq!(crate::ser::ical(&recur)?, "FREQ=DAILY;INTERVAL=0;BYHOUR=1");
-
-        Ok(())
+        assert_eq!(crate::ser::ical(&recur), "FREQ=DAILY;INTERVAL=0;BYHOUR=1");
     }
 
     #[test]
-    fn ser_freq() -> crate::Result {
-        assert_eq!(crate::ser::ical(&crate::Freq::Yearly)?, "YEARLY");
-
-        Ok(())
+    fn ser_freq() {
+        assert_eq!(crate::ser::ical(&crate::Freq::Yearly), "YEARLY");
     }
 
     #[test]
-    fn ser_weekday_num() -> crate::Result {
+    fn ser_weekday_num() {
         let weekday_num = crate::WeekdayNum {
             weekday: crate::Weekday::Sunday,
             ord: Some(-1),
         };
 
-        assert_eq!(crate::ser::ical(&weekday_num)?, "-1SU");
-
-        Ok(())
+        assert_eq!(crate::ser::ical(&weekday_num), "-1SU");
     }
 
     #[test]
-    fn ser_weekday() -> crate::Result {
-        assert_eq!(crate::ser::ical(&crate::Weekday::Monday)?, "MO");
-
-        Ok(())
+    fn ser_weekday() {
+        assert_eq!(crate::ser::ical(&crate::Weekday::Monday), "MO");
     }
 }

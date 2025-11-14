@@ -80,12 +80,10 @@ crate::ser::ical_for_tostring!(Status);
 #[cfg(test)]
 mod test {
     #[test]
-    fn ser() -> crate::Result {
+    fn ser() {
         assert_eq!(
-            crate::ser::ical(&crate::Status::NeedsAction)?,
+            crate::ser::ical(&crate::Status::NeedsAction),
             "NEEDS-ACTION"
         );
-
-        Ok(())
     }
 }

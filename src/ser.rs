@@ -3,8 +3,8 @@
 macro_rules! ical_for_tostring {
     ($ty: ty) => {
         impl $crate::ser::Serialize for $ty {
-            fn ical(&self) -> $crate::Result<String> {
-                Ok(self.to_string())
+            fn ical(&self) -> String {
+                self.to_string()
             }
         }
     };
@@ -21,10 +21,10 @@ pub trait Serialize {
         None
     }
 
-    fn ical(&self) -> crate::Result<String>;
+    fn ical(&self) -> String;
 }
 
-pub fn ical<T: Serialize>(value: &T) -> crate::Result<String> {
+pub fn ical<T: Serialize>(value: &T) -> String {
     let mut s = String::new();
 
     if let Some(attr) = value.attr() {
@@ -32,9 +32,9 @@ pub fn ical<T: Serialize>(value: &T) -> crate::Result<String> {
         s.push(':');
     }
 
-    s.push_str(&value.ical()?);
+    s.push_str(&value.ical());
 
-    Ok(s)
+    s
 }
 
 ical_for_tostring!(i8);
@@ -43,7 +43,7 @@ ical_for_tostring!(u32);
 ical_for_tostring!(chrono::TimeDelta);
 
 impl Serialize for chrono::FixedOffset {
-    fn ical(&self) -> crate::Result<String> {
+    fn ical(&self) -> String {
         let offset = self.local_minus_utc();
         let (sign, offset) = if offset < 0 {
             ('-', -offset)
@@ -55,33 +55,31 @@ impl Serialize for chrono::FixedOffset {
         let min = mins.rem_euclid(60);
         let hour = mins.div_euclid(60);
 
-        let s = if sec == 0 {
+        if sec == 0 {
             format!("{sign}{hour:02}{min:02}")
         } else {
             format!("{sign}{hour:02}{min:02}{sec:02}")
-        };
-
-        Ok(s)
+        }
     }
 }
 
 impl Serialize for String {
-    fn ical(&self) -> crate::Result<String> {
-        Ok(escape(self))
+    fn ical(&self) -> String {
+        escape(self)
     }
 }
 
 impl<T: Serialize> Serialize for Vec<T> {
-    fn ical(&self) -> crate::Result<String> {
+    fn ical(&self) -> String {
         let mut s = String::new();
 
         for x in self {
-            s.push_str(&x.ical()?);
+            s.push_str(&x.ical());
             s.push(',');
         }
         s.pop();
 
-        Ok(s)
+        s
     }
 }
 
@@ -94,28 +92,28 @@ impl<T: Serialize> Serialize for Option<T> {
         }
     }
 
-    fn ical(&self) -> crate::Result<String> {
+    fn ical(&self) -> String {
         if let Some(value) = &self {
             value.ical()
         } else {
-            Ok(String::new())
+            String::new()
         }
     }
 }
 
 impl<K: ToString, V: Serialize> Serialize for std::collections::BTreeMap<K, V> {
-    fn ical(&self) -> crate::Result<String> {
+    fn ical(&self) -> String {
         let mut s = String::new();
 
         for (k, v) in self {
             s.push_str(&k.to_string());
             s.push('=');
-            s.push_str(&v.ical()?);
+            s.push_str(&v.ical());
             s.push(';');
         }
         s.pop();
 
-        Ok(s)
+        s
     }
 }
 
@@ -125,10 +123,10 @@ pub(crate) fn escape(s: &str) -> String {
         .replace('\n', "\\n")
 }
 
-pub(crate) fn field<S: Serialize>(name: &str, value: &S) -> crate::Result<String> {
+pub(crate) fn field<S: Serialize>(name: &str, value: &S) -> String {
     let mut s = String::new();
 
-    let ical = value.ical()?;
+    let ical = value.ical();
 
     if S::component().is_some() {
         s.push_str(&ical);
@@ -151,7 +149,7 @@ pub(crate) fn field<S: Serialize>(name: &str, value: &S) -> crate::Result<String
         }
     }
 
-    Ok(s)
+    s
 }
 
 fn split(s: &str, sub_size: usize) -> Vec<&str> {
@@ -170,11 +168,11 @@ fn split(s: &str, sub_size: usize) -> Vec<&str> {
 #[cfg(test)]
 mod test {
     #[test]
-    fn long_line() -> crate::Result {
+    fn long_line() {
         let text = crate::Text::from(
             "This is a long description with more than 75 characteres that exists on a long line.",
         );
-        let ical = crate::ser::field("DESCRIPTION", &text)?;
+        let ical = crate::ser::field("DESCRIPTION", &text);
 
         similar_asserts::assert_eq!(
             ical,
@@ -182,17 +180,13 @@ mod test {
  xists on a long line.\r
 "
         );
-
-        Ok(())
     }
 
     #[test]
-    fn fixed_offset() -> crate::Result {
+    fn fixed_offset() {
         use crate::ser::Serialize as _;
 
         let offset = chrono::FixedOffset::east_opt(3600).unwrap();
-        assert_eq!(offset.ical()?, "+0100");
-
-        Ok(())
+        assert_eq!(offset.ical(), "+0100");
     }
 }

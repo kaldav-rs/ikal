@@ -42,14 +42,12 @@ crate::ser::ical_for_tostring!(Geo);
 #[cfg(test)]
 mod test {
     #[test]
-    fn ser() -> crate::Result {
+    fn ser() {
         let geo = crate::Geo {
             lat: 37.386013,
             lon: -122.08293,
         };
 
-        assert_eq!(crate::ser::ical(&geo)?, "37.386013;-122.08293");
-
-        Ok(())
+        assert_eq!(crate::ser::ical(&geo), "37.386013;-122.08293");
     }
 }

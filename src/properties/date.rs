@@ -276,27 +276,25 @@ impl crate::ser::Serialize for Date {
         }
     }
 
-    fn ical(&self) -> crate::Result<String> {
-        Ok(self.to_string())
+    fn ical(&self) -> String {
+        self.to_string()
     }
 }
 
 #[cfg(test)]
 mod test {
     #[test]
-    fn ser() -> crate::Result {
+    fn ser() {
         let date = crate::Date::default();
-        assert_eq!(crate::ser::ical(&date)?, "19700101T000000");
+        assert_eq!(crate::ser::ical(&date), "19700101T000000");
 
         let date = crate::Date::Date(chrono::NaiveDate::default());
-        assert_eq!(crate::ser::ical(&date)?, "VALUE=DATE:19700101");
+        assert_eq!(crate::ser::ical(&date), "VALUE=DATE:19700101");
 
         let date_time = crate::DateTime::Naive(chrono::NaiveDateTime::default());
-        assert_eq!(crate::ser::ical(&date_time)?, "19700101T000000");
+        assert_eq!(crate::ser::ical(&date_time), "19700101T000000");
 
         let date_time = crate::DateTime::Local(chrono::DateTime::default());
-        assert_eq!(crate::ser::ical(&date_time)?, "19700101T010000Z");
-
-        Ok(())
+        assert_eq!(crate::ser::ical(&date_time), "19700101T010000Z");
     }
 }

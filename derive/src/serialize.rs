@@ -43,7 +43,7 @@ pub(crate) fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::Tok
         let field_name = field_params.name(name);
 
         let ser_part = quote::quote! {
-            let ical = self.#name.ical()?;
+            let ical = self.#name.ical();
             if !ical.is_empty() {
                 s.push_str(&format!("{}={ical};", #field_name));
             }
@@ -55,13 +55,13 @@ pub(crate) fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::Tok
     let serialize = quote::quote! {
         #[automatically_derived]
         impl #impl_generics crate::ser::Serialize for #name #ty_generics #where_clause {
-            fn ical(&self) -> crate::Result<::std::string::String> {
+            fn ical(&self) -> ::std::string::String {
                 let mut s = String::new();
 
                 #(#body)*
                 s.pop();
 
-                Ok(s)
+                s
             }
         }
     };

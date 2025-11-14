@@ -59,13 +59,11 @@ crate::ser::ical_for_tostring!(Class);
 #[cfg(test)]
 mod test {
     #[test]
-    fn ser() -> crate::Result {
+    fn ser() {
         let class = crate::Class::Public;
-        assert_eq!(crate::ser::ical(&class)?, "PUBLIC");
+        assert_eq!(crate::ser::ical(&class), "PUBLIC");
 
         let class = crate::Class::Custom("Custom".to_string());
-        assert_eq!(crate::ser::ical(&class)?, "CUSTOM");
-
-        Ok(())
+        assert_eq!(crate::ser::ical(&class), "CUSTOM");
     }
 }

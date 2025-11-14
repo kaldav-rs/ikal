@@ -33,7 +33,7 @@ impl std::str::FromStr for RequestStatus {
 }
 
 impl crate::ser::Serialize for RequestStatus {
-    fn ical(&self) -> crate::Result<String> {
+    fn ical(&self) -> String {
         let mut s = format!(
             "{:.1};{}",
             self.statcode,
@@ -45,20 +45,20 @@ impl crate::ser::Serialize for RequestStatus {
             s.push_str(&crate::ser::escape(extdata));
         }
 
-        Ok(s)
+        s
     }
 }
 
 #[cfg(test)]
 mod test {
     #[test]
-    fn ser() -> crate::Result {
+    fn ser() {
         let status = crate::RequestStatus {
             statcode: 2.0,
             statdesc: "Success".to_string(),
             extdata: None,
         };
-        assert_eq!(crate::ser::ical(&status)?, "2.0;Success");
+        assert_eq!(crate::ser::ical(&status), "2.0;Success");
 
         let status = crate::RequestStatus {
             statcode: 2.8,
@@ -66,10 +66,8 @@ mod test {
             extdata: Some("RRULE:FREQ=WEEKLY;INTERVAL=2".to_string()),
         };
         assert_eq!(
-            crate::ser::ical(&status)?,
+            crate::ser::ical(&status),
             "2.8;Success\\, repeating event ignored. Scheduled as a single event.;RRULE:FREQ=WEEKLY\\;INTERVAL=2"
         );
-
-        Ok(())
     }
 }

@@ -73,7 +73,7 @@ mod test {
             status: NeedsAction,
         }?;
 
-        let ical = crate::ser::ical(&vtodo)?;
+        let ical = crate::ser::ical(&vtodo);
 
         similar_asserts::assert_eq!(
             ical,

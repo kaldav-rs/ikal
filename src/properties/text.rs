@@ -57,7 +57,7 @@ impl From<&str> for Text {
 }
 
 impl crate::ser::Serialize for Text {
-    fn ical(&self) -> crate::Result<String> {
+    fn ical(&self) -> String {
         self.to_string().ical()
     }
 
@@ -65,7 +65,7 @@ impl crate::ser::Serialize for Text {
         if self.params.is_empty() {
             None
         } else {
-            self.params.ical().ok()
+            Some(self.params.ical())
         }
     }
 }
@@ -78,7 +78,7 @@ impl AsRef<str> for Text {
 
 mod test {
     #[test]
-    fn ser() -> crate::Result {
+    fn ser() {
         let text = crate::Text::from(
             "Project XYZ ; Final Review
 Conference Room - 3B
@@ -86,7 +86,7 @@ Come Prepared.",
         );
 
         assert_eq!(
-            crate::ser::ical(&text)?,
+            crate::ser::ical(&text),
             "Project XYZ \\; Final Review\\nConference Room - 3B\\nCome Prepared."
         );
 
@@ -99,10 +99,8 @@ Come Prepared.",
             text: "20150219T190000".to_string(),
         };
         assert_eq!(
-            crate::ser::ical(&text)?,
+            crate::ser::ical(&text),
             "TZID=Europe/Paris;VALUE=DATE-TIME:20150219T190000"
         );
-
-        Ok(())
     }
 }

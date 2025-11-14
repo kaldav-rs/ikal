@@ -65,7 +65,7 @@ mod test {
 3. Henry Miller (Handsoff Insurance): Car was totaled by tree. Is looking into a loaner car. 555-2323 (tel)."],
         }?;
 
-        let ical = crate::ser::ical(&vjournal)?;
+        let ical = crate::ser::ical(&vjournal);
 
         similar_asserts::assert_eq!(
             ical,

@@ -51,7 +51,7 @@ impl From<&str> for Uri {
 }
 
 impl crate::ser::Serialize for Uri {
-    fn ical(&self) -> crate::Result<String> {
+    fn ical(&self) -> String {
         self.to_string().ical()
     }
 
@@ -59,7 +59,7 @@ impl crate::ser::Serialize for Uri {
         if self.params.is_empty() {
             None
         } else {
-            self.params.ical().ok()
+            Some(self.params.ical())
         }
     }
 }
@@ -67,10 +67,10 @@ impl crate::ser::Serialize for Uri {
 #[cfg(test)]
 mod test {
     #[test]
-    fn ser() -> crate::Result {
+    fn ser() {
         let uri = crate::Uri::from("http://tzurl.org/zoneinfo/Pacific/Fiji");
         assert_eq!(
-            crate::ser::ical(&uri)?,
+            crate::ser::ical(&uri),
             "http://tzurl.org/zoneinfo/Pacific/Fiji"
         );
 
@@ -79,10 +79,8 @@ mod test {
             uri: "mailto:someone@example.com".to_string(),
         };
         assert_eq!(
-            crate::ser::ical(&uri)?,
+            crate::ser::ical(&uri),
             "RSVP=TRUE:mailto:someone@example.com"
         );
-
-        Ok(())
     }
 }

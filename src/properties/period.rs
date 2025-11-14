@@ -127,22 +127,17 @@ crate::ser::ical_for_tostring!(StartDur);
 #[cfg(test)]
 mod test {
     #[test]
-    fn ser() -> crate::Result {
+    fn ser() {
         let period = crate::Period::StartEnd(crate::period::StartEnd {
             start: crate::DateTime::default(),
             end: crate::DateTime::default(),
         });
-        assert_eq!(
-            crate::ser::ical(&period)?,
-            "19700101T000000/19700101T000000"
-        );
+        assert_eq!(crate::ser::ical(&period), "19700101T000000/19700101T000000");
 
         let period = crate::Period::StartDur(crate::period::StartDur {
             start: crate::DateTime::default(),
             duration: chrono::TimeDelta::hours(5),
         });
-        assert_eq!(crate::ser::ical(&period)?, "19700101T000000/PT18000S");
-
-        Ok(())
+        assert_eq!(crate::ser::ical(&period), "19700101T000000/PT18000S");
     }
 }

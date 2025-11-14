@@ -45,7 +45,7 @@ mod test {
             dtend: "19971016T050000Z",
         }?;
 
-        let ical = crate::ser::ical(&vfreebusy)?;
+        let ical = crate::ser::ical(&vfreebusy);
 
         similar_asserts::assert_eq!(
             ical,
