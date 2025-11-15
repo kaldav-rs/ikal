@@ -104,7 +104,7 @@ pub use ikal_derive::vtodo;
 
 pub use ikal_derive::{Component, Serialize};
 #[doc(hidden)]
-pub use ikal_derive::{audio, display, email, tz_daylight};
+pub use ikal_derive::{audio, display, email, tz_daylight, tz_standard};
 
 use content_line::*;
 

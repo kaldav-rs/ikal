@@ -38,6 +38,7 @@ component!(audio, valarm::Audio);
 component!(display, valarm::Display);
 component!(email, valarm::Email);
 component!(tz_daylight, vtimezone::Daylight);
+component!(tz_standard, vtimezone::Standard);
 component!(vcalendar, VCalendar);
 component!(vevent, VEvent);
 component!(vfreebusy, VFreebusy);
