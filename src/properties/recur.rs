@@ -3,11 +3,12 @@ use chrono::Datelike as _;
 /**
  * See [3.3.10. Recurrence Rule](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3)
  */
-#[derive(Clone, Debug, Default, Eq, PartialEq, crate::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq, crate::Serialize)]
 pub struct Recur {
     pub freq: Freq,
     pub until: Option<crate::Date>,
     pub count: Option<u8>,
+    #[serialize(skip_if = "default_interval")]
     pub interval: u8,
     #[serialize(rename = "BYSECOND")]
     pub by_second: Vec<i8>,
@@ -28,6 +29,31 @@ pub struct Recur {
     #[serialize(rename = "BYSETPOS")]
     pub by_setpos: Vec<i8>,
     pub wkst: Option<Weekday>,
+}
+
+fn default_interval(value: &u8) -> bool {
+    *value == 1
+}
+
+impl Default for Recur {
+    fn default() -> Self {
+        Self {
+            freq: Default::default(),
+            until: None,
+            count: None,
+            interval: 1,
+            by_second: Vec::new(),
+            by_minute: Vec::new(),
+            by_hour: Vec::new(),
+            by_day: Vec::new(),
+            by_monthday: Vec::new(),
+            by_yearday: Vec::new(),
+            by_weekno: Vec::new(),
+            by_month: Vec::new(),
+            by_setpos: Vec::new(),
+            wkst: None,
+        }
+    }
 }
 
 impl TryFrom<String> for Recur {
@@ -305,10 +331,11 @@ mod test {
     #[test]
     fn ser_recur() {
         let mut recur = crate::Recur::default();
-        assert_eq!(crate::ser::ical(&recur), "FREQ=DAILY;INTERVAL=0");
+        assert_eq!(crate::ser::ical(&recur), "FREQ=DAILY");
 
+        recur.interval = 2;
         recur.by_hour = vec![1];
-        assert_eq!(crate::ser::ical(&recur), "FREQ=DAILY;INTERVAL=0;BYHOUR=1");
+        assert_eq!(crate::ser::ical(&recur), "FREQ=DAILY;INTERVAL=2;BYHOUR=1");
     }
 
     #[test]

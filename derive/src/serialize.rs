@@ -4,6 +4,7 @@ use darling::FromField;
 #[darling(attributes(serialize))]
 pub(crate) struct Field {
     pub rename: Option<String>,
+    pub skip_if: Option<syn::ExprPath>,
 }
 
 impl Field {
@@ -42,12 +43,20 @@ pub(crate) fn impl_macro(ast: &syn::DeriveInput) -> syn::Result<proc_macro2::Tok
 
         let field_name = field_params.name(name);
 
-        let ser_part = quote::quote! {
+        let mut ser_part = quote::quote! {
             let ical = self.#name.ical();
             if !ical.is_empty() {
                 s.push_str(&format!("{}={ical};", #field_name));
             }
         };
+
+        if let Some(skip_if) = field_params.skip_if {
+            ser_part = quote::quote! {
+                if !#skip_if(&self.#name) {
+                    #ser_part;
+                }
+            }
+        }
 
         body.push(ser_part);
     }
