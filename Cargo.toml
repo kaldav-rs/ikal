@@ -5,7 +5,7 @@ members = [".", "derive"]
 name = "ikal"
 description = "Parse icalendar object"
 license = "MIT"
-version = "0.4.0"
+version = "0.5.0"
 authors = ["Sanpi <sanpi@homecomputing.fr>"]
 repository = "https://github.com/kaldav-rs/ikal.git"
 documentation = "https://docs.rs/ikal/"
@@ -24,7 +24,7 @@ default-features = false
 features = ["clock", "std"]
 
 [dependencies.ikal-derive]
-version = "0.4"
+version = "0.5"
 path = "derive"
 
 [dev-dependencies]
