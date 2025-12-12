@@ -157,7 +157,13 @@ fn split(s: &str, sub_size: usize) -> Vec<&str> {
     let mut cur = s;
 
     while !cur.is_empty() {
-        let (chunk, rest) = cur.split_at(std::cmp::min(sub_size, cur.len()));
+        let mut pos = std::cmp::min(sub_size, cur.len());
+
+        while !cur.is_char_boundary(pos) {
+            pos -= 1;
+        }
+
+        let (chunk, rest) = cur.split_at(pos);
         v.push(chunk);
         cur = rest;
     }
@@ -188,5 +194,19 @@ mod test {
 
         let offset = chrono::FixedOffset::east_opt(3600).unwrap();
         assert_eq!(offset.ical(), "+0100");
+    }
+
+    #[test]
+    fn split() {
+        let text =
+            crate::Text::from("Durant les vacances scolaires (du 18/10 au 03/11)        Bottière");
+        let ical = crate::ser::field("DESCRIPTION", &text);
+
+        similar_asserts::assert_eq!(
+            ical,
+            "DESCRIPTION:Durant les vacances scolaires (du 18/10 au 03/11)        Botti\r
+ ère\r
+"
+        );
     }
 }
