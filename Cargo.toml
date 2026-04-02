@@ -28,4 +28,4 @@ version = "0.5"
 path = "derive"
 
 [dev-dependencies]
-similar-asserts = "1.5"
+similar-asserts = "2.0"
