@@ -38,7 +38,8 @@ impl syn::parse::Parse for Map {
         let mut entries = Vec::new();
 
         while !input.is_empty() {
-            let key = input.parse::<syn::Ident>()
+            let key = input
+                .parse::<syn::Ident>()
                 .expect("Key must be an identifier!");
 
             if input.parse::<syn::Token![,]>().is_ok() {
