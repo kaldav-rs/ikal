@@ -233,6 +233,8 @@ mod test {
 
     #[test]
     fn between() {
+        use chrono::Datelike as _;
+
         let now = chrono::Local::now();
 
         let event = crate::vevent! {
@@ -243,7 +245,6 @@ mod test {
         }
         .unwrap();
 
-        use chrono::Datelike as _;
         let end = now.with_year(now.year() + 20).unwrap();
         let events = event.recurrent().between(now, end);
 

@@ -60,7 +60,7 @@ impl crate::ser::Serialize for VAlarm {
             Self::Email(email) => email.ical(),
         };
 
-        let mut lines = s.split("\n").collect::<Vec<_>>();
+        let mut lines = s.split('\n').collect::<Vec<_>>();
         lines[0] = "BEGIN:VALARM\r";
         lines.pop();
         lines.pop();

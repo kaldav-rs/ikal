@@ -108,7 +108,7 @@ END:VEVENT\r
             created: "20170209T192358",
             description: "",
             geo: {
-                lat: 37.386013,
+                lat: 37.386013_f32,
                 lon: -122.08293,
             },
             last_modified: "20170209T192358",
@@ -134,8 +134,8 @@ END:VEVENT\r
             exdate: ["20170209"],
             rstatus: [
                 {
-                    statcode: 2.0,
-                    statdesc: "Success",
+                    statcode: 2.0_f32,
+                    statdesc: "success",
                 }
             ],
             related_to: [""],

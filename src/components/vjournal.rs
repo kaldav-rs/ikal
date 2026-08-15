@@ -117,8 +117,8 @@ END:VJOURNAL\r
             related_to: [""],
             rstatus: [
                 {
-                    statcode: 2.0,
-                    statdesc: "Success",
+                    statcode: 2.0_f32,
+                    statdesc: "success",
                 }
             ],
         }?;

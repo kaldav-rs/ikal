@@ -44,8 +44,8 @@ mod test {
     #[test]
     fn ser() {
         let geo = crate::Geo {
-            lat: 37.386013,
-            lon: -122.08293,
+            lat: 37.386013_f32,
+            lon: -122.08293_f32,
         };
 
         assert_eq!(crate::ser::ical(&geo), "37.386013;-122.08293");

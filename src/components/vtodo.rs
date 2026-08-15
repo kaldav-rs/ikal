@@ -129,7 +129,7 @@ END:VTODO\r
             exdate: ["20070501"],
             rstatus: [
                 {
-                    statcode: 2.8,
+                    statcode: 2.8_f32,
                     statdesc: "Success",
                     extdata: "",
                 }

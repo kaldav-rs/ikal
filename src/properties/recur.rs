@@ -38,7 +38,7 @@ fn default_interval(value: &u8) -> bool {
 impl Default for Recur {
     fn default() -> Self {
         Self {
-            freq: Default::default(),
+            freq: Freq::default(),
             until: None,
             count: None,
             interval: 1,
@@ -101,9 +101,7 @@ impl std::ops::Add<chrono::NaiveDate> for crate::Recur {
 
     fn add(self, rhs: chrono::NaiveDate) -> Self::Output {
         let interval = match self.freq {
-            Freq::Secondly => return rhs,
-            Freq::Minutely => return rhs,
-            Freq::Hourly => return rhs,
+            Freq::Secondly | Freq::Minutely | Freq::Hourly => return rhs,
             Freq::Daily => chrono::TimeDelta::days(self.interval.into()),
             Freq::Weekly => chrono::TimeDelta::weeks(self.interval.into()),
             Freq::Monthly => return rhs + chrono::Months::new(self.interval.into()),

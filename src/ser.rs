@@ -13,6 +13,7 @@ macro_rules! ical_for_tostring {
 pub(crate) use ical_for_tostring;
 
 pub trait Serialize {
+    #[must_use]
     fn component() -> Option<String> {
         None
     }

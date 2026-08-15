@@ -10,6 +10,7 @@ pub struct Text {
 }
 
 impl Text {
+    #[must_use]
     pub fn from(text: &str) -> Self {
         Self {
             params: BTreeMap::new(),

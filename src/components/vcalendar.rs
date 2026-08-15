@@ -36,7 +36,7 @@ impl VCalendar {
 mod test {
     #[test]
     fn parse() {
-        crate::test::test_files::<crate::VCalendar>("calendars")
+        crate::test::test_files::<crate::VCalendar>("calendars");
     }
 
     #[test]

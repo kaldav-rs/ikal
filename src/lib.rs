@@ -139,7 +139,7 @@ pub fn parse_duration(value: &str) -> crate::Result<chrono::TimeDelta> {
         return Err(crate::Error::ParseDuration(format!(
             "Invalid duration: {value}"
         )));
-    };
+    }
 
     loop {
         if it.next_if(|x| *x == 'T').is_some() {
@@ -258,9 +258,8 @@ CALSCALE:GREGORIAN
             };
 
             if extension == std::ffi::OsStr::new("ics") {
-                let input = match std::fs::read_to_string(&file) {
-                    Ok(input) => input,
-                    Err(_) => continue,
+                let Ok(input) = std::fs::read_to_string(&file) else {
+                    continue;
                 };
 
                 let component: crate::Result<T> = input.try_into();
